@@ -1,0 +1,7 @@
+<!-- Logo Fonte : disque de fonte vu de face. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#EDEDED"/></linearGradient></defs>
+<rect width="1024" height="1024" fill="url(#g)"/>
+<circle cx="512" cy="512" r="330" fill="#111111"/>
+<circle cx="512" cy="512" r="236" fill="none" stroke="#FFF" stroke-opacity=".16" stroke-width="14"/>
+<circle cx="512" cy="512" r="92" fill="#F5F5F5"/>
+<circle cx="512" cy="512" r="46" fill="#FFFFFF"/></svg>
