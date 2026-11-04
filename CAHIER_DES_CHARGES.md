@@ -92,18 +92,30 @@ Défaut corrigé par rapport à la V1 : la Séance 1 n'avait que l'avant des cui
 
 ## 4. Écrans et fonctionnalités
 
-Navigation : **barre d'onglets en bas, 5 onglets** : Aujourd'hui, Programmes, Exercices, Shakers, Progrès.
+Navigation : **barre d'onglets en bas, 5 onglets** : Aujourd'hui, Programmes, Exercices, Nutrition, Progrès.
 Elle est **masquée pendant la séance** (Séance, Repos, Fin) pour éviter les appuis par erreur.
 
-1. **Aujourd'hui** : choix 1/2/3 fois cette semaine, cartes Séance 1/2/3 avec les pastilles de zones et l'état, bouton « Commencer la séance N », liste des exercices de la séance choisie (vignette photo, zone, séries × reps), carte Shaker avec ajout en un geste.
+1. **Aujourd'hui** : choix 1/2/3 fois cette semaine, cartes Séance 1/2/3 avec les pastilles de zones et l'état, bouton « Commencer la séance N », liste des exercices de la séance choisie (vignette photo, zone, séries × reps), rappel du coach (alerte la plus importante), carte « Nutrition du jour ».
 2. **Séance en cours** (plein écran) : chrono, « Exercice x sur n », barre de progression, **démo photo** (alternance départ / arrivée, vues Animation / Départ / Arrivée), nom, zone, matériel, 3 points clés, échauffement calculé, tableau des séries (dernière fois, kg, reps, réserve 0/1/2/3+, case à cocher), « + Série », conseil de progression, bouton « machine prise » (remplacement par un exercice du même muscle, avec photo), précédent / suivant / terminer.
 3. **Repos** (plein écran) : grand compte à rebours, −15 s / +15 s / Passer, prochain exercice avec photo, conseil, bip + vibration à la fin, écran maintenu allumé (Wake Lock).
-4. **Fin de séance** : durée, séries, volume, nouveaux records (avec photos), ressenti Facile / Bien / Dur, ajout de shaker, note libre, enregistrer.
+4. **Fin de séance** : durée, séries, volume, nouveaux records (avec photos), ressenti Facile / Bien / Dur, « Une douleur ? » (Aucune, Dos, Épaules, Genoux, Coudes), note libre, enregistrer.
 5. **Fiche exercice** : grande démo, pastilles de muscles, étapes numérotées, erreurs à éviter, historique des charges, alternatives avec photos, favori.
 6. **Exercices** : recherche, filtres par zone et favoris, grille de photos.
 7. **Programmes** : cycle de 6 semaines (semaine en cours, semaine allégée), choix 1/2/3 fois, détail des séances de la semaine, règles du coach, « recommencer un cycle ».
-8. **Shakers** : type (Whey, Caséine, Gainer), dose (25/30/40/50 g), liste du jour avec suppression, calendrier du mois (shakers et séances), jours d'affilée.
-9. **Progrès** : séances, semaine en cours, temps total ; volume de la semaine par muscle par rapport à la cible ; courbe de charge par exercice ; alertes de stagnation ; poids du corps et tendance ; historique des séances (avec suppression).
+8. **Nutrition** (remplace Shakers, jugé inutile) : 2 objectifs du jour calculés sur le dernier poids (protéines 1,6 g/kg ; calories = entretien estimé à 33 kcal/kg + 300), et ajustement chaque semaine selon la balance (< +0,25 %/sem. → +150 kcal ; > +0,5 %/sem. → −150 kcal ; bouton pour appliquer). Les anciens shakers restent stockés et exportés.
+9. **Progrès** : **le coach** (voir 4.1) ; séances, semaine en cours, temps total ; volume de la semaine par muscle par rapport à la cible ; courbe de charge par exercice ; alertes de stagnation ; poids du corps et tendance ; historique des séances (avec suppression).
+
+### 4.1 Le coach
+
+Règles simples calculées dans le téléphone (aucune donnée envoyée) :
+- **Douleur** signalée en fin de séance (valable 14 jours, « Aucune » l'efface) : les exercices qui sollicitent la zone sont proposés 10 % plus légers, avec une alerte et un bouton « Remplacer » dans la séance ; les remplacements qui ne sollicitent pas la zone passent en premier. Rappel : douleur qui dure → médecin ou kiné.
+- **Charge qui monte vite** : plus de +10 % (et plus de 2,5 kg) d'une séance à l'autre.
+- **Stagnation** : même charge sur 3 séances.
+- **Trop près de l'échec** : réserve à 0 sur la moitié des séries ou plus.
+- **Fatigue** : 2 séances « Dur » de suite.
+- **Reprise** : 8 jours ou plus sans séance → charges proposées −10 %.
+- **Ça progresse** : gains de charge sur 4 semaines.
+- **Bilan pour Claude** : bouton qui copie un résumé des 4 dernières semaines (séances, charges, ressenti, douleurs, poids, objectifs, alertes) à coller dans l'appli Claude, plus un lien « Ouvrir Claude ». Une IA directement dans l'appli demanderait une clé API payante : écartée pour l'instant.
 
 ## 5. Design
 
@@ -131,7 +143,7 @@ Direction claire, inspirée des codes sportswear (Nike, Adidas) sans copier de m
 2. **En faire une PWA installable** sur l'écran d'accueil du téléphone : `manifest.json`, icônes, service worker pour fonctionner hors ligne à la salle.
 3. **Héberger gratuitement** (GitHub Pages) pour l'ouvrir depuis le téléphone.
 4. **Export / import des données** (fichier JSON), puisque le stockage reste dans le navigateur.
-5. **Rappel shaker** après la séance (notification de la PWA, si le téléphone le permet).
+5. ~~Rappel shaker~~ : abandonné (onglet Shakers remplacé par Nutrition).
 6. **Passage aux poids libres** après 6 semaines : proposer des remplacements (squat, développé couché, rowing haltère…), ce qui demandera d'ajouter leurs photos.
 7. Ajouter des exercices et traduire les consignes en français au fur et à mesure.
 

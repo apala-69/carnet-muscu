@@ -259,7 +259,7 @@ const ICON = {
   home:'<path d="M4 10l8-6 8 6v9a1 1 0 0 1-1 1h-4v-6h-6v6H5a1 1 0 0 1-1-1z"/>',
   list:'<path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/>',
   search:'<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>',
-  shaker:'<path d="M7 3h10l-1.5 18h-7zM6.5 8h11"/>',
+  food:'<path d="M4 12h16a8 8 0 0 1-16 0z"/><path d="M9 8c0-1.2.8-1.6.8-2.8M14.2 8c0-1.2.8-1.6.8-2.8"/>',
   chart:'<path d="M5 20V11M12 20V4M19 20v-7"/>',
   chev:'<path d="M9 6l6 6-6 6"/>', back:'<path d="M15 6l-6 6 6 6"/>', x:'<path d="M6 6l12 12M18 6L6 18"/>',
   check:'<path d="M5 12.5l4.5 4.5L19 7.5"/>', swap:'<path d="M4 7h13l-3-3M20 17H7l3 3"/>',
@@ -277,7 +277,6 @@ function lsSave(){ if (DB) return; try { localStorage.setItem(LS_KEY, JSON.strin
 function settings(){ if (!S.settings) S.settings = defaultSettings(); return S.settings; }
 async function dbWrite(fn){ if (!DB) { lsSave(); return; } try { await fn(); } catch(e){ toast(e && e.code==='quota_exceeded' ? 'Stockage plein : supprime d\'anciennes données.' : 'Enregistrement impossible pour le moment, réessaie.'); } }
 function saveSettings(){ dbWrite(()=>DB.doc('settings/main').set(settings())); }
-function saveShakerDay(d){ const entries = S.shakers[d]||[]; dbWrite(()=> entries.length ? DB.doc('shakers/'+d).set({date:d,entries}) : DB.doc('shakers/'+d).delete()); }
 function saveWeight(d){ dbWrite(()=> S.weights[d]!=null ? DB.doc('weights/'+d).set({date:d,kg:S.weights[d]}) : DB.doc('weights/'+d).delete()); }
 function saveSessionRec(rec){ S.sessions.push(rec); S.sessions.sort((a,b)=>a.ts-b.ts); dbWrite(()=>DB.doc('sessions/'+rec.id).set(rec)); }
 function deleteSessionRec(id){ S.sessions = S.sessions.filter(s=>s.id!==id); dbWrite(()=>DB.doc('sessions/'+id).delete()); }
@@ -329,6 +328,9 @@ function advice(k, it){
   const max = Math.max(...last.sets.map(s=>s.kg));
   const top = last.sets.filter(s=>s.kg===max);
   const allTop = last.sets.length>=it.sets && last.sets.every(s=>s.reps>=it.hi);
+  const pz = painFor(k), gap = daysOff();
+  if (pz.length) { const kg=round25(max*0.9); return { kg, text:'Gêne '+pz.map(z=>z.toLowerCase()).join(', ')+' signalée : prends 10 % plus léger ('+kgs(kg)+') et arrête si ça tire.' }; }
+  if (gap>=8) { const kg=round25(max*0.9); return { kg, text:gap+' jours sans séance : reprends à '+kgs(kg)+' (10 % plus léger), tu remonteras vite.' }; }
   if (allTop) return { kg: max+2.5, up:true, text: it.hi+' reps partout la dernière fois : passe à '+kgs(max+2.5)+'.' };
   return { kg:max, text:'Garde '+kgs(max)+' et vise une rep de plus que la dernière fois.' };
 }
@@ -339,7 +341,6 @@ function stalls(){
   Object.keys(EX).forEach(k=>{ const h = historyOf(k); if (h.length<3) return; const last3 = h.slice(-3).map(x=>Math.max(...x.sets.map(s=>s.kg))); if (last3[0]===last3[1] && last3[1]===last3[2]) out.push({k,kg:last3[2]}); });
   return out;
 }
-function shakerStreak(){ let n=0; const d=new Date(); if (!(S.shakers[iso(d)]||[]).length) d.setDate(d.getDate()-1); while ((S.shakers[iso(d)]||[]).length){ n++; d.setDate(d.getDate()-1); } return n; }
 
 /* ============ État de l'interface ============ */
 let VIEW = 'aujourdhui';
@@ -351,11 +352,9 @@ let SHEET = null;         // feuille de remplacement
 let END = null;           // écran de fin
 let LIB = {q:'',g:'Tous'};
 let PROG_EX = null;
-let SHK = null;
-let CAL = null;
 let CONFIRM = null;
 let demoTimer = null, clockTimer = null, wake = null, audio = null;
-const TABS = [['aujourdhui','Aujourd\'hui','home'],['programmes','Programmes','list'],['exercices','Exercices','search'],['shakers','Shakers','shaker'],['progres','Progrès','chart']];
+const TABS = [['aujourdhui','Aujourd\'hui','home'],['programmes','Programmes','list'],['exercices','Exercices','search'],['nutrition','Nutrition','food'],['progres','Progrès','chart']];
 
 function toast(msg){ const t=document.createElement('div'); t.className='toast'; t.textContent=msg; document.body.appendChild(t); setTimeout(()=>{t.style.opacity='0';},1800); setTimeout(()=>t.remove(),2100); }
 function go(v){ VIEW=v; FICHE=null; try{ if (location.hash.slice(1)!==v) history.replaceState(null,'','#'+v); }catch(e){} render(); window.scrollTo(0,0); }
@@ -371,7 +370,7 @@ function render(){
   if (END) h = vEnd();
   else if (FICHE) h = vFiche();
   else if (LIVE) h = vLive();
-  else { h = ({aujourdhui:vToday,programmes:vProg,exercices:vLib,shakers:vShakers,progres:vProgress}[VIEW]||vToday)() + nav(); }
+  else { h = ({aujourdhui:vToday,programmes:vProg,exercices:vLib,nutrition:vNutri,progres:vProgress}[VIEW]||vToday)() + nav(); }
   if (REST) h += vRest();
   if (SHEET) h += vSheet();
   app.innerHTML = h;
@@ -390,16 +389,16 @@ function seanceCard(p, sel, done, interactive){
 function vToday(){
   const st=settings(); const ci=cycleInfo(); const wp=weekPlan(); const done=doneCount();
   const slot = Math.min(PICK||nextSlot(), wp.length); const plan=wp[slot-1];
-  const shk=(S.shakers[today()]||[]); const ls=st.lastShaker||{type:'Whey',dose:30};
   const chosen=weekChosen();
   return '<main class="wrap">'+
   '<header class="between" style="align-items:center"><span class="muted" style="font-weight:500">'+cap(frDate(new Date()))+'</span><a class="pill p" href="#programmes" data-go="programmes">'+(ci.week===6?'Cycle '+ci.num+' · Allégée':'Cycle '+ci.num+' · Sem. '+ci.week+'/6')+'</a></header>'+
   '<section style="display:flex;flex-direction:column;gap:12px"><h1 class="display" style="font-size:40px;line-height:.95">Cette semaine,<br>j\'y vais combien de fois ?</h1><div class="seggroup">'+[1,2,3].map(n=>'<button class="seg" data-act="days" data-n="'+n+'" aria-pressed="'+(chosen&&st.days===n)+'">'+n+' fois</button>').join('')+'</div>'+(chosen?'':'<span class="small muted">Nouvelle semaine : choisis avant de commencer.</span>')+'</section>'+
   (plan.deload?'<div class="note accent">Semaine allégée : moitié moins de séries.</div>':'')+
+  todayCoach()+
   '<section style="display:flex;flex-direction:column;gap:10px"><div class="between"><h2 class="sec-t">Mes séances de la semaine</h2><span class="small muted">'+Math.min(done,wp.length)+' / '+wp.length+' faites</span></div>'+wp.map(p=>seanceCard(p, p.slot===slot, p.slot<=done, true)).join('')+'</section>'+
   '<button class="btn p" data-act="start">'+(LIVE?'Reprendre la séance':'Commencer la '+esc(plan.name.toLowerCase()))+'</button>'+
   '<section><div class="between" style="padding-bottom:10px"><h2 class="sec-t">'+esc(plan.name)+' · exercices</h2><span class="small muted">Touche pour la démo</span></div><div class="list">'+plan.items.map((it,i)=>exRow(it.k, zone(it.k)+' · '+it.sets+' × '+it.lo+'-'+it.hi, i+1)).join('')+'</div></section>'+
-  '<div class="card" style="flex-direction:row;align-items:center;justify-content:space-between"><span style="display:flex;flex-direction:column;gap:2px"><span style="font-weight:500">Shaker</span><span class="small muted">'+(shk.length?shk.length+' pris aujourd\'hui · '+shk.reduce((a,b)=>a+b.dose,0)+' g':'Pas encore pris aujourd\'hui')+'</span></span><button class="pill p" style="background:var(--bg);height:40px" data-act="quickshake">+ '+esc(ls.type)+' '+ls.dose+' g</button></div>'+
+  todayNutri()+
   '</main>';
 }
 
@@ -425,6 +424,7 @@ function vLive(){
   '<div class="bar" aria-hidden="true"><i style="width:'+Math.round(doneSets/allSets*100)+'%"></i></div>'+
   demoBlock(d.k, true)+
   '<div style="display:flex;flex-direction:column;gap:6px"><h1 class="display h2">'+esc(e.n)+'</h1><span class="muted" style="font-size:14px">'+esc(e.m)+' · '+esc(e.eq)+' · '+it.sets+' × '+it.lo+'-'+it.hi+' · repos '+mmss(it.rest)+'</span>'+(d.k!==d.orig?'<span class="small muted">Remplace : '+esc(EX[d.orig].n)+'</span>':'')+'</div>'+
+  (painFor(d.k).length?'<div class="note danger" style="display:flex;flex-direction:column;gap:8px"><span><b>Attention '+esc(painFor(d.k).join(', ').toLowerCase())+'</b> · Tu as signalé une gêne. Cet exercice la sollicite : va plus léger, ou remplace-le.</span><button class="pill p" style="align-self:flex-start;background:var(--bg)" data-act="sheet-swap">Remplacer l\'exercice</button></div>':'')+
   '<ol class="steps">'+e.s.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ol>'+
   warm+
   '<section><div class="sets-h"><span>Série</span><span>Dernière fois</span><span>kg</span><span>Reps</span><span>Réserve</span><span></span></div>'+
@@ -477,8 +477,8 @@ async function requestWake(){ try { if (navigator.wakeLock) wake = await navigat
 function vSheet(){
   if (SHEET==='list'){ const L=LIVE; return '<div class="scrim" data-act="close-sheet"><div class="sheet" data-stop="1" role="dialog" aria-label="Exercices de la séance"><div class="between"><h2 class="sec-t">'+esc(L.plan.name)+'</h2><button class="icon-btn p" data-act="close-sheet" aria-label="Fermer">'+svg('x')+'</button></div><div class="list">'+L.data.map((d,i)=>exRow(d.k, d.sets.filter(s=>s.done).length+' / '+d.sets.length+' séries'+(i===L.idx?' · en cours':''), i+1, 'jump" data-i="'+i)).join('')+'</div></div></div>'; }
   const cur=LIVE.data[LIVE.idx]; const e=EX[cur.orig];
-  const alts=Object.keys(EX).filter(k=>EX[k].v===e.v && k!==cur.k);
-  return '<div class="scrim" data-act="close-sheet"><div class="sheet" data-stop="1" role="dialog" aria-label="Remplacer l\'exercice"><div class="between"><h2 class="sec-t">Machine prise ? Remplace par</h2><button class="icon-btn p" data-act="close-sheet" aria-label="Fermer">'+svg('x')+'</button></div><span class="small muted">Même muscle travaillé : '+esc(e.v.toLowerCase())+'. Les séries et le repos restent les mêmes.</span><div class="list">'+(cur.k!==cur.orig?exRow(cur.orig,'Revenir à l\'exercice prévu',null,'swap'):'')+alts.filter(k=>k!==cur.orig).map(k=>exRow(k, EX[k].eq+' · '+EX[k].m, null, 'swap')).join('')+'</div></div></div>';
+  const alts=Object.keys(EX).filter(k=>EX[k].v===e.v && k!==cur.k).sort((a,b)=>painFor(a).length-painFor(b).length);
+  return '<div class="scrim" data-act="close-sheet"><div class="sheet" data-stop="1" role="dialog" aria-label="Remplacer l\'exercice"><div class="between"><h2 class="sec-t">Machine prise ? Remplace par</h2><button class="icon-btn p" data-act="close-sheet" aria-label="Fermer">'+svg('x')+'</button></div><span class="small muted">Même muscle travaillé : '+esc(e.v.toLowerCase())+'. Les séries et le repos restent les mêmes.</span><div class="list">'+(cur.k!==cur.orig?exRow(cur.orig,'Revenir à l\'exercice prévu',null,'swap'):'')+alts.filter(k=>k!==cur.orig).map(k=>exRow(k, (painFor(k).length?'Sollicite : '+painFor(k).join(', ').toLowerCase()+' · ':'')+EX[k].eq+' · '+EX[k].m, null, 'swap')).join('')+'</div></div></div>';
 }
 
 /* ---- Fin de séance ---- */
@@ -487,18 +487,18 @@ function buildEnd(){
   const items=L.data.map(d=>({k:d.k, sets:d.sets.filter(s=>s.done).map(s=>({kg:parseFloat(String(s.kg).replace(',','.'))||0, reps:parseInt(s.reps,10)||0, rir:s.rir}))})).filter(i=>i.sets.length);
   const ts=Date.now();
   const records=[]; items.forEach(i=>{ const prev=bestOf(i.k); const b=i.sets.reduce((a,s)=>(!a||s.kg>a.kg||(s.kg===a.kg&&s.reps>a.reps))?s:a,null); if (b && b.kg>0 && (!prev || b.kg>prev.kg || (b.kg===prev.kg && b.reps>prev.reps))) records.push({k:i.k,kg:b.kg,reps:b.reps,first:!prev}); });
-  END={ rec:{ id:'s'+ts, ts, date:today(), plan:L.plan.id, slot:L.plan.slot, name:L.plan.name, dur, items, feel:'Bien', note:'' }, records };
+  END={ rec:{ id:'s'+ts, ts, date:today(), plan:L.plan.id, slot:L.plan.slot, name:L.plan.name, dur, items, feel:'Bien', note:'', pain:[] }, records };
 }
 function vEnd(){
   const r=END.rec; const sets=r.items.reduce((a,i)=>a+i.sets.length,0); const vol=r.items.reduce((a,i)=>a+i.sets.reduce((b,s)=>b+s.kg*s.reps,0),0);
   const recs=END.records.filter(x=>!x.first);
-  const ls=settings().lastShaker||{type:'Whey',dose:30};
+  const pain=r.pain||[];
   return '<main class="wrap">'+
   '<div style="display:flex;flex-direction:column;gap:8px"><span class="muted" style="font-weight:500">'+esc(r.name)+' · '+frDate(new Date())+'</span><h1 class="display h1">Séance<br>bouclée.</h1></div>'+
   '<div class="stats"><div class="stat"><span class="small muted">Durée</span><b>'+Math.max(1,Math.round(r.dur/60))+' min</b></div><div class="stat"><span class="small muted">Séries</span><b>'+sets+'</b></div><div class="stat"><span class="small muted">Volume soulevé</span><b>'+Math.round(vol).toLocaleString('fr-FR')+' kg</b></div><div class="stat"><span class="small muted">Records</span><b>'+recs.length+'</b></div></div>'+
   (recs.length?'<section style="display:flex;flex-direction:column;gap:4px"><h2 class="sec-t">Nouveaux records</h2><div class="list">'+recs.map(x=>'<div class="li small-th"><span class="thumb"><img src="'+img(x.k)+'" alt=""></span><span class="n">'+esc(EX[x.k].n)+'</span><span class="pill accent">'+fmt(x.kg)+' kg × '+x.reps+'</span></div>').join('')+'</div></section>':(sets?'<div class="empty-st">Pas de record cette fois. Les charges notées aujourd\'hui servent de référence pour la prochaine séance.</div>':'<div class="empty-st">Aucune série cochée : rien ne sera enregistré.</div>'))+
   '<section style="display:flex;flex-direction:column;gap:10px"><h2 class="sec-t">C\'était comment ?</h2><div class="seggroup">'+['Facile','Bien','Dur'].map(f=>'<button class="seg" data-act="feel" data-f="'+f+'" aria-pressed="'+(r.feel===f)+'">'+f+'</button>').join('')+'</div></section>'+
-  '<div class="card" style="flex-direction:row;align-items:center;justify-content:space-between"><span style="font-weight:500">Shaker après la séance ?</span><button class="pill p" style="background:var(--bg);height:40px" data-act="quickshake">+ '+esc(ls.type)+' '+ls.dose+' g</button></div>'+
+  '<section style="display:flex;flex-direction:column;gap:10px"><h2 class="sec-t">Une douleur ?</h2><div class="pills">'+['Aucune'].concat(PAIN_ZONES).map(z=>{ const on = z==='Aucune' ? !pain.length : pain.includes(z); return '<button class="chip" data-act="pain" data-z="'+z+'" aria-pressed="'+on+'">'+z+'</button>'; }).join('')+'</div><span class="small muted">Une gêne, pas une simple courbature. Le coach allègera les exercices concernés aux prochaines séances.</span></section>'+
   '<label class="field" for="endnote">Note pour la prochaine fois<textarea id="endnote" rows="2" data-in="note" placeholder="Ex. : genou droit un peu sensible sur la presse">'+esc(r.note)+'</textarea></label>'+
   '<div class="row"><button class="btn ghost p" data-act="end-back">Revenir à la séance</button><button class="btn p" data-act="save">'+(sets?'Enregistrer':'Fermer')+'</button></div>'+
   '</main>';
@@ -556,32 +556,6 @@ function vLib(){
   '</main>';
 }
 
-/* ---- Shakers ---- */
-function vShakers(){
-  const st=settings(); if (!SHK) SHK=Object.assign({},st.lastShaker||{type:'Whey',dose:30});
-  const t=today(); const ent=S.shakers[t]||[]; const streak=shakerStreak();
-  const base = CAL || (()=>{ const d=new Date(); return {y:d.getFullYear(),m:d.getMonth()}; })();
-  const first=new Date(base.y,base.m,1), lead=(first.getDay()+6)%7, nd=new Date(base.y,base.m+1,0).getDate();
-  const sesDays=new Set(S.sessions.map(s=>s.date));
-  let cells=''; for(let i=0;i<lead;i++) cells+='<div class="day empty"></div>';
-  let monthShk=0, monthSes=0;
-  for(let d=1; d<=nd; d++){ const key=base.y+'-'+pad(base.m+1)+'-'+pad(d); const sh=(S.shakers[key]||[]).length>0, se=sesDays.has(key); if(sh)monthShk++; if(se)monthSes++; const cls=key===t?'today':(key<t?'past':''); cells+='<div class="day '+cls+'"><span>'+d+'</span><span class="dots">'+(sh?'<i class="dot" title="Shaker"></i>':'')+(se?'<i class="sq" title="Séance"></i>':'')+'</span></div>'; }
-  const mName=cap(first.toLocaleDateString('fr-FR',{month:'long',year:'numeric'}));
-  return '<main class="wrap">'+
-  '<div class="between" style="align-items:center"><h1 class="title">Shakers</h1>'+(streak?'<span class="pill accent">'+streak+' jour'+(streak>1?'s':'')+' d\'affilée</span>':'')+'</div>'+
-  '<section class="card"><div class="between"><h2 class="sec-t">Ajouter</h2><span class="small muted">Aujourd\'hui · maintenant</span></div>'+
-  '<div class="seggroup">'+['Whey','Caséine','Gainer'].map(x=>'<button class="seg" style="border:0" data-act="shk-type" data-v="'+x+'" aria-pressed="'+(SHK.type===x)+'">'+x+'</button>').join('')+'</div>'+
-  '<div class="seggroup">'+[25,30,40,50].map(x=>'<button class="seg" style="border:0" data-act="shk-dose" data-v="'+x+'" aria-pressed="'+(SHK.dose===x)+'">'+x+' g</button>').join('')+'</div>'+
-  '<button class="btn p" data-act="shk-add">Ajouter · '+esc(SHK.type)+' '+SHK.dose+' g</button>'+
-  ent.map((x,i)=>'<div class="between" style="align-items:center;background:var(--bg);border-radius:999px;padding:6px 6px 6px 16px"><span>'+esc(x.type)+' · '+x.dose+' g <span class="muted">· '+x.time+'</span></span><button class="icon-btn p" style="width:36px;height:36px" data-act="shk-del" data-i="'+i+'" aria-label="Supprimer ce shaker">'+svg('x')+'</button></div>').join('')+
-  '</section>'+
-  '<section style="display:flex;flex-direction:column;gap:10px"><div class="between" style="align-items:center"><div class="row"><button class="icon-btn p" style="width:36px;height:36px" data-act="cal" data-d="-1" aria-label="Mois précédent">'+svg('back')+'</button><h2 class="sec-t" style="min-width:150px;text-align:center">'+mName+'</h2><button class="icon-btn p" style="width:36px;height:36px" data-act="cal" data-d="1" aria-label="Mois suivant">'+svg('chev')+'</button></div></div>'+
-  '<div class="legend"><span><i style="background:var(--ink);border-radius:50%;width:8px"></i>Shaker</span><span><i style="background:var(--accent);border:1px solid var(--accent-edge)"></i>Séance</span><span>'+monthShk+' jours shaker · '+monthSes+' séances</span></div>'+
-  '<div class="cal-h"><span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span></div><div class="cal">'+cells+'</div></section>'+
-  '<div class="note" style="background:var(--soft)">Repère prise de masse : environ 1,6 g de protéines par kg de poids et par jour, au total de la journée. Le shaker complète tes repas, il ne les remplace pas.</div>'+
-  '</main>';
-}
-
 /* ---- Progrès ---- */
 function vProgress(){
   const ss=S.sessions; const totalMin=Math.round(ss.reduce((a,s)=>a+s.dur,0)/60);
@@ -603,6 +577,7 @@ function vProgress(){
   let trend=''; if (wk.length>=2){ const lastD=parseISO(wk[wk.length-1]); const ref=wk.filter(d=>(lastD-parseISO(d))>=6*864e5).pop(); if (ref){ const weeks=(lastD-parseISO(ref))/(7*864e5); const per=(S.weights[wk[wk.length-1]]-S.weights[ref])/weeks; const pct=per/S.weights[ref]*100; trend=(per>=0?'+':'')+fmt(per)+' kg / sem. · '+(pct<0.25?'un peu lent : mange un peu plus.':pct>0.5?'rapide : réduis légèrement.':'dans la cible.'); } }
   return '<main class="wrap">'+
   '<h1 class="title">Progrès</h1>'+
+  vCoach()+
   '<div class="stats three"><div class="stat"><span class="small muted">Séances</span><b>'+ss.length+'</b></div><div class="stat"><span class="small muted">Cette semaine</span><b>'+weekSessions().length+' / '+settings().days+'</b></div><div class="stat"><span class="small muted">Temps total</span><b>'+(totalMin>=60?Math.floor(totalMin/60)+' h '+pad(totalMin%60):totalMin+' min')+'</b></div></div>'+
   '<section style="display:flex;flex-direction:column;gap:12px"><div class="between"><h2 class="sec-t">Volume de la semaine</h2><span class="small muted">séries par muscle</span></div><div class="legend"><span><i style="background:var(--ink)"></i>Faites</span><span><i style="background:var(--accent);border:1px solid var(--accent-edge)"></i>Cible</span></div>'+
   VOL.map(g=>{ const t=TARGET[g]; return '<div class="vol"><span style="font-size:14px">'+g+'</span><div class="track"><span class="tgt" style="left:'+(t[0]/max*100)+'%;width:'+((t[1]-t[0])/max*100)+'%"></span><span class="done" style="width:'+Math.min(100,v[g]/max*100)+'%"></span></div><span style="font-size:13px;text-align:right;font-variant-numeric:tabular-nums">'+v[g]+' / '+t[0]+'</span></div>'; }).join('')+
@@ -618,6 +593,131 @@ function vProgress(){
   '<section><h2 class="sec-t" style="padding-bottom:10px">Historique</h2>'+(ss.length?'<div class="list">'+[...ss].reverse().slice(0,12).map(s=>'<div class="li" style="grid-template-columns:1fr auto"><span class="t"><span class="n">'+esc(s.name)+'</span><span class="m">'+esc(cap(frDate(parseISO(s.date),{weekday:'long',day:'numeric',month:'long'})))+' · '+Math.max(1,Math.round(s.dur/60))+' min · '+s.items.reduce((a,i)=>a+i.sets.length,0)+' séries'+(s.feel?' · '+esc(s.feel):'')+'</span>'+(s.note?'<span class="m">« '+esc(s.note)+' »</span>':'')+'</span>'+(CONFIRM==='del-'+s.id?'<span class="row"><button class="pill p" data-act="confirm-no">Garder</button><button class="pill p" style="background:var(--danger);color:#fff" data-act="del-session" data-id="'+s.id+'">Supprimer</button></span>':'<button class="icon-btn p" style="width:36px;height:36px" data-act="del-ask" data-id="'+s.id+'" aria-label="Supprimer cette séance">'+svg('x')+'</button>')+'</div>').join('')+'</div>':'<div class="empty-st">Aucune séance enregistrée pour l\'instant. Lance la séance du jour depuis l\'onglet Aujourd\'hui.</div>')+'</section>'+
   vDataCard()+vAppCard()+
   '</main>';
+}
+
+/* ---- Coach : analyse des séances (règles simples, tout reste dans le téléphone) ---- */
+const PAIN_ZONES = ['Dos','Épaules','Genoux','Coudes'];
+const STRESS = {
+  'Dos':['rdl','hacksquat','legpress','seatedrow'],
+  'Épaules':['chestpress','inclinepress','inclinedb','shoulderpress','milpress','dbpress','butterfly','crossover'],
+  'Genoux':['legext','hacksquat','legpress'],
+  'Coudes':['tricepsrope','pushdown','overheadrope','preacher','cablepreacher','machinecurl']
+};
+const dayDiff = (a,b) => Math.round((parseISO(b)-parseISO(a))/864e5);
+// Dernière douleur signalée il y a moins de 14 jours (une séance « Aucune » efface l'alerte).
+function activePain(){
+  const s=[...S.sessions].reverse().find(x=>Array.isArray(x.pain));
+  if (!s || !s.pain.length || dayDiff(s.date,today())>14) return null;
+  return { zones:s.pain, date:s.date };
+}
+function painFor(k){ const p=activePain(); return p ? p.zones.filter(z=>(STRESS[z]||[]).includes(k)) : []; }
+function daysOff(){ const l=S.sessions[S.sessions.length-1]; return l ? dayDiff(l.date,today()) : 0; }
+const topKg = sets => sets.length ? Math.max(...sets.map(x=>x.kg)) : 0;
+function coachTips(){
+  const out=[]; const ss=S.sessions;
+  if (!ss.length) return [{t:'info',h:'Le coach',x:'Il analysera tes séances dès la première : progression, charges qui montent trop vite, douleurs, pauses.'}];
+  const p=activePain();
+  if (p) out.push({t:'warn',h:'Gêne : '+p.zones.join(', ').toLowerCase(),x:'Signalée le '+frDate(parseISO(p.date),{day:'numeric',month:'long'})+'. Les exercices qui la sollicitent sont proposés 10 % plus légers, avec un remplacement. Si la douleur dure plus d\'une semaine, est vive ou descend dans la jambe ou le bras : médecin ou kiné.'});
+  const off=daysOff();
+  if (off>=8) out.push({t:'info',h:'Reprise',x:off+' jours sans séance : les charges proposées sont baissées de 10 % pour repartir en douceur.'});
+  const jumps=[], stuck=[], fail=[], ups=[];
+  Object.keys(EX).forEach(k=>{
+    const h=historyOf(k); if (!h.length) return;
+    const last=h[h.length-1], prev=h[h.length-2];
+    if (prev){ const a=topKg(prev.sets), b=topKg(last.sets); if (a>0 && b-a>2.5 && (b-a)/a>0.10) jumps.push({k,a,b}); }
+    const half=last.sets.length && last.sets.filter(x=>x.rir===0).length*2>=last.sets.length;
+    if (half && dayDiff(last.date,today())<=14) fail.push(k);
+    const recent=h.filter(x=>dayDiff(x.date,today())<=28);
+    if (recent.length>=2){ const d=topKg(recent[recent.length-1].sets)-topKg(recent[0].sets); if (d>0) ups.push({k,d}); }
+  });
+  jumps.forEach(j=>{ const back=['rdl','hacksquat'].includes(j.k);
+    out.push({t:'warn',h:'Charge qui monte vite',x:EX[j.k].n+' : '+fmt(j.a)+' → '+fmt(j.b)+' kg d\'un coup (+'+Math.round((j.b-j.a)/j.a*100)+' %). Monte par 2,5 kg : les muscles suivent vite, les tendons'+(back?' et le bas du dos':'')+' moins.'}); });
+  stalls().forEach(x=>out.push({t:'warn',h:'Stagnation',x:EX[x.k].n+' bloqué à '+kgs(x.kg)+' depuis 3 séances. Ajoute une série, ou remplace-le par un exercice du même muscle.'}));
+  if (fail.length) out.push({t:'info',h:'Trop près de l\'échec',x:'Réserve à 0 sur la plupart des séries : '+fail.map(k=>EX[k].n).join(', ')+'. Garde 1 à 2 reps en réserve, surtout sur les gros exercices : tu progresses autant et tu récupères mieux.'});
+  const last2=ss.slice(-2);
+  if (last2.length===2 && last2.every(x=>x.feel==='Dur')) out.push({t:'info',h:'Fatigue',x:'2 séances dures de suite. Vérifie ton sommeil (7 à 9 h) et tes calories. Si ça continue, fais la prochaine séance avec moitié moins de séries.'});
+  ups.sort((a,b)=>b.d-a.d); const fast=jumps.map(j=>j.k); ups.splice(0,ups.length,...ups.filter(u=>!fast.includes(u.k)));
+  if (ups.length) out.push({t:'good',h:'Ça progresse',x:ups.slice(0,3).map(u=>'+'+fmt(u.d)+' kg sur '+EX[u.k].n.toLowerCase()).join(', ')+' en 4 semaines.'});
+  if (!out.length) out.push({t:'good',h:'Rien à signaler',x:'Charges régulières, pas de douleur signalée. Continue comme ça.'});
+  return out;
+}
+const tipNote = c => '<div class="note '+(c.t==='warn'?'danger':c.t==='good'?'accent':'')+'"'+(c.t==='info'?' style="background:var(--soft)"':'')+'><b'+(c.t==='good'?' style="font-weight:600"':'')+'>'+esc(c.h)+'</b> · '+esc(c.x)+'</div>';
+function todayCoach(){ const w=coachTips().find(c=>c.t==='warn'); return w ? tipNote(w) : ''; }
+function vCoach(){
+  return '<section style="display:flex;flex-direction:column;gap:8px"><div class="between"><h2 class="sec-t">Le coach</h2><span class="small muted">d\'après tes séances</span></div>'+
+  coachTips().map(tipNote).join('')+
+  '<div class="row" style="flex-wrap:wrap"><button class="pill p" style="background:var(--ink);color:var(--bg);height:40px" data-act="claude">Copier mon bilan pour Claude</button><a class="pill p" style="height:40px;border:1px solid var(--stroke);background:var(--bg)" href="https://claude.ai/new" target="_blank" rel="noopener">Ouvrir Claude</a></div>'+
+  '<span class="small muted">Le bilan de tes 4 dernières semaines est copié : colle-le dans Claude pour une analyse plus poussée. Ce sont des repères, pas un avis médical.</span></section>';
+}
+function report(){
+  const st=settings(), ci=cycleInfo(), n=nutriState(), since=iso(new Date(Date.now()-28*864e5));
+  const L=['Je fais de la musculation en salle (débutant depuis octobre 2026, objectif prise de masse, '+st.days+' séance'+(st.days>1?'s':'')+' par semaine prévues, programme tout le corps, pas de pompes).',
+  'Analyse mon bilan ci-dessous : ma progression, les points à surveiller (douleurs, charges qui montent trop vite, dos, récupération) et 3 conseils concrets pour les 2 prochaines semaines. Réponds en français, simplement.','',
+  'Cycle '+ci.num+', semaine '+ci.week+' sur 6 (semaine 6 allégée).'];
+  const wk=Object.keys(S.weights).sort();
+  if (wk.length) L.push('Poids du corps : '+wk.slice(-6).map(d=>d+' : '+fmt(S.weights[d])+' kg').join(' ; ')+'.');
+  if (n.w) L.push('Objectifs nutrition : '+n.prot+' g de protéines et '+n.kcal+' kcal par jour.');
+  L.push('','Séances des 4 dernières semaines :');
+  const ss=S.sessions.filter(x=>x.date>=since);
+  if (!ss.length) L.push('(aucune)');
+  ss.forEach(x=>{
+    L.push('- '+x.date+' · '+x.name+' · '+Math.max(1,Math.round(x.dur/60))+' min · ressenti '+(x.feel||'?')+(x.pain&&x.pain.length?' · douleur : '+x.pain.join(', ').toLowerCase():'')+(x.note?' · note : '+x.note:''));
+    x.items.forEach(i=>L.push('    '+(EX[i.k]?EX[i.k].n:i.k)+' : '+i.sets.map(y=>fmt(y.kg)+' kg × '+y.reps+' (réserve '+(y.rir===3?'3+':y.rir)+')').join(', ')));
+  });
+  const tips=coachTips().filter(c=>c.t!=='good');
+  if (tips.length){ L.push('','Alertes de l\'appli :'); tips.forEach(c=>L.push('- '+c.h+' : '+c.x)); }
+  return L.join('\n');
+}
+async function copyReport(){
+  const t=report();
+  try { await navigator.clipboard.writeText(t); }
+  catch(e){ const a=document.createElement('textarea'); a.value=t; a.setAttribute('readonly',''); a.style.position='fixed'; a.style.opacity='0'; document.body.appendChild(a); a.select(); try{ document.execCommand('copy'); }catch(_){} a.remove(); }
+  toast('Bilan copié : colle-le dans Claude');
+}
+
+/* ---- Nutrition : 2 objectifs du jour + ajustement chaque semaine ---- */
+const round50 = n => Math.round(n/50)*50;
+function lastWeight(){ const wk=Object.keys(S.weights).sort(); return wk.length ? S.weights[wk[wk.length-1]] : null; }
+// Tendance du poids : variation par semaine, entre la dernière pesée et une pesée d'au moins 6 jours plus tôt.
+function weightTrend(){
+  const wk=Object.keys(S.weights).sort(); if (wk.length<2) return null;
+  const lastD=wk[wk.length-1]; const ref=wk.filter(d=>dayDiff(d,lastD)>=6).pop(); if (!ref) return null;
+  const per=(S.weights[lastD]-S.weights[ref])/(dayDiff(ref,lastD)/7);
+  return { per, pct: per/S.weights[ref]*100 };
+}
+function nutriState(){
+  const st=settings(); const w=lastWeight(); if (w==null) return {w:null};
+  const nu=st.nutri||{};
+  const kcal = nu.kcal || round50(w*33+300);   // départ : entretien estimé (≈ 33 kcal/kg) + 300
+  const prot = Math.round(w*1.6/5)*5;
+  const tr=weightTrend(); let adj=0, verdict=null;
+  if (tr){ if (tr.pct<0.25){ adj=150; verdict='slow'; } else if (tr.pct>0.5){ adj=-150; verdict='fast'; } else verdict='ok'; }
+  const done = nu.lastAdj===weekKey();
+  return { w, kcal, prot, tr, adj: done?0:adj, verdict, done, estimated: !nu.kcal };
+}
+function todayNutri(){
+  const n=nutriState(); if (!n.w) return '';
+  return '<a class="card p" href="#nutrition" data-go="nutrition" style="flex-direction:row;align-items:center;justify-content:space-between;text-decoration:none;color:var(--ink)"><span style="display:flex;flex-direction:column;gap:2px"><span style="font-weight:500">Nutrition du jour</span><span class="small muted">'+n.prot+' g de protéines · '+n.kcal.toLocaleString('fr-FR')+' kcal</span></span>'+svg('chev','class="chev"')+'</a>';
+}
+function weightForm(){ return '<form class="row" data-form="weight"><label class="sr" for="wkg">Poids en kg</label><input id="wkg" inputmode="decimal" placeholder="Ton poids (kg)" style="flex:1;min-width:0;height:44px;border-radius:999px;border:0;padding:0 16px;background:var(--bg);font-size:16px"><button class="pill p" style="height:44px;background:var(--ink);color:var(--bg)" type="submit">Ajouter</button></form>'; }
+function vNutri(){
+  const n=nutriState();
+  let h='<main class="wrap"><h1 class="title">Nutrition</h1>';
+  if (!n.w) return h+'<section class="card"><h2 class="sec-t">Tes objectifs du jour</h2><span class="small muted">Entre ton poids : l\'appli calcule tes protéines et tes calories, puis les ajuste chaque semaine.</span>'+weightForm()+'</section></main>';
+  h+='<section style="display:flex;flex-direction:column;gap:10px"><div class="between"><h2 class="sec-t">Objectifs du jour</h2><span class="small muted">pour '+fmt(n.w)+' kg</span></div>'+
+  '<div class="stats"><div class="stat"><span class="small muted">Protéines</span><b>'+n.prot+' g</b><span class="small muted">1,6 g par kg</span></div><div class="stat"><span class="small muted">Calories</span><b>'+n.kcal.toLocaleString('fr-FR')+'</b><span class="small muted">kcal par jour</span></div></div>'+
+  '<span class="small muted">'+(n.estimated?'Calories : estimation de départ (ton entretien + 300 kcal). La balance dira si c\'est juste : l\'appli ajuste chaque semaine.':'Calories ajustées d\'après ta balance.')+' Au-delà de 1,6 g de protéines par kg, le gain est faible.</span></section>';
+  const t=n.tr, lo=n.w*0.0025, hi=n.w*0.005;
+  let adj;
+  if (!t) adj='<span class="small muted">Pèse-toi le lundi au réveil, après être passé aux toilettes. Dès 2 pesées à une semaine d\'écart, l\'appli te dit si tu dois manger plus ou moins.</span>';
+  else {
+    const line='<div class="between" style="align-items:flex-end"><b class="display" style="font-size:34px;line-height:1">'+(t.per>=0?'+':'')+fmt(t.per)+' kg</b><span class="small muted" style="text-align:right">par semaine<br>cible : +'+fmt(lo)+' à +'+fmt(hi)+' kg</span></div>';
+    if (n.done) adj=line+'<div class="note" style="background:var(--bg)">Ajusté cette semaine. Prochaine vérification lundi prochain.</div>';
+    else if (n.verdict==='ok') adj=line+'<div class="note accent">Dans la cible : garde '+n.kcal.toLocaleString('fr-FR')+' kcal par jour.</div>';
+    else adj=line+'<div class="note" style="background:var(--bg)">'+(n.verdict==='slow'?'Tu prends trop lentement : ajoute environ 150 kcal par jour, par exemple un bol de riz cuit (120 g) ou une poignée d\'amandes.':'Tu prends trop vite (surtout du gras) : enlève environ 150 kcal par jour, par exemple un soda ou une portion de gâteau.')+'</div><button class="btn sm p" data-act="nutri-apply">Passer à '+(n.kcal+n.adj).toLocaleString('fr-FR')+' kcal par jour</button>';
+  }
+  h+='<section class="card"><div class="between"><h2 class="sec-t">Ajustement de la semaine</h2><span class="small muted">selon ta balance</span></div>'+adj+weightForm()+'</section>';
+  return h+'</main>';
 }
 
 /* ---- Mes données : export / import (fichier JSON) ---- */
@@ -688,7 +788,6 @@ if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
 }
 
 /* ============ Interactions ============ */
-function addShaker(type,dose){ const t=today(); const d=new Date(); (S.shakers[t]=S.shakers[t]||[]).push({type,dose,time:pad(d.getHours())+':'+pad(d.getMinutes())}); settings().lastShaker={type,dose}; saveShakerDay(t); saveSettings(); toast('Shaker ajouté : '+type+' '+dose+' g'); }
 
 app.addEventListener('click', ev=>{
   const g=ev.target.closest('[data-go]'); if (g){ ev.preventDefault(); go(g.dataset.go); return; }
@@ -732,13 +831,10 @@ app.addEventListener('click', ev=>{
     case 'finish': clearTimeout(REST&&REST.t); REST=null; CONFIRM=null; buildEnd(); render(); window.scrollTo(0,0); break;
     case 'end-back': END=null; render(); break;
     case 'feel': END.rec.feel=el.dataset.f; render(); break;
+    case 'pain': { const z=el.dataset.z, r=END.rec; r.pain=r.pain||[]; r.pain = z==='Aucune' ? [] : (r.pain.includes(z) ? r.pain.filter(x=>x!==z) : r.pain.concat(z)); render(); break; }
+    case 'nutri-apply': { const st=settings(), n=nutriState(); if (n.adj){ st.nutri=Object.assign({},st.nutri,{kcal:n.kcal+n.adj, lastAdj:weekKey()}); saveSettings(); toast('Objectif : '+(n.kcal+n.adj).toLocaleString('fr-FR')+' kcal par jour'); } render(); break; }
+    case 'claude': copyReport(); break;
     case 'save': { const r=END.rec; if (r.items.length) saveSessionRec(r); END=null; LIVE=null; PICK=null; clearInterval(clockTimer); saveDraft(); try{wake&&wake.release();}catch(e){} VIEW='aujourdhui'; render(); window.scrollTo(0,0); if (r.items.length) toast('Séance enregistrée'); break; }
-    case 'quickshake': { const ls=settings().lastShaker||{type:'Whey',dose:30}; addShaker(ls.type,ls.dose); render(); break; }
-    case 'shk-type': SHK.type=el.dataset.v; render(); break;
-    case 'shk-dose': SHK.dose=+el.dataset.v; render(); break;
-    case 'shk-add': addShaker(SHK.type,SHK.dose); render(); break;
-    case 'shk-del': { const t=today(); S.shakers[t].splice(+el.dataset.i,1); saveShakerDay(t); render(); break; }
-    case 'cal': { const b=CAL||{y:new Date().getFullYear(),m:new Date().getMonth()}; const d=new Date(b.y,b.m+ +el.dataset.d,1); CAL={y:d.getFullYear(),m:d.getMonth()}; render(); break; }
     case 'libg': LIB.g=el.dataset.g; render(); break;
     case 'cycle-ask': CONFIRM='cycle'; render(); break;
     case 'cycle-reset': settings().cycleStart=iso(monday(new Date())); CONFIRM=null; saveSettings(); render(); toast('Nouveau cycle lancé'); break;
@@ -772,7 +868,7 @@ window.addEventListener('hashchange', ()=>{ const h=location.hash.slice(1); if (
 /* ============ Démarrage ============ */
 lsLoad(); settings();
 try { const dr=sessionStorage.getItem(LS_KEY+'-live'); if (dr){ LIVE=JSON.parse(dr); clockTimer=setInterval(()=>{ const c=document.getElementById('clock'); if (c&&LIVE) c.textContent=mmss((Date.now()-LIVE.start)/1000); },1000); } } catch(e){}
-{ const h=location.hash.slice(1); if (TABS.some(t=>t[0]===h)) VIEW=h; }
+{ let h=location.hash.slice(1); if (h==='shakers') h='nutrition'; if (TABS.some(t=>t[0]===h)) VIEW=h; }
 render();
 connect();
 </script>
