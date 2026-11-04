@@ -3,16 +3,21 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#FFFFFF">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
-</head>
-<body>
 <title>Carnet Muscu</title>
+<meta name="description" content="Mes séances de musculation, avec une photo pour chaque exercice.">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Carnet Muscu">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
 <style>
 /* Layout : une colonne mobile (max 520px) centrée, barre d'onglets fixe en bas, séance en plein écran. Direction claire sportswear : blanc, quasi-noir, gris de fond pour les photos, un seul accent vert acide. */
 :root{
@@ -173,6 +178,8 @@ details.prog summary::-webkit-details-marker{display:none}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
 .toast{position:fixed;left:50%;bottom:calc(100px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:60;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-size:14px;font-weight:500;transition:opacity 200ms ease}
 </style>
+</head>
+<body>
 
 <div id="app" aria-live="polite"></div>
 
@@ -608,7 +615,26 @@ function vProgress(){
   (wk.length?'<div style="display:flex;flex-direction:column;gap:4px">'+wk.slice(-4).reverse().map(d=>'<div class="between small"><span class="muted">'+esc(frDate(parseISO(d),{weekday:'short',day:'numeric',month:'short'}))+'</span><span style="font-weight:500">'+fmt(S.weights[d])+' kg</span></div>').join('')+'</div>':'')+
   '</section>'+
   '<section><h2 class="sec-t" style="padding-bottom:10px">Historique</h2>'+(ss.length?'<div class="list">'+[...ss].reverse().slice(0,12).map(s=>'<div class="li" style="grid-template-columns:1fr auto"><span class="t"><span class="n">'+esc(s.name)+'</span><span class="m">'+esc(cap(frDate(parseISO(s.date),{weekday:'long',day:'numeric',month:'long'})))+' · '+Math.max(1,Math.round(s.dur/60))+' min · '+s.items.reduce((a,i)=>a+i.sets.length,0)+' séries'+(s.feel?' · '+esc(s.feel):'')+'</span>'+(s.note?'<span class="m">« '+esc(s.note)+' »</span>':'')+'</span>'+(CONFIRM==='del-'+s.id?'<span class="row"><button class="pill p" data-act="confirm-no">Garder</button><button class="pill p" style="background:var(--danger);color:#fff" data-act="del-session" data-id="'+s.id+'">Supprimer</button></span>':'<button class="icon-btn p" style="width:36px;height:36px" data-act="del-ask" data-id="'+s.id+'" aria-label="Supprimer cette séance">'+svg('x')+'</button>')+'</div>').join('')+'</div>':'<div class="empty-st">Aucune séance enregistrée pour l\'instant. Lance la séance du jour depuis l\'onglet Aujourd\'hui.</div>')+'</section>'+
+  vAppCard()+
   '</main>';
+}
+
+/* ---- L'appli sur le téléphone ---- */
+let INSTALL = null;   // invitation d'installation (Android / Chrome)
+const standalone = () => { try { return matchMedia('(display-mode: standalone)').matches || navigator.standalone===true; } catch(e){ return false; } };
+const isIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1);
+function vAppCard(){
+  let inst;
+  if (standalone()) inst='<span class="small muted">L\'appli est installée sur ton téléphone. Elle marche aussi sans réseau à la salle.</span>';
+  else if (INSTALL) inst='<span class="small muted">Ajoute-la à ton écran d\'accueil : elle s\'ouvre en plein écran et marche sans réseau.</span><button class="btn sm p" data-act="install">Installer l\'appli</button>';
+  else if (isIOS()) inst='<span class="small muted">Pour l\'avoir sur ton écran d\'accueil : dans Safari, touche Partager puis « Sur l\'écran d\'accueil ». Elle marchera aussi sans réseau.</span>';
+  else inst='<span class="small muted">Pour l\'avoir sur ton écran d\'accueil : ouvre le menu du navigateur puis « Installer l\'appli » ou « Ajouter à l\'écran d\'accueil ».</span>';
+  return '<section class="card" id="appli"><h2 class="display" style="font-size:22px">L\'appli</h2>'+inst+'</section>';
+}
+window.addEventListener('beforeinstallprompt', e=>{ e.preventDefault(); INSTALL=e; if (VIEW==='progres' && !LIVE) render(); });
+window.addEventListener('appinstalled', ()=>{ INSTALL=null; toast('Appli installée'); if (VIEW==='progres' && !LIVE) render(); });
+if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
+  window.addEventListener('load', ()=>{ navigator.serviceWorker.register('sw.js').catch(()=>{}); });
 }
 
 /* ============ Interactions ============ */
@@ -667,6 +693,7 @@ app.addEventListener('click', ev=>{
     case 'cycle-ask': CONFIRM='cycle'; render(); break;
     case 'cycle-reset': settings().cycleStart=iso(monday(new Date())); CONFIRM=null; saveSettings(); render(); toast('Nouveau cycle lancé'); break;
     case 'del-ask': CONFIRM='del-'+el.dataset.id; render(); break;
+    case 'install': if (INSTALL){ const p=INSTALL; INSTALL=null; p.prompt(); p.userChoice.finally(()=>render()); } break;
     case 'del-session': deleteSessionRec(el.dataset.id); CONFIRM=null; render(); toast('Séance supprimée'); break;
   }
 });
