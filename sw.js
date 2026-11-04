@@ -1,6 +1,6 @@
 /* Service worker de Carnet Muscu : l'appli fonctionne hors ligne à la salle.
    Quand tu modifies index.html ou ajoutes des photos, change VERSION et complète la liste. */
-const VERSION = 'carnet-muscu-v2';
+const VERSION = 'carnet-muscu-v3';
 const FONTS = 'carnet-muscu-polices';
 const APP = [
   './',
