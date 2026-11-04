@@ -1,11 +1,12 @@
-/* Service worker de Carnet Muscu : l'appli fonctionne hors ligne à la salle.
+/* Service worker de Fonte : l'appli fonctionne hors ligne à la salle.
    Quand tu modifies index.html ou ajoutes des photos, change VERSION et complète la liste. */
-const VERSION = 'carnet-muscu-v3';
+const VERSION = 'fonte-v4';
 const FONTS = 'carnet-muscu-polices';
 const APP = [
   './',
   'index.html',
   'manifest.json',
+  'icons/icon.svg',
   'icons/icon-192.png',
   'icons/icon-512.png',
   'icons/maskable-512.png',

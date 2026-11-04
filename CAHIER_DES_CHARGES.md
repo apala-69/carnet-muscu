@@ -1,4 +1,6 @@
-# Carnet Muscu — cahier des charges
+# Fonte — cahier des charges
+
+Nom de l'appli : **Fonte** (anciennement « Carnet Muscu »). Logo : un disque de fonte noir vu de face, sur fond blanc (`icons/icon.svg`).
 
 Application personnelle de suivi de musculation, sur téléphone, en français.
 Ce document reprend tout ce qui a été décidé avant le passage sur Claude Code (benchmark, maquettes, programme, première version).

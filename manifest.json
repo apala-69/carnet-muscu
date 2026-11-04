@@ -1,6 +1,6 @@
 {
-  "name": "Carnet Muscu",
-  "short_name": "Carnet Muscu",
+  "name": "Fonte",
+  "short_name": "Fonte",
   "description": "Mes séances de musculation, avec une photo pour chaque exercice.",
   "lang": "fr",
   "start_url": "./index.html",

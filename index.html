@@ -3,15 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Carnet Muscu</title>
+<title>Fonte</title>
 <meta name="description" content="Mes séances de musculation, avec une photo pour chaque exercice.">
 <meta name="theme-color" content="#FFFFFF">
 <link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="icons/icon.svg">
 <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Carnet Muscu">
+<meta name="apple-mobile-web-app-title" content="Fonte">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -623,9 +624,9 @@ function vProgress(){
 let IMPORT = null;    // données lues dans un fichier, en attente de confirmation
 function exportData(){
   const st=settings(); st.lastExport=today(); saveSettings();
-  const file={ app:'carnet-muscu', format:1, exportedAt:new Date().toISOString(), data:{ sessions:S.sessions, shakers:S.shakers, weights:S.weights, settings:st } };
+  const file={ app:'fonte', format:1, exportedAt:new Date().toISOString(), data:{ sessions:S.sessions, shakers:S.shakers, weights:S.weights, settings:st } };
   const blob=new Blob([JSON.stringify(file,null,1)],{type:'application/json'});
-  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='carnet-muscu-'+today()+'.json';
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='fonte-'+today()+'.json';
   document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),4000);
   toast('Sauvegarde téléchargée'); render();
 }
@@ -759,7 +760,7 @@ app.addEventListener('input', ev=>{
 app.addEventListener('change', ev=>{
   if (ev.target.dataset.in==='progex'){ PROG_EX=ev.target.value; render(); }
   if (ev.target.dataset.in==='import'){ const f=ev.target.files && ev.target.files[0]; if (!f) return;
-    f.text().then(t=>{ const d=readImport(t); if (!d){ toast('Ce fichier n\'est pas une sauvegarde Carnet Muscu.'); return; } IMPORT=d; CONFIRM='import'; render(); document.getElementById('donnees')?.scrollIntoView({block:'center'}); }); }
+    f.text().then(t=>{ const d=readImport(t); if (!d){ toast('Ce fichier n\'est pas une sauvegarde Fonte.'); return; } IMPORT=d; CONFIRM='import'; render(); document.getElementById('donnees')?.scrollIntoView({block:'center'}); }); }
 });
 app.addEventListener('submit', ev=>{
   ev.preventDefault();
