@@ -37,7 +37,7 @@ Dans sa version publiée sur claude.ai, l'appli utilisait le stockage partagé d
 
 C'est le consensus des références pour 1 à 3 séances par semaine. Voir `docs/SOURCES.md`.
 
-- Chaque muscle doit être travaillé au moins 2 fois par semaine (méta-analyse de Schoenfeld, 2016).
+- 2 fois par semaine fait mieux que 1 (Schoenfeld 2016) ; à volume égal, la fréquence change peu (Schoenfeld 2019) : elle sert à répartir les séries.
 - Mike Israetel (RP) conseille au débutant tout le corps, 4 à 6 exercices de base par séance et environ 8 reps.
 - Greg Nuckols (Stronger by Science) fait 3 séances tout le corps, avec **des exercices différents d'une séance à l'autre pour les mêmes muscles**.
 - On change les exercices d'une séance à l'autre, pas les muscles.
@@ -55,26 +55,33 @@ Chaque séance contient :
 
 Les gros exercices viennent en premier, l'isolation à la fin.
 
-### 3.4 Programme cible (à appliquer — la V1 utilise encore l'ancien)
+### 3.4 Programme du coach (version fondée sur les études, novembre 2026)
 
-Défaut corrigé par rapport à la V1 : la Séance 1 n'avait que l'avant des cuisses et la Séance 2 que l'arrière. Maintenant, chaque séance travaille les deux.
+Chaque règle et sa source sont affichées dans l'appli (Programmes → « Sur quoi je me base ») et listées dans `docs/SOURCES.md`. Les pratiques de coach non prouvées sont signalées comme telles.
 
-**2 fois par semaine (environ 55 min)**
+| Mouvement | Séance 1 | Séance 2 | Séance 3 |
+|---|---|---|---|
+| Jambes – pousser | Presse à cuisses 3 × 8-12 | Hack squat 3 × 8-12 | Fente statique haltères 3 × 8-12 (+ leg extension 2 × 12-15) |
+| Jambes – hanche | Leg curl assis 3 × 10-12 | SDT jambes tendues haltères 3 × 8-12 | Leg curl assis 3 × 10-12 |
+| Pousser | Chest press 3 × 8-12 | Développé incliné haltères 3 × 8-12 | Développé couché haltères 3 × 8-12 |
+| Tirer | Tirage vertical 3 × 8-12 | Rowing haltère un bras 3 × 8-12 | Rowing assis 3 × 8-12 |
+| Épaules | Élévations latérales haltères 3 × 12-15 | Développé épaules machine 3 × 8-12 | Élévations latérales poulie 3 × 12-15 |
+| Bras / abdos | Extension triceps au-dessus de la tête 2 × 10-12 + curl pupitre 2 × 10-12 | Curl marteau corde 2 × 10-12 + crunch machine 2 × 12-15 | Curl haltères 2 × 10-12 + triceps corde 2 × 10-12 |
 
-| Mouvement | Séance 1 | Séance 2 |
-|---|---|---|
-| Jambes – pousser | Presse à cuisses 3 × 8-12 | Hack squat 3 × 8-12 |
-| Jambes – hanche | Leg curl assis 2 × 10-12 | Soulevé de terre jambes tendues 3 × 8-10 |
-| Pousser | Chest press 3 × 8-10 | Développé incliné haltères 3 × 8-12 |
-| Tirer | Tirage vertical 3 × 8-12 | Rowing assis 3 × 8-12 |
-| Épaules | Élévations latérales 2 × 12-15 | Développé épaules machine 2 × 10-12 |
-| Bras / abdos | Curl pupitre 2 × 10-12 + Triceps corde 2 × 10-12 | Curl marteau corde 2 × 10-12 + Crunch machine 2 × 12-15 |
+- Repos : 2 min 30 sur les gros exercices (2 min pour les tirages), 90 s sur l'isolation (Schoenfeld 2016, Singer 2024).
+- Mélange machines / poids libres dès le départ (Haugen 2023 : même hypertrophie). Leg curl **assis** (Maeo 2021), triceps **au-dessus de la tête** (Maeo 2022).
+- Volume obtenu : 3 séances → 9 à 11 séries par semaine par gros muscle, 4 à 6 pour les bras ; 2 séances (S1 + S2) → 6. Séances de 56 à 60 min.
+- **1 fois par semaine** : presse 4 × 8-12, chest press 4 × 8-12, tirage vertical 4 × 8-12, leg curl assis 3 × 10-12, développé épaules haltères 3 × 8-12, triceps au-dessus de la tête 2 × 10-12 (Nuzzo 2024 : une petite dose fait progresser, moins que 2 séances).
+- Après 6 semaines, passage progressif aux poids libres pour les exercices restés sur machine (voir 4.2).
 
-**3 fois par semaine :** Séance 1, Séance 2 et une **Séance 3** avec d'autres variantes. Exemple : Leg extension + Leg curl allongé, Pec deck ou Développé incliné machine, Rowing machine ou Tirage prise serrée, Élévations latérales poulie, Curl haltères + Extension triceps au-dessus de la tête. Garder la même structure en 6 mouvements.
+### 3.4 bis Séances personnalisables
 
-**1 fois par semaine :** une séance d'environ 60 min. Presse 4 × 8-12, Chest press 4 × 8-10, Tirage vertical 4 × 8-12, Développé épaules 3 × 10-12, Leg curl 3 × 10-12, Triceps corde 2 × 10-12.
-
-**Machines d'abord :** pendant les 6 premières semaines, privilégier les machines pour apprendre. Ensuite, proposer de remplacer progressivement par des poids libres. Israetel et Nuckols construisent sur les poids libres.
+- **Au premier lancement**, 3 choix : *Programme du coach* (section 3.4), *Je compose mes séances* (séances vides) ou *Demander à Claude*.
+- **Une séance = un jour à la salle.** Les mêmes séances reviennent chaque semaine : toute modification s'applique dès maintenant et aux semaines suivantes.
+- Dans chaque séance : ajouter, **remplacer**, retirer, monter / descendre un exercice, régler séries, reps et repos.
+- Modifier le programme du coach le copie dans « Mes séances » (`settings.plan`, champ ajouté sans migration : absent = programme du coach). Bouton « Revenir au coach ».
+- **Demander à Claude** : l'appli copie une demande (rôle de coach prise de masse, profil, liste des clés d'exercices, format JSON imposé). L'utilisateur colle la réponse : les exercices inconnus (ex. pompes) sont ignorés.
+- Ajout rapide depuis la fiche d'un exercice : « + Séance N ».
 
 ### 3.5 Règles d'entraînement
 
@@ -83,6 +90,7 @@ Défaut corrigé par rapport à la V1 : la Séance 1 n'avait que l'avant des cui
 | Volume | 10 à 12 séries par muscle et par semaine au départ, puis on monte |
 | Intensité | Arrêter chaque série à 1-2 reps de l'échec (« reps en réserve ») |
 | Repos | 2 à 3 min sur les gros exercices, 60 à 90 s sur l'isolation (repos défini par exercice) |
+| Selon l'objectif | Prise de masse : gros exercices 3 × 8-12 (2 min 30), isolation 3 × 10-15 (1 min 15). Force : 4 × 3-6 (3 min 30). Endurance : 3 × 12-15 / 2 × 15-20 (45 s à 1 min). Gainage en secondes. Affiché dans chaque fiche. |
 | Progression | Double progression : fourchette de reps (ex. 8-12) ; quand le haut est atteint sur toutes les séries, +2,5 kg |
 | Cycle | 6 semaines : semaines 1-5 en progression (réserve de 3 → 1), semaine 6 allégée (moitié des séries) |
 | Échauffement | Sur le 1er exercice : 50 % × 10 puis 75 % × 5, calculés à partir de la charge de travail |
@@ -92,18 +100,38 @@ Défaut corrigé par rapport à la V1 : la Séance 1 n'avait que l'avant des cui
 
 ## 4. Écrans et fonctionnalités
 
-Navigation : **barre d'onglets en bas, 5 onglets** : Aujourd'hui, Programmes, Exercices, Shakers, Progrès.
+Navigation : **barre d'onglets en bas, 5 onglets** : Aujourd'hui, Programmes, Exercices, Nutrition, Progrès.
 Elle est **masquée pendant la séance** (Séance, Repos, Fin) pour éviter les appuis par erreur.
 
-1. **Aujourd'hui** : choix 1/2/3 fois cette semaine, cartes Séance 1/2/3 avec les pastilles de zones et l'état, bouton « Commencer la séance N », liste des exercices de la séance choisie (vignette photo, zone, séries × reps), carte Shaker avec ajout en un geste.
+1. **Aujourd'hui** : choix 1/2/3 fois cette semaine, cartes Séance 1/2/3 avec les pastilles de zones et l'état, bouton « Commencer la séance N », liste des exercices de la séance choisie (vignette photo, zone, séries × reps), rappel du coach (alerte la plus importante), carte « Nutrition du jour ».
 2. **Séance en cours** (plein écran) : chrono, « Exercice x sur n », barre de progression, **démo photo** (alternance départ / arrivée, vues Animation / Départ / Arrivée), nom, zone, matériel, 3 points clés, échauffement calculé, tableau des séries (dernière fois, kg, reps, réserve 0/1/2/3+, case à cocher), « + Série », conseil de progression, bouton « machine prise » (remplacement par un exercice du même muscle, avec photo), précédent / suivant / terminer.
 3. **Repos** (plein écran) : grand compte à rebours, −15 s / +15 s / Passer, prochain exercice avec photo, conseil, bip + vibration à la fin, écran maintenu allumé (Wake Lock).
-4. **Fin de séance** : durée, séries, volume, nouveaux records (avec photos), ressenti Facile / Bien / Dur, ajout de shaker, note libre, enregistrer.
+4. **Fin de séance** : durée, séries, volume, nouveaux records (avec photos), ressenti Facile / Bien / Dur, « Une douleur ? » (Aucune, Dos, Épaules, Genoux, Coudes), note libre, enregistrer.
 5. **Fiche exercice** : grande démo, pastilles de muscles, étapes numérotées, erreurs à éviter, historique des charges, alternatives avec photos, favori.
 6. **Exercices** : recherche, filtres par zone et favoris, grille de photos.
 7. **Programmes** : cycle de 6 semaines (semaine en cours, semaine allégée), choix 1/2/3 fois, détail des séances de la semaine, règles du coach, « recommencer un cycle ».
-8. **Shakers** : type (Whey, Caséine, Gainer), dose (25/30/40/50 g), liste du jour avec suppression, calendrier du mois (shakers et séances), jours d'affilée.
-9. **Progrès** : séances, semaine en cours, temps total ; volume de la semaine par muscle par rapport à la cible ; courbe de charge par exercice ; alertes de stagnation ; poids du corps et tendance ; historique des séances (avec suppression).
+8. **Nutrition** (remplace Shakers, jugé inutile) : 2 objectifs du jour calculés sur le dernier poids (protéines 1,6 g/kg ; calories = entretien estimé à 33 kcal/kg + 300), et ajustement chaque semaine selon la balance (< +0,25 %/sem. → +150 kcal ; > +0,5 %/sem. → −150 kcal ; bouton pour appliquer). Les anciens shakers restent stockés et exportés.
+9. **Progrès** : **le coach** (voir 4.1) ; séances, semaine en cours, temps total ; volume de la semaine par muscle par rapport à la cible ; courbe de charge par exercice ; alertes de stagnation ; poids du corps et tendance ; historique des séances (avec suppression).
+
+### 4.1 Le coach
+
+Règles simples calculées dans le téléphone (aucune donnée envoyée) :
+- **Douleur** signalée en fin de séance (valable 14 jours, « Aucune » l'efface) : les exercices qui sollicitent la zone sont proposés 10 % plus légers, avec une alerte et un bouton « Remplacer » dans la séance ; les remplacements qui ne sollicitent pas la zone passent en premier. Rappel : douleur qui dure → médecin ou kiné.
+- **Charge qui monte vite** : plus de +10 % (et plus de 2,5 kg) d'une séance à l'autre.
+- **Stagnation** : même charge sur 3 séances.
+- **Trop près de l'échec** : réserve à 0 sur la moitié des séries ou plus.
+- **Fatigue** : 2 séances « Dur » de suite.
+- **Reprise** : 8 jours ou plus sans séance → charges proposées −10 %.
+- **Ça progresse** : gains de charge sur 4 semaines.
+- **Bilan pour Claude** : bouton qui copie un résumé des 4 dernières semaines (séances, charges, ressenti, douleurs, poids, objectifs, alertes) à coller dans l'appli Claude, plus un lien « Ouvrir Claude ». Une IA directement dans l'appli demanderait une clé API payante : écartée pour l'instant.
+
+### 4.2 Ajouts (novembre 2026)
+
+- **Passage aux poids libres** : 6 semaines après la 1re séance, une carte sur Aujourd'hui propose un remplacement à la fois (ordre de priorité : chest press → développé couché haltères, développé incliné machine → barre, hack squat → squat, épaules machine → haltères, rowing machine → haltère…). La presse à cuisses reste. « Plus tard » = reproposé dans 14 jours.
+- **Carte des muscles** (Progrès) : silhouette avant / arrière dessinée pour l'appli, colorée selon les séries faites depuis lundi (0, 1-4, 5-9, 10+).
+- **Mensurations** (Progrès) : bras, poitrine, taille, cuisse (dans `settings.measures`), écart depuis la 1re mesure, rappel du coach après 30 jours, alerte si la taille monte plus vite que les bras. **Photos** dans IndexedDB (`fonte-photos`), réduites à 900 px, comparaison avant / maintenant ; incluses dans l'export.
+- **Bilan de la semaine passée** : du lundi au mercredi sur Aujourd'hui (séances, records, séries, charge totale, poids, un conseil), fermable.
+- **Calcul des disques** pendant la séance pour les exercices à la barre (barre 20 kg, barre EZ 10 kg ; disques 25 à 1,25 kg).
 
 ## 5. Design
 
@@ -122,7 +150,7 @@ Direction claire, inspirée des codes sportswear (Nike, Adidas) sans copier de m
 
 - Source : **free-exercise-db** (domaine public) — https://github.com/yuhonas/free-exercise-db
 - 2 photos par exercice (`img/<clé>-0.jpg` = départ, `img/<clé>-1.jpg` = arrivée), redimensionnées à 600 px de large.
-- 36 exercices dans la V1. La correspondance clé → dossier d'origine est dans `docs/SOURCES.md`.
+- 36 exercices dans la V1, **139** depuis l'ajout de la bibliothèque (filtres par muscle et par matériel). La correspondance clé → dossier d'origine est dans `docs/SOURCES.md`.
 - Piste pour aller plus loin : **exercises-dataset** (1 324 exercices avec GIF animés, licence à vérifier).
 
 ## 7. Prochaines étapes pour Claude Code
@@ -131,8 +159,8 @@ Direction claire, inspirée des codes sportswear (Nike, Adidas) sans copier de m
 2. **En faire une PWA installable** sur l'écran d'accueil du téléphone : `manifest.json`, icônes, service worker pour fonctionner hors ligne à la salle.
 3. **Héberger gratuitement** (GitHub Pages) pour l'ouvrir depuis le téléphone.
 4. **Export / import des données** (fichier JSON), puisque le stockage reste dans le navigateur.
-5. **Rappel shaker** après la séance (notification de la PWA, si le téléphone le permet).
-6. **Passage aux poids libres** après 6 semaines : proposer des remplacements (squat, développé couché, rowing haltère…), ce qui demandera d'ajouter leurs photos.
+5. ~~Rappel shaker~~ : abandonné (onglet Shakers remplacé par Nutrition).
+6. ~~Passage aux poids libres~~ : fait (voir 4.2).
 7. Ajouter des exercices et traduire les consignes en français au fur et à mesure.
 
 ## 8. Ce qu'il ne faut pas faire
