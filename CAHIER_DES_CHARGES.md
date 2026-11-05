@@ -127,6 +127,14 @@ Règles simples calculées dans le téléphone (aucune donnée envoyée) :
 - **Ça progresse** : gains de charge sur 4 semaines.
 - **Bilan pour Claude** : bouton qui copie un résumé des 4 dernières semaines (séances, charges, ressenti, douleurs, poids, objectifs, alertes) à coller dans l'appli Claude, plus un lien « Ouvrir Claude ». Une IA directement dans l'appli demanderait une clé API payante : écartée pour l'instant.
 
+### 4.2 Ajouts (novembre 2026)
+
+- **Passage aux poids libres** : 6 semaines après la 1re séance, une carte sur Aujourd'hui propose un remplacement à la fois (ordre de priorité : chest press → développé couché haltères, développé incliné machine → barre, hack squat → squat, épaules machine → haltères, rowing machine → haltère…). La presse à cuisses reste. « Plus tard » = reproposé dans 14 jours.
+- **Carte des muscles** (Progrès) : silhouette avant / arrière dessinée pour l'appli, colorée selon les séries faites depuis lundi (0, 1-4, 5-9, 10+).
+- **Mensurations** (Progrès) : bras, poitrine, taille, cuisse (dans `settings.measures`), écart depuis la 1re mesure, rappel du coach après 30 jours, alerte si la taille monte plus vite que les bras. **Photos** dans IndexedDB (`fonte-photos`), réduites à 900 px, comparaison avant / maintenant ; incluses dans l'export.
+- **Bilan de la semaine passée** : du lundi au mercredi sur Aujourd'hui (séances, records, séries, charge totale, poids, un conseil), fermable.
+- **Calcul des disques** pendant la séance pour les exercices à la barre (barre 20 kg, barre EZ 10 kg ; disques 25 à 1,25 kg).
+
 ## 5. Design
 
 Direction claire, inspirée des codes sportswear (Nike, Adidas) sans copier de marque ni de logo.
@@ -154,7 +162,7 @@ Direction claire, inspirée des codes sportswear (Nike, Adidas) sans copier de m
 3. **Héberger gratuitement** (GitHub Pages) pour l'ouvrir depuis le téléphone.
 4. **Export / import des données** (fichier JSON), puisque le stockage reste dans le navigateur.
 5. ~~Rappel shaker~~ : abandonné (onglet Shakers remplacé par Nutrition).
-6. **Passage aux poids libres** après 6 semaines : proposer des remplacements (squat, développé couché, rowing haltère…), ce qui demandera d'ajouter leurs photos.
+6. ~~Passage aux poids libres~~ : fait (voir 4.2).
 7. Ajouter des exercices et traduire les consignes en français au fur et à mesure.
 
 ## 8. Ce qu'il ne faut pas faire
