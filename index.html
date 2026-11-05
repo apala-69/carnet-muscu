@@ -222,7 +222,111 @@ pushdown:{n:'Extension triceps barre',g:'Bras',v:'Triceps',m:'Triceps',eq:'Pouli
 overheadrope:{n:'Extension triceps au-dessus de la tête',g:'Bras',v:'Triceps',m:'Triceps (longue portion)',eq:'Poulie',s:["Dos à la poulie, corde derrière la tête, coudes vers l'avant.","Tends les bras vers le haut et l'avant.","Reviens lentement derrière la tête."],e:["Coudes qui s'écartent.","Cambrer le dos."]},
 abcrunch:{n:'Crunch à la machine',g:'Abdos',v:'Abdos',m:'Grand droit',eq:'Machine',s:["Règle le siège, pieds calés.","Enroule le dos en rapprochant les côtes du bassin.","Reviens lentement sans relâcher complètement."],e:["Tirer avec les bras.","Charge trop lourde qui fait bouger les hanches."]},
 kneeraise:{n:'Relevé de genoux (chaise romaine)',g:'Abdos',v:'Abdos',m:'Abdos',eq:'Chaise romaine',s:["Avant-bras sur les appuis, dos contre le dossier.","Monte les genoux vers la poitrine en basculant le bassin.","Redescends lentement sans te balancer."],e:["Se balancer.","Monter seulement les cuisses sans enrouler le bassin."]},
-hanging:{n:'Relevé de jambes suspendu',g:'Abdos',v:'Abdos',m:'Abdos',eq:'Barre fixe',s:["Suspendu à la barre, bras tendus.","Monte les genoux puis les jambes en enroulant le bassin.","Redescends lentement."],e:["Se balancer.","Aller trop vite."]}
+hanging:{n:'Relevé de jambes suspendu',g:'Abdos',v:'Abdos',m:'Abdos',eq:'Barre fixe',s:["Suspendu à la barre, bras tendus.","Monte les genoux puis les jambes en enroulant le bassin.","Redescends lentement."],e:["Se balancer.","Aller trop vite."]},
+/* --- Bibliothèque élargie (free-exercise-db, domaine public) --- */
+squat:{n:"Squat barre",g:"Jambes",v:"Jambes",z:"Cuisses",m:"Quadriceps · fessiers",eq:"Barre",t:"poly",s:["Barre sur le haut du dos, pieds à largeur d'épaules, pointes légèrement ouvertes.", "Descends en poussant les fesses en arrière, jusqu'à cuisses parallèles au sol.", "Remonte en poussant sur tout le pied, dos droit."],e:["Genoux qui rentrent vers l'intérieur.", "Dos qui s'arrondit en bas."]},
+frontsquat:{n:"Squat avant",g:"Jambes",v:"Jambes",z:"Cuisses",m:"Quadriceps · fessiers",eq:"Barre",t:"poly",s:["Barre posée sur l'avant des épaules, coudes hauts.", "Descends buste droit jusqu'à cuisses parallèles.", "Remonte en gardant les coudes hauts."],e:["Coudes qui tombent : la barre glisse.", "Buste qui penche en avant."]},
+smithsquat:{n:"Squat à la Smith machine",g:"Jambes",v:"Jambes",z:"Cuisses",m:"Quadriceps · fessiers",eq:"Machine",t:"poly",s:["Barre guidée sur le haut du dos, pieds légèrement en avant de la barre.", "Descends jusqu'à cuisses parallèles.", "Remonte en poussant sur les talons."],e:["Pieds trop reculés : stress sur les genoux.", "Verrouiller les genoux en haut."]},
+gobletsquat:{n:"Squat gobelet",g:"Jambes",v:"Jambes",z:"Cuisses",m:"Quadriceps · fessiers",eq:"Haltères",t:"poly",s:["Tiens un haltère contre la poitrine, coudes vers le bas.", "Descends entre tes genoux, buste droit.", "Remonte en poussant sur les talons."],e:["Talons qui décollent.", "Dos qui s'arrondit."]},
+dbsquat:{n:"Squat haltères",g:"Jambes",v:"Jambes",z:"Cuisses",m:"Quadriceps · fessiers",eq:"Haltères",t:"poly",s:["Haltères le long du corps, pieds à largeur d'épaules.", "Descends en poussant les fesses en arrière.", "Remonte, dos droit, regard devant."],e:["Genoux qui rentrent.", "Descendre en arrondissant le dos."]},
+splitsquat:{n:"Fente statique haltères",g:"Jambes",v:"Jambes",z:"Cuisses",m:"Quadriceps · fessiers",eq:"Haltères",t:"poly",s:["Un grand pas, haltères le long du corps, buste droit.", "Descends le genou arrière vers le sol.", "Remonte en poussant sur le pied avant. Change de jambe."],e:["Genou avant qui part vers l'intérieur.", "Pas trop court : talon avant qui décolle."]},
+lunge:{n:"Fentes avant haltères",g:"Jambes",v:"Jambes",z:"Cuisses",m:"Quadriceps · fessiers",eq:"Haltères",t:"poly",s:["Debout, haltères le long du corps.", "Fais un grand pas en avant et descends le genou arrière vers le sol.", "Repousse pour revenir. Alterne les jambes."],e:["Buste qui penche en avant.", "Genou avant qui dépasse beaucoup la pointe du pied."]},
+reverselunge:{n:"Fentes arrière haltères",g:"Jambes",v:"Jambes",z:"Cuisses",m:"Quadriceps · fessiers",eq:"Haltères",t:"poly",s:["Debout, haltères le long du corps.", "Fais un pas en arrière et descends le genou vers le sol.", "Reviens en poussant sur le pied avant."],e:["Perdre l'équilibre en allant trop vite.", "Genou avant qui rentre."]},
+walklunge:{n:"Fentes marchées barre",g:"Jambes",v:"Jambes",z:"Cuisses",m:"Quadriceps · fessiers",eq:"Barre",t:"poly",s:["Barre sur le haut du dos.", "Avance d'un grand pas et descends le genou arrière.", "Enchaîne avec l'autre jambe en avançant."],e:["Pas trop courts.", "Buste qui s'effondre."]},
+stepup:{n:"Montées sur banc haltères",g:"Jambes",v:"Jambes",z:"Cuisses",m:"Quadriceps · fessiers",eq:"Haltères",t:"poly",s:["Face à un banc, haltères en main.", "Pose un pied entier sur le banc et monte en poussant dessus.", "Redescends lentement. Alterne."],e:["Pousser avec la jambe d'en bas.", "Banc trop haut."]},
+narrowpress:{n:"Presse à cuisses pieds serrés",g:"Jambes",v:"Jambes",z:"Cuisses",m:"Quadriceps",eq:"Machine",t:"poly",s:["Pieds serrés au milieu de la plateforme.", "Descends lentement jusqu'à 90° aux genoux.", "Pousse sans verrouiller les genoux."],e:["Bas du dos qui se décolle.", "Descendre trop bas."]},
+singlelegext:{n:"Leg extension une jambe",g:"Jambes",v:"Jambes",z:"Cuisses",m:"Quadriceps",eq:"Machine",t:"iso",s:["Règle la machine comme le leg extension, une seule jambe sous le boudin.", "Tends la jambe en contractant la cuisse.", "Redescends lentement. Change de jambe."],e:["Donner un coup de pied.", "Décoller les fesses."]},
+standlegcurl:{n:"Leg curl debout",g:"Jambes",v:"Jambes",z:"Ischios",m:"Ischio-jambiers",eq:"Machine",t:"iso",s:["Debout, cuisse contre l'appui, boudin derrière la cheville.", "Ramène le talon vers la fesse.", "Redescends lentement. Change de jambe."],e:["Cambrer le dos.", "Lancer la jambe."]},
+deadlift:{n:"Soulevé de terre",g:"Jambes",v:"Jambes",z:"Ischios",m:"Ischios · fessiers · dos",eq:"Barre",t:"poly",s:["Pieds sous la barre, mains juste à l'extérieur des jambes, dos plat.", "Pousse dans le sol en gardant la barre contre les jambes.", "Redresse-toi en serrant les fessiers, puis redescends en contrôlant."],e:["Dos rond : le plus grand risque.", "Barre qui s'éloigne des jambes."]},
+sumo:{n:"Soulevé de terre sumo",g:"Jambes",v:"Jambes",z:"Ischios",m:"Fessiers · ischios · adducteurs",eq:"Barre",t:"poly",s:["Pieds très écartés, pointes ouvertes, mains entre les jambes.", "Pousse le sol en ouvrant les genoux, dos plat.", "Redresse-toi puis redescends en contrôlant."],e:["Genoux qui rentrent.", "Dos rond."]},
+dbrdl:{n:"Soulevé de terre jambes tendues haltères",g:"Jambes",v:"Jambes",z:"Ischios",m:"Ischios · fessiers",eq:"Haltères",t:"poly",s:["Haltères devant les cuisses, genoux légèrement fléchis.", "Descends les haltères le long des jambes en poussant les fesses en arrière.", "Remonte en serrant les fessiers, dos droit."],e:["Arrondir le dos.", "Plier les genoux comme un squat."]},
+goodmorning:{n:"Good morning",g:"Jambes",v:"Jambes",z:"Ischios",m:"Ischios · bas du dos",eq:"Barre",t:"poly",s:["Barre sur le haut du dos, genoux légèrement fléchis.", "Penche le buste en avant en poussant les fesses en arrière, dos plat.", "Remonte en serrant les fessiers."],e:["Dos rond.", "Charge trop lourde : commence léger."]},
+hipthrust:{n:"Hip thrust",g:"Jambes",v:"Jambes",z:"Fessiers",m:"Fessiers · ischios",eq:"Barre",t:"poly",s:["Haut du dos contre un banc, barre sur les hanches (avec une mousse).", "Monte les hanches jusqu'à l'alignement épaules-genoux.", "Serre les fessiers en haut, redescends lentement."],e:["Cambrer le bas du dos en haut.", "Pousser avec la pointe des pieds."]},
+glutebridge:{n:"Pont fessier barre",g:"Jambes",v:"Jambes",z:"Fessiers",m:"Fessiers",eq:"Barre",t:"poly",s:["Allongé au sol, barre sur les hanches, pieds à plat.", "Monte les hanches en serrant les fessiers.", "Redescends sans poser complètement."],e:["Cambrer le dos.", "Pieds trop loin des fesses."]},
+cablekick:{n:"Extension de hanche à la poulie",g:"Jambes",v:"Jambes",z:"Fessiers",m:"Fessiers",eq:"Poulie basse",t:"iso",s:["Sangle à la cheville, face à la poulie, mains sur la machine.", "Pousse la jambe vers l'arrière en serrant la fesse.", "Reviens lentement. Change de jambe."],e:["Cambrer le dos pour aller plus loin.", "Balancer la jambe."]},
+pullthrough:{n:"Pull through à la poulie",g:"Jambes",v:"Jambes",z:"Fessiers",m:"Fessiers · ischios",eq:"Poulie basse",t:"poly",s:["Dos à la poulie basse, corde entre les jambes.", "Penche-toi en poussant les fesses en arrière, dos plat.", "Redresse-toi en serrant les fessiers."],e:["Tirer avec les bras.", "Arrondir le dos."]},
+backext:{n:"Extensions lombaires (banc à 45°)",g:"Jambes",v:"Jambes",z:"Ischios",m:"Bas du dos · fessiers · ischios",eq:"Banc",t:"iso",s:["Hanches sur l'appui, chevilles calées, bras croisés sur la poitrine.", "Descends le buste en gardant le dos plat.", "Remonte jusqu'à l'alignement du corps, pas plus."],e:["Monter trop haut en cambrant.", "Aller trop vite."]},
+abductor:{n:"Abducteurs à la machine",g:"Jambes",v:"Jambes",z:"Fessiers",m:"Fessiers (moyen fessier)",eq:"Machine",t:"iso",s:["Assis, coussins contre l'extérieur des genoux.", "Écarte les jambes en contrôlant.", "Reviens lentement sans laisser la charge taper."],e:["Lancer la charge.", "Se pencher en avant."]},
+adductor:{n:"Adducteurs à la machine",g:"Jambes",v:"Jambes",z:"Cuisses",m:"Adducteurs",eq:"Machine",t:"iso",s:["Assis, coussins contre l'intérieur des genoux.", "Serre les jambes en contrôlant.", "Ouvre lentement, sans forcer l'écart."],e:["Écart trop grand au départ.", "Lâcher la charge."]},
+calfpress:{n:"Mollets à la presse",g:"Jambes",v:"Jambes",z:"Mollets",m:"Mollets",eq:"Machine",t:"iso",s:["Avant des pieds en bas de la plateforme, jambes tendues sans verrouiller.", "Pousse avec la pointe des pieds le plus loin possible.", "Reviens lentement en étirant le mollet."],e:["Plier les genoux.", "Amplitude trop courte."]},
+smithcalf:{n:"Mollets à la Smith machine",g:"Jambes",v:"Jambes",z:"Mollets",m:"Mollets",eq:"Machine",t:"iso",s:["Barre guidée sur le haut du dos, avant des pieds sur une marche.", "Monte sur la pointe des pieds.", "Descends lentement talons sous la marche."],e:["Rebondir en bas.", "Plier les genoux."]},
+dbcalf:{n:"Mollets debout haltères",g:"Jambes",v:"Jambes",z:"Mollets",m:"Mollets",eq:"Haltères",t:"iso",s:["Haltères en main, avant des pieds sur une marche.", "Monte le plus haut possible.", "Descends lentement."],e:["Aller trop vite.", "Amplitude trop courte."]},
+bench:{n:"Développé couché barre",g:"Pecs",v:"Pecs",z:"Pecs",m:"Pectoraux · triceps · épaules",eq:"Barre",t:"poly",s:["Allongé, yeux sous la barre, mains un peu plus larges que les épaules, omoplates serrées.", "Descends la barre sur le bas des pectoraux, coudes à 45°.", "Pousse en expirant. Toujours avec un partenaire ou des sécurités."],e:["Rebondir sur la poitrine.", "Fesses qui décollent du banc."]},
+inclinebench:{n:"Développé incliné barre",g:"Pecs",v:"Pecs",z:"Pecs",m:"Haut des pectoraux · épaules",eq:"Barre",t:"poly",s:["Banc à 30°, mains un peu plus larges que les épaules.", "Descends la barre sur le haut de la poitrine.", "Pousse vers le haut en expirant."],e:["Banc trop incliné.", "Coudes écartés à 90°."]},
+declinebench:{n:"Développé décliné barre",g:"Pecs",v:"Pecs",z:"Pecs",m:"Bas des pectoraux · triceps",eq:"Barre",t:"poly",s:["Banc décliné, jambes calées, barre au-dessus de la poitrine.", "Descends sur le bas des pectoraux.", "Pousse en expirant."],e:["Rebondir.", "Barre qui part vers le cou."]},
+dbbench:{n:"Développé couché haltères",g:"Pecs",v:"Pecs",z:"Pecs",m:"Pectoraux · triceps",eq:"Haltères",t:"poly",s:["Allongé, haltères à hauteur de poitrine, omoplates serrées.", "Pousse vers le haut en rapprochant les haltères.", "Redescends lentement, coudes à 45°."],e:["Descendre trop bas et forcer l'épaule.", "Haltères qui s'entrechoquent."]},
+dbfly:{n:"Écartés couchés haltères",g:"Pecs",v:"Pecs",z:"Pecs",m:"Pectoraux",eq:"Haltères",t:"iso",s:["Allongé, haltères au-dessus de la poitrine, coudes légèrement fléchis.", "Ouvre les bras en arc de cercle jusqu'à sentir l'étirement.", "Referme en serrant les pectoraux."],e:["Bras tendus : stress sur les coudes.", "Descendre trop bas."]},
+inclinefly:{n:"Écartés inclinés haltères",g:"Pecs",v:"Pecs",z:"Pecs",m:"Haut des pectoraux",eq:"Haltères",t:"iso",s:["Banc à 30°, haltères au-dessus de la poitrine.", "Ouvre les bras, coudes légèrement fléchis.", "Referme en serrant le haut des pectoraux."],e:["Prendre trop lourd.", "Plier et tendre les coudes."]},
+smithbench:{n:"Développé couché à la Smith machine",g:"Pecs",v:"Pecs",z:"Pecs",m:"Pectoraux · triceps",eq:"Machine",t:"poly",s:["Banc sous la barre guidée, barre au niveau du bas des pectoraux.", "Descends en contrôlant.", "Pousse en expirant."],e:["Banc mal placé : la barre touche le cou.", "Rebondir."]},
+smithincline:{n:"Développé incliné à la Smith machine",g:"Pecs",v:"Pecs",z:"Pecs",m:"Haut des pectoraux",eq:"Machine",t:"poly",s:["Banc à 30° sous la barre guidée.", "Descends sur le haut de la poitrine.", "Pousse en expirant."],e:["Banc trop incliné.", "Épaules qui avancent."]},
+machinebench:{n:"Développé couché machine",g:"Pecs",v:"Pecs",z:"Pecs",m:"Pectoraux · triceps",eq:"Machine",t:"poly",s:["Allongé, poignées à hauteur de poitrine.", "Pousse en expirant.", "Reviens lentement."],e:["Épaules qui décollent du banc.", "Laisser la charge taper."]},
+declinepress:{n:"Développé décliné machine",g:"Pecs",v:"Pecs",z:"Pecs",m:"Bas des pectoraux",eq:"Machine",t:"poly",s:["Assis, poignées à hauteur du bas de la poitrine.", "Pousse vers l'avant et le bas.", "Reviens lentement."],e:["Dos qui décolle.", "Coudes trop écartés."]},
+cablepress:{n:"Développé à la poulie",g:"Pecs",v:"Pecs",z:"Pecs",m:"Pectoraux",eq:"Poulie",t:"poly",s:["Dos aux poulies, poignées à hauteur de poitrine, un pied en avant.", "Pousse devant toi en rapprochant les mains.", "Reviens lentement."],e:["Cambrer le dos.", "Perdre l'équilibre : avance un pied."]},
+lowcross:{n:"Écartés poulie basse",g:"Pecs",v:"Pecs",z:"Pecs",m:"Haut des pectoraux",eq:"Poulie basse",t:"iso",s:["Poignées des poulies basses, bras le long du corps, paumes vers l'avant.", "Monte les mains devant toi jusqu'à hauteur de poitrine.", "Redescends lentement."],e:["Monter les mains trop haut.", "Plier et tendre les coudes."]},
+pullover:{n:"Pull-over haltère",g:"Pecs",v:"Pecs",z:"Pecs",m:"Pectoraux · grand dorsal",eq:"Haltères",t:"iso",s:["Haut du dos en travers d'un banc, haltère tenu à deux mains au-dessus de la poitrine.", "Descends l'haltère derrière la tête, bras presque tendus.", "Ramène au-dessus de la poitrine."],e:["Descendre trop bas.", "Plier les coudes."]},
+dipschest:{n:"Dips buste penché",g:"Pecs",v:"Pecs",z:"Pecs",m:"Bas des pectoraux · triceps",eq:"Barres parallèles",t:"poly",s:["Aux barres parallèles, bras tendus, buste penché en avant.", "Descends jusqu'à 90° aux coudes.", "Remonte en poussant. Charge = poids ajouté (0 au début)."],e:["Descendre trop bas : stress sur les épaules.", "Se balancer."]},
+pullup:{n:"Tractions",g:"Dos",v:"Dos",z:"Dos",m:"Grand dorsal · biceps",eq:"Barre fixe",t:"poly",s:["Suspendu, mains un peu plus larges que les épaules, paumes vers l'avant.", "Monte jusqu'à passer le menton au-dessus de la barre.", "Redescends lentement bras tendus. Charge = poids ajouté (0 au début)."],e:["Se balancer.", "Demi-amplitude."]},
+chinup:{n:"Tractions supination",g:"Dos",v:"Dos",z:"Dos",m:"Grand dorsal · biceps",eq:"Barre fixe",t:"poly",s:["Suspendu, mains à largeur d'épaules, paumes vers toi.", "Monte jusqu'au menton au-dessus de la barre.", "Redescends lentement. Charge = poids ajouté (0 au début)."],e:["Se balancer.", "Ne pas descendre jusqu'en bas."]},
+vbarpull:{n:"Tirage vertical poignée triangle",g:"Dos",v:"Dos",z:"Dos",m:"Grand dorsal",eq:"Poulie haute",t:"poly",s:["Poignée triangle, cuisses calées, buste légèrement en arrière.", "Tire vers le haut de la poitrine, coudes le long du corps.", "Remonte en contrôlant."],e:["Tirer avec les bras.", "Se balancer."]},
+underpull:{n:"Tirage vertical supination",g:"Dos",v:"Dos",z:"Dos",m:"Grand dorsal · biceps",eq:"Poulie haute",t:"poly",s:["Barre en main, paumes vers toi, mains à largeur d'épaules.", "Tire vers le haut de la poitrine.", "Remonte lentement bras tendus."],e:["Se balancer en arrière.", "Hausser les épaules."]},
+onearmlat:{n:"Tirage vertical un bras",g:"Dos",v:"Dos",z:"Dos",m:"Grand dorsal",eq:"Poulie haute",t:"poly",s:["Poignée d'une main, cuisses calées.", "Tire le coude vers la hanche.", "Remonte en étirant le dos. Change de bras."],e:["Tourner le buste.", "Tirer avec le biceps."]},
+straightarm:{n:"Tirage bras tendus à la poulie",g:"Dos",v:"Dos",z:"Dos",m:"Grand dorsal",eq:"Poulie haute",t:"iso",s:["Debout face à la poulie haute, barre en main, bras presque tendus.", "Abaisse la barre jusqu'aux cuisses en gardant les bras tendus.", "Remonte lentement."],e:["Plier les coudes.", "Pencher le buste pour tricher."]},
+bbrow:{n:"Rowing barre",g:"Dos",v:"Dos",z:"Dos",m:"Dos · biceps",eq:"Barre",t:"poly",s:["Buste penché à 45°, dos plat, barre bras tendus.", "Tire la barre vers le nombril en serrant les omoplates.", "Redescends en contrôlant."],e:["Dos rond.", "Se redresser pour tirer."]},
+dbrow:{n:"Rowing haltère un bras",g:"Dos",v:"Dos",z:"Dos",m:"Dos · biceps",eq:"Haltères",t:"poly",s:["Une main et un genou sur un banc, dos plat, haltère dans l'autre main.", "Tire l'haltère vers la hanche, coude près du corps.", "Redescends lentement. Change de côté."],e:["Tourner le buste.", "Tirer vers l'épaule."]},
+tbar:{n:"Rowing T-bar",g:"Dos",v:"Dos",z:"Dos",m:"Dos · biceps",eq:"Barre",t:"poly",s:["Debout au-dessus de la barre, buste penché, dos plat.", "Tire la poignée vers la poitrine.", "Redescends en contrôlant."],e:["Dos rond.", "Donner de l'élan."]},
+lyingtbar:{n:"Rowing T-bar poitrine appuyée",g:"Dos",v:"Dos",z:"Dos",m:"Dos",eq:"Machine",t:"poly",s:["Poitrine contre l'appui, poignées en main.", "Tire en serrant les omoplates.", "Reviens lentement."],e:["Décoller la poitrine.", "Hausser les épaules."]},
+inclinerow:{n:"Rowing haltères banc incliné",g:"Dos",v:"Dos",z:"Dos",m:"Dos",eq:"Haltères",t:"poly",s:["Allongé sur le ventre sur un banc incliné, haltères bras tendus.", "Tire les coudes vers l'arrière.", "Redescends lentement."],e:["Décoller la poitrine du banc.", "Tirer avec élan."]},
+onearmcablerow:{n:"Rowing poulie un bras",g:"Dos",v:"Dos",z:"Dos",m:"Dos",eq:"Poulie basse",t:"poly",s:["Assis face à la poulie, poignée dans une main, dos droit.", "Tire vers la hanche en serrant l'omoplate.", "Tends le bras lentement. Change de côté."],e:["Tourner le buste.", "Arrondir le dos."]},
+smithrow:{n:"Rowing à la Smith machine",g:"Dos",v:"Dos",z:"Dos",m:"Dos · biceps",eq:"Machine",t:"poly",s:["Buste penché, dos plat, barre guidée bras tendus.", "Tire vers le nombril.", "Redescends en contrôlant."],e:["Dos rond.", "Se redresser."]},
+rackpull:{n:"Soulevé de terre partiel (rack pull)",g:"Dos",v:"Dos",z:"Dos",m:"Dos · fessiers · trapèzes",eq:"Barre",t:"poly",s:["Barre posée sur les sécurités à hauteur des genoux.", "Dos plat, redresse-toi en poussant les hanches vers l'avant.", "Repose la barre en contrôlant."],e:["Dos rond.", "Pencher en arrière en haut."]},
+shrug:{n:"Haussements d'épaules barre",g:"Dos",v:"Dos",z:"Trapèzes",m:"Trapèzes",eq:"Barre",t:"iso",s:["Debout, barre devant les cuisses, bras tendus.", "Monte les épaules vers les oreilles.", "Redescends lentement."],e:["Rouler les épaules.", "Plier les bras."]},
+dbshrug:{n:"Haussements d'épaules haltères",g:"Dos",v:"Dos",z:"Trapèzes",m:"Trapèzes",eq:"Haltères",t:"iso",s:["Haltères le long du corps.", "Monte les épaules vers les oreilles.", "Tiens 1 seconde en haut, redescends."],e:["Rouler les épaules.", "Tête qui avance."]},
+ohp:{n:"Développé militaire barre",g:"Épaules",v:"Épaules",z:"Épaules",m:"Deltoïdes · triceps",eq:"Barre",t:"poly",s:["Debout, barre sur le haut de la poitrine, mains un peu plus larges que les épaules.", "Pousse au-dessus de la tête en serrant les fessiers.", "Redescends au menton en contrôlant."],e:["Cambrer le bas du dos.", "Pousser avec les jambes."]},
+arnold:{n:"Développé Arnold",g:"Épaules",v:"Épaules",z:"Épaules",m:"Deltoïdes",eq:"Haltères",t:"poly",s:["Assis, haltères devant le visage, paumes vers toi.", "Pousse en tournant les paumes vers l'avant.", "Redescends en refaisant la rotation."],e:["Cambrer le dos.", "Aller trop vite."]},
+smithohp:{n:"Développé épaules à la Smith machine",g:"Épaules",v:"Épaules",z:"Épaules",m:"Deltoïdes · triceps",eq:"Machine",t:"poly",s:["Assis sous la barre guidée, dos calé.", "Pousse au-dessus de la tête.", "Redescends au menton."],e:["Cambrer le dos.", "Descendre derrière la nuque."]},
+seatedlat:{n:"Élévations latérales assis",g:"Épaules",v:"Épaules",z:"Épaules",m:"Deltoïde moyen",eq:"Haltères",t:"iso",s:["Assis au bout d'un banc, haltères le long du corps.", "Monte les bras sur les côtés jusqu'à hauteur d'épaules.", "Redescends lentement."],e:["Monter plus haut que les épaules.", "Balancer."]},
+frontraise:{n:"Élévations frontales haltères",g:"Épaules",v:"Épaules",z:"Épaules",m:"Avant d'épaule",eq:"Haltères",t:"iso",s:["Debout, haltères devant les cuisses.", "Monte un bras devant toi jusqu'à hauteur d'épaule.", "Redescends lentement. Alterne."],e:["Donner de l'élan avec le dos.", "Monter trop haut."]},
+cablefront:{n:"Élévations frontales poulie",g:"Épaules",v:"Épaules",z:"Épaules",m:"Avant d'épaule",eq:"Poulie basse",t:"iso",s:["Dos à la poulie basse, poignée entre les jambes.", "Monte le bras devant toi jusqu'à hauteur d'épaule.", "Redescends lentement."],e:["Cambrer le dos.", "Balancer."]},
+facepull:{n:"Face pull",g:"Épaules",v:"Épaules",z:"Épaules",m:"Arrière d'épaule · trapèzes",eq:"Poulie haute",t:"iso",s:["Corde à hauteur du visage, bras tendus.", "Tire la corde vers le front en écartant les mains, coudes hauts.", "Reviens lentement."],e:["Coudes qui tombent.", "Se pencher en arrière."]},
+reversemachine:{n:"Oiseau à la machine",g:"Épaules",v:"Épaules",z:"Épaules",m:"Arrière d'épaule",eq:"Machine",t:"iso",s:["Face au dossier du pec deck, poignées à hauteur d'épaules.", "Ouvre les bras vers l'arrière.", "Reviens lentement."],e:["Hausser les épaules.", "Plier les coudes."]},
+cablereardelt:{n:"Oiseau à la poulie",g:"Épaules",v:"Épaules",z:"Épaules",m:"Arrière d'épaule",eq:"Poulie",t:"iso",s:["Entre deux poulies hautes, câbles croisés devant toi.", "Ouvre les bras vers l'arrière, coudes légèrement fléchis.", "Reviens lentement."],e:["Tirer avec le dos.", "Prendre trop lourd."]},
+seatedrear:{n:"Oiseau assis haltères",g:"Épaules",v:"Épaules",z:"Épaules",m:"Arrière d'épaule",eq:"Haltères",t:"iso",s:["Assis au bout d'un banc, buste penché sur les cuisses.", "Écarte les bras sur les côtés.", "Redescends lentement."],e:["Se redresser.", "Balancer."]},
+uprightrow:{n:"Rowing menton barre",g:"Épaules",v:"Épaules",z:"Épaules",m:"Deltoïdes · trapèzes",eq:"Barre",t:"poly",s:["Debout, barre devant les cuisses, mains à largeur d'épaules.", "Monte la barre jusqu'au bas de la poitrine, coudes hauts.", "Redescends lentement."],e:["Monter trop haut : gêne dans l'épaule.", "Mains trop serrées."]},
+extrot:{n:"Rotation externe à la poulie",g:"Épaules",v:"Épaules",z:"Épaules",m:"Coiffe des rotateurs",eq:"Poulie",t:"iso",s:["De profil à la poulie, coude collé au corps à 90°.", "Tourne l'avant-bras vers l'extérieur.", "Reviens lentement. Très léger : c'est de la prévention."],e:["Décoller le coude.", "Charge trop lourde."]},
+bbcurl:{n:"Curl barre",g:"Bras",v:"Biceps",z:"Biceps",m:"Biceps",eq:"Barre",t:"iso",s:["Debout, barre en main, paumes vers l'avant.", "Plie les bras, coudes collés au corps.", "Redescends lentement."],e:["Balancer le buste.", "Coudes qui avancent."]},
+ezcurl:{n:"Curl barre EZ",g:"Bras",v:"Biceps",z:"Biceps",m:"Biceps",eq:"Barre EZ",t:"iso",s:["Barre EZ en main, prise sur les parties inclinées.", "Plie les bras sans bouger les coudes.", "Redescends lentement."],e:["Donner de l'élan.", "Demi-amplitude."]},
+altcurl:{n:"Curl haltères alterné",g:"Bras",v:"Biceps",z:"Biceps",m:"Biceps",eq:"Haltères",t:"iso",s:["Haltères le long du corps.", "Plie un bras en tournant la paume vers le haut.", "Redescends puis change de bras."],e:["Balancer le buste.", "Aller trop vite."]},
+inclinecurl:{n:"Curl incliné haltères",g:"Bras",v:"Biceps",z:"Biceps",m:"Biceps",eq:"Haltères",t:"iso",s:["Assis sur un banc incliné à 45°, bras pendants.", "Plie les bras sans avancer les coudes.", "Redescends jusqu'à bras tendus."],e:["Coudes qui avancent.", "Prendre trop lourd."]},
+concentration:{n:"Curl concentré",g:"Bras",v:"Biceps",z:"Biceps",m:"Biceps",eq:"Haltères",t:"iso",s:["Assis, coude calé contre l'intérieur de la cuisse.", "Plie le bras vers l'épaule.", "Redescends lentement. Change de bras."],e:["Bouger le haut du bras.", "Aller trop vite."]},
+cablecurl:{n:"Curl à la poulie",g:"Bras",v:"Biceps",z:"Biceps",m:"Biceps",eq:"Poulie basse",t:"iso",s:["Face à la poulie basse, barre en main.", "Plie les bras, coudes collés.", "Redescends lentement."],e:["Pencher le buste.", "Coudes qui avancent."]},
+preacherbar:{n:"Curl pupitre barre EZ",g:"Bras",v:"Biceps",z:"Biceps",m:"Biceps",eq:"Barre EZ",t:"iso",s:["Bras posés sur le pupitre, barre EZ en main.", "Plie les bras.", "Redescends jusqu'à bras presque tendus."],e:["Lâcher la descente.", "Décoller les coudes."]},
+spidercurl:{n:"Spider curl",g:"Bras",v:"Biceps",z:"Biceps",m:"Biceps",eq:"Barre EZ",t:"iso",s:["Allongé sur le ventre sur la face inclinée du pupitre, bras pendants.", "Plie les bras.", "Redescends lentement."],e:["Bouger les épaules.", "Demi-amplitude."]},
+reversecurl:{n:"Curl barre prise inversée",g:"Bras",v:"Biceps",z:"Avant-bras",m:"Avant-bras · biceps",eq:"Barre",t:"iso",s:["Barre en main, paumes vers le bas.", "Plie les bras, coudes collés.", "Redescends lentement."],e:["Poignets qui cassent.", "Balancer."]},
+zottman:{n:"Curl Zottman",g:"Bras",v:"Biceps",z:"Avant-bras",m:"Biceps · avant-bras",eq:"Haltères",t:"iso",s:["Monte les haltères paumes vers le haut.", "En haut, tourne les paumes vers le bas.", "Redescends lentement paumes vers le bas."],e:["Aller trop vite.", "Prendre trop lourd."]},
+wristcurl:{n:"Flexion des poignets barre",g:"Bras",v:"Biceps",z:"Avant-bras",m:"Avant-bras",eq:"Barre",t:"iso",s:["Assis, avant-bras sur les cuisses, paumes vers le haut, poignets dans le vide.", "Monte la barre en pliant les poignets.", "Redescends lentement."],e:["Bouger les avant-bras.", "Aller trop vite."]},
+skull:{n:"Barre au front",g:"Bras",v:"Triceps",z:"Triceps",m:"Triceps",eq:"Barre EZ",t:"iso",s:["Allongé, barre EZ au-dessus de la poitrine, bras tendus.", "Plie les coudes pour descendre la barre vers le front.", "Tends les bras sans bouger les coudes."],e:["Coudes qui s'écartent.", "Descendre trop vite."]},
+closebench:{n:"Développé couché prise serrée",g:"Bras",v:"Triceps",z:"Triceps",m:"Triceps · pectoraux",eq:"Barre",t:"poly",s:["Allongé, mains à largeur d'épaules.", "Descends la barre sur le bas des pectoraux, coudes près du corps.", "Pousse en expirant."],e:["Mains trop serrées : stress sur les poignets.", "Coudes écartés."]},
+dips:{n:"Dips triceps",g:"Bras",v:"Triceps",z:"Triceps",m:"Triceps · pectoraux",eq:"Barres parallèles",t:"poly",s:["Aux barres parallèles, buste droit, bras tendus.", "Descends jusqu'à 90° aux coudes.", "Remonte. Charge = poids ajouté (0 au début)."],e:["Descendre trop bas.", "Épaules qui montent aux oreilles."]},
+dipmachine:{n:"Dips à la machine",g:"Bras",v:"Triceps",z:"Triceps",m:"Triceps",eq:"Machine",t:"poly",s:["Assis, poignées le long du corps.", "Pousse vers le bas jusqu'à bras tendus.", "Remonte lentement."],e:["Hausser les épaules.", "Pencher le buste."]},
+benchdips:{n:"Dips entre bancs",g:"Bras",v:"Triceps",z:"Triceps",m:"Triceps",eq:"Banc",t:"poly",s:["Mains sur le bord d'un banc derrière toi, jambes devant.", "Descends en pliant les coudes jusqu'à 90°.", "Remonte. Charge = poids ajouté (0 au début)."],e:["Descendre trop bas.", "Fesses loin du banc."]},
+kickback:{n:"Kickback triceps haltère",g:"Bras",v:"Triceps",z:"Triceps",m:"Triceps",eq:"Haltères",t:"iso",s:["Buste penché, coude collé au corps à 90°.", "Tends le bras vers l'arrière.", "Reviens lentement."],e:["Coude qui descend.", "Balancer l'haltère."]},
+dbext:{n:"Extension triceps haltère au-dessus de la tête",g:"Bras",v:"Triceps",z:"Triceps",m:"Triceps (longue portion)",eq:"Haltères",t:"iso",s:["Haltère tenu à deux mains au-dessus de la tête.", "Descends l'haltère derrière la tête en pliant les coudes.", "Remonte bras tendus."],e:["Coudes qui s'écartent.", "Cambrer le dos."]},
+reversepush:{n:"Extension triceps prise inversée",g:"Bras",v:"Triceps",z:"Triceps",m:"Triceps",eq:"Poulie haute",t:"iso",s:["Barre en main paumes vers le haut, coudes collés.", "Tends les bras vers le bas.", "Remonte lentement."],e:["Coudes qui avancent.", "Poignets qui cassent."]},
+vbarpush:{n:"Extension triceps poignée en V",g:"Bras",v:"Triceps",z:"Triceps",m:"Triceps",eq:"Poulie haute",t:"iso",s:["Poignée en V, coudes collés au corps.", "Pousse vers le bas jusqu'à bras tendus.", "Remonte jusqu'à 90°."],e:["Pencher le buste.", "Coudes qui s'écartent."]},
+onearmtri:{n:"Extension triceps un bras à la poulie",g:"Bras",v:"Triceps",z:"Triceps",m:"Triceps",eq:"Poulie haute",t:"iso",s:["Poignée d'une main, coude collé.", "Tends le bras vers le bas.", "Remonte lentement. Change de bras."],e:["Tourner le buste.", "Coude qui bouge."]},
+machinetri:{n:"Extension triceps machine",g:"Bras",v:"Triceps",z:"Triceps",m:"Triceps",eq:"Machine",t:"iso",s:["Coudes posés sur l'appui, alignés avec l'axe.", "Tends les bras.", "Reviens lentement."],e:["Décoller les coudes.", "Laisser la charge taper."]},
+cablecrunch:{n:"Crunch à la poulie",g:"Abdos",v:"Abdos",z:"Abdos",m:"Grand droit",eq:"Poulie haute",t:"abdo",s:["À genoux face à la poulie, corde tenue près de la tête.", "Enroule le dos en rapprochant les coudes des genoux.", "Reviens lentement."],e:["Tirer avec les bras.", "Bouger les hanches."]},
+crunch:{n:"Crunch au sol",g:"Abdos",v:"Abdos",z:"Abdos",m:"Grand droit",eq:"Poids du corps",t:"abdo",s:["Allongé, genoux pliés, mains aux tempes.", "Décolle les épaules en enroulant le haut du dos.", "Redescends lentement."],e:["Tirer sur la nuque.", "Monter trop haut."]},
+reversecrunch:{n:"Crunch inversé",g:"Abdos",v:"Abdos",z:"Abdos",m:"Bas des abdos",eq:"Poids du corps",t:"abdo",s:["Allongé, jambes pliées en l'air.", "Ramène les genoux vers la poitrine en décollant le bassin.", "Redescends lentement."],e:["Prendre de l'élan.", "Cambrer le dos en bas."]},
+legraise:{n:"Relevé de jambes allongé",g:"Abdos",v:"Abdos",z:"Abdos",m:"Bas des abdos",eq:"Banc",t:"abdo",s:["Allongé sur un banc, mains derrière la tête sur le banc.", "Monte les jambes tendues jusqu'à la verticale.", "Redescends lentement sans toucher."],e:["Cambrer le bas du dos.", "Laisser tomber les jambes."]},
+declinecrunch:{n:"Crunch sur banc décliné",g:"Abdos",v:"Abdos",z:"Abdos",m:"Grand droit",eq:"Banc",t:"abdo",s:["Sur un banc décliné, pieds calés.", "Enroule le haut du dos.", "Redescends lentement."],e:["Tirer sur la nuque.", "Aller trop vite."]},
+russian:{n:"Rotation russe",g:"Abdos",v:"Abdos",z:"Abdos",m:"Obliques",eq:"Poids du corps",t:"abdo",s:["Assis, buste incliné en arrière, pieds au sol.", "Tourne le buste d'un côté puis de l'autre.", "Garde le dos droit."],e:["Dos rond.", "Bouger seulement les bras."]},
+woodchop:{n:"Bûcheron à la poulie",g:"Abdos",v:"Abdos",z:"Abdos",m:"Obliques",eq:"Poulie",t:"abdo",s:["De profil à la poulie haute, poignée à deux mains.", "Tire en diagonale vers la hanche opposée en tournant le buste.", "Reviens lentement. Change de côté."],e:["Tirer avec les bras.", "Plier le dos."]},
+pallof:{n:"Pallof press",g:"Abdos",v:"Abdos",z:"Abdos",m:"Gainage · obliques",eq:"Poulie",t:"abdo",s:["De profil à la poulie, poignée contre la poitrine.", "Tends les bras devant toi sans laisser le buste tourner.", "Ramène lentement. Change de côté."],e:["Laisser le buste tourner.", "Cambrer."]},
+rollout:{n:"Roulette abdos (barre)",g:"Abdos",v:"Abdos",z:"Abdos",m:"Grand droit · gainage",eq:"Barre",t:"abdo",s:["À genoux, mains sur une barre chargée de petits disques.", "Roule vers l'avant en gardant le dos plat.", "Reviens en contractant les abdos."],e:["Cambrer le dos : arrête avant.", "Aller trop loin au début."]},
+plank:{n:"Gainage",g:"Abdos",v:"Abdos",z:"Abdos",m:"Gainage",eq:"Poids du corps",t:"gainage",s:["Sur les avant-bras et les pointes de pieds.", "Corps aligné, fessiers et abdos serrés.", "Tiens la position. Reps = secondes."],e:["Fesses trop hautes.", "Bas du dos qui s'affaisse."]},
+sideplank:{n:"Gainage latéral",g:"Abdos",v:"Abdos",z:"Abdos",m:"Obliques",eq:"Poids du corps",t:"gainage",s:["Sur un avant-bras, de profil, pieds l'un sur l'autre.", "Monte les hanches pour aligner le corps.", "Tiens la position. Change de côté. Reps = secondes."],e:["Hanches qui tombent.", "Épaule qui s'enfonce."]},
+deadbug:{n:"Dead bug",g:"Abdos",v:"Abdos",z:"Abdos",m:"Gainage",eq:"Poids du corps",t:"abdo",s:["Allongé, bras vers le plafond, genoux à 90°.", "Tends un bras et la jambe opposée sans décoller le bas du dos.", "Reviens et alterne."],e:["Bas du dos qui se décolle.", "Aller trop vite."]}
 };
 const GROUPS = ['Jambes','Pecs','Dos','Épaules','Bras','Abdos'];
 const VOL = ['Jambes','Pecs','Dos','Épaules','Biceps','Triceps','Abdos'];
@@ -298,10 +402,17 @@ function cycleInfo(){
   const weeks = Math.max(0, Math.floor((monday(new Date()) - start) / (7*864e5)));
   return { num: Math.floor(weeks/6)+1, week: weeks%6+1 };
 }
+/* Séances : programme du coach (PLANS) ou séances personnalisées (settings.plan), qui servent toutes les semaines. */
+const PLAN_IDS = ['S1','S2','S3','E'];
+const planMode = () => (settings().plan && settings().plan.mode) || 'coach';
+const MODE_NAME = {coach:'Programme du coach', perso:'Mes séances', claude:'Programme de Claude'};
+function planItems(id){ const pl=settings().plan; return planMode()==='coach' ? PLANS[id].items : ((pl && pl[id]) || []); }
+function ensurePerso(){ const st=settings(); if (planMode()!=='coach') return; const pl={mode:'perso'}; PLAN_IDS.forEach(id=>pl[id]=PLANS[id].items.map(x=>x.slice())); st.plan=pl; }
+function editPlan(id, fn){ ensurePerso(); const st=settings(); st.plan[id]=st.plan[id]||[]; fn(st.plan[id]); if (st.plan.mode==='claude') st.plan.mode='perso'; saveSettings(); }
 function buildPlan(id){
   const base = PLANS[id]; const deload = cycleInfo().week===6;
   let name = base.name;
-  const items = base.items.map((it,i)=>{
+  const items = planItems(id).filter(it=>EX[it[0]]).map((it,i)=>{
     let [k,sets,lo,hi,rest] = it;
     if (deload) sets = Math.max(1,Math.ceil(sets/2));
     return {k,sets,lo,hi,rest};
@@ -309,7 +420,18 @@ function buildPlan(id){
   return {id,name,items,deload};
 }
 const ZONE = {legpress:'Cuisses',hacksquat:'Cuisses',legext:'Cuisses',legcurl:'Ischios',lyinglegcurl:'Ischios',rdl:'Ischios',calfstand:'Mollets',calfseated:'Mollets'};
-const zone = k => ZONE[k] || EX[k].v;
+const zone = k => ZONE[k] || EX[k].z || EX[k].v;
+/* Type d'exercice : poly (gros exercice), iso (isolation), abdo, gainage (reps = secondes) */
+const POLY_V1 = ['legpress','hacksquat','rdl','chestpress','inclinepress','inclinedb','latpull','closepull','seatedrow','isorow','highrow','shoulderpress','milpress','dbpress'];
+const exType = k => EX[k].t || (POLY_V1.includes(k) ? 'poly' : EX[k].g==='Abdos' ? 'abdo' : 'iso');
+const repTxt = (k,lo,hi) => lo+'-'+hi+(exType(k)==='gainage'?' s':'');
+/* Séries × reps × repos selon l'objectif (repères Schoenfeld, Israetel, Nuckols) */
+const OBJ = [
+  {id:'masse', n:'Prise de masse', poly:[3,8,12,150], iso:[3,10,15,75], abdo:[3,12,15,60], gainage:[3,30,60,60]},
+  {id:'force', n:'Force', poly:[4,3,6,210], iso:[3,8,12,90], abdo:[3,10,15,60], gainage:[3,45,60,60]},
+  {id:'endurance', n:'Endurance', poly:[3,12,15,60], iso:[2,15,20,45], abdo:[3,15,20,45], gainage:[3,45,90,45]}
+];
+const defItem = k => { const [sets,lo,hi,rest] = OBJ[0][exType(k)]; return [k,sets,lo,hi,rest]; };
 function weekKey(){ return iso(monday(new Date())); }
 function weekChosen(){ return settings().daysWeek === weekKey(); }
 function weekPlan(){
@@ -350,14 +472,18 @@ let REST = null;          // minuteur de repos
 let FICHE = null;         // fiche exercice ouverte
 let SHEET = null;         // feuille de remplacement
 let END = null;           // écran de fin
-let LIB = {q:'',g:'Tous'};
+let LIB = {q:'',g:'Tous',eq:'Tout'};
+let EDIT = null;          // séance en cours de modification (S1, S2, S3, E)
+let PICKER = null;        // choix d'un exercice : {id, at} (at = index à remplacer)
+let PQ = {q:'',g:'Tous',eq:'Tout'};
+let CLAUDE_TXT = '';
 let PROG_EX = null;
 let CONFIRM = null;
 let demoTimer = null, clockTimer = null, wake = null, audio = null;
 const TABS = [['aujourdhui','Aujourd\'hui','home'],['programmes','Programmes','list'],['exercices','Exercices','search'],['nutrition','Nutrition','food'],['progres','Progrès','chart']];
 
-function toast(msg){ const t=document.createElement('div'); t.className='toast'; t.textContent=msg; document.body.appendChild(t); setTimeout(()=>{t.style.opacity='0';},1800); setTimeout(()=>t.remove(),2100); }
-function go(v){ VIEW=v; FICHE=null; try{ if (location.hash.slice(1)!==v) history.replaceState(null,'','#'+v); }catch(e){} render(); window.scrollTo(0,0); }
+function toast(msg){ document.querySelectorAll('.toast').forEach(x=>x.remove()); const t=document.createElement('div'); t.className='toast'; t.textContent=msg; document.body.appendChild(t); setTimeout(()=>{t.style.opacity='0';},1800); setTimeout(()=>t.remove(),2100); }
+function go(v){ if (v!=='programmes'){ EDIT=null; PICKER=null; } VIEW=v; FICHE=null; try{ if (location.hash.slice(1)!==v) history.replaceState(null,'','#'+v); }catch(e){} render(); window.scrollTo(0,0); }
 
 /* ============ Rendu ============ */
 const app = document.getElementById('app');
@@ -381,10 +507,11 @@ function render(){
 function seanceCard(p, sel, done, interactive){
   const status = done ? '<span class="pill accent" style="height:28px">Faite</span>' : (p.slot===nextSlot()? '<span class="pill" style="height:28px;background:var(--ink);color:var(--bg)">Prochaine</span>' : '<span class="pill" style="height:28px">À faire</span>');
   const zones=[...new Set(p.items.map(i=>zone(i.k)))];
+  if (!p.items.length) return '<'+(interactive?'button data-act="pick" data-id="'+p.slot+'" aria-pressed="'+sel+'"':'div')+' class="'+(interactive?'p ':'')+'wk" style="display:flex;flex-direction:column;gap:8px;text-align:left;padding:16px;border-radius:20px;background:var(--bg);border:'+(sel?'2px solid var(--ink)':'2px dashed var(--stroke)')+';width:100%;color:var(--ink)"><span class="display" style="font-size:28px">'+esc(p.name)+'</span><span class="small muted">Pas encore d\'exercice. Compose-la en quelques touches.</span></'+(interactive?'button':'div')+'>';
   return '<'+(interactive?'button data-act="pick" data-id="'+p.slot+'" aria-pressed="'+sel+'"':'div')+' class="'+(interactive?'p ':'')+'wk" style="display:flex;flex-direction:column;gap:10px;text-align:left;padding:16px;border-radius:20px;background:'+(sel?'var(--bg)':'var(--soft)')+';border:'+(sel?'2px solid var(--ink)':'2px solid transparent')+';width:100%;color:var(--ink)">'+
   '<span class="between" style="align-items:center;width:100%"><span class="display" style="font-size:28px">'+esc(p.name)+'</span>'+status+'</span>'+
   '<span class="pills">'+zones.map(z=>'<span class="pill" style="height:28px;background:'+(sel?'var(--soft)':'var(--bg)')+'">'+esc(z)+'</span>').join('')+'</span>'+
-  '<span class="small muted">Tout le corps · '+p.items.length+' exercices · ~'+estMinutes(p)+' min</span></'+(interactive?'button':'div')+'>';
+  '<span class="small muted">'+p.items.length+' exercice'+(p.items.length>1?'s':'')+' · ~'+estMinutes(p)+' min</span></'+(interactive?'button':'div')+'>';
 }
 function vToday(){
   const st=settings(); const ci=cycleInfo(); const wp=weekPlan(); const done=doneCount();
@@ -393,11 +520,12 @@ function vToday(){
   return '<main class="wrap">'+
   '<header class="between" style="align-items:center"><span class="muted" style="font-weight:500">'+cap(frDate(new Date()))+'</span><a class="pill p" href="#programmes" data-go="programmes">'+(ci.week===6?'Cycle '+ci.num+' · Allégée':'Cycle '+ci.num+' · Sem. '+ci.week+'/6')+'</a></header>'+
   '<section style="display:flex;flex-direction:column;gap:12px"><h1 class="display" style="font-size:40px;line-height:.95">Cette semaine,<br>j\'y vais combien de fois ?</h1><div class="seggroup">'+[1,2,3].map(n=>'<button class="seg" data-act="days" data-n="'+n+'" aria-pressed="'+(chosen&&st.days===n)+'">'+n+' fois</button>').join('')+'</div>'+(chosen?'':'<span class="small muted">Nouvelle semaine : choisis avant de commencer.</span>')+'</section>'+
+  (!st.plan && !S.sessions.length ? vChoice() : '')+
   (plan.deload?'<div class="note accent">Semaine allégée : moitié moins de séries.</div>':'')+
   todayCoach()+
   '<section style="display:flex;flex-direction:column;gap:10px"><div class="between"><h2 class="sec-t">Mes séances de la semaine</h2><span class="small muted">'+Math.min(done,wp.length)+' / '+wp.length+' faites</span></div>'+wp.map(p=>seanceCard(p, p.slot===slot, p.slot<=done, true)).join('')+'</section>'+
-  '<button class="btn p" data-act="start">'+(LIVE?'Reprendre la séance':'Commencer la '+esc(plan.name.toLowerCase()))+'</button>'+
-  '<section><div class="between" style="padding-bottom:10px"><h2 class="sec-t">'+esc(plan.name)+' · exercices</h2><span class="small muted">Touche pour la démo</span></div><div class="list">'+plan.items.map((it,i)=>exRow(it.k, zone(it.k)+' · '+it.sets+' × '+it.lo+'-'+it.hi, i+1)).join('')+'</div></section>'+
+  (plan.items.length||LIVE ? '<button class="btn p" data-act="start">'+(LIVE?'Reprendre la séance':'Commencer la '+esc(plan.name.toLowerCase()))+'</button>' : '<button class="btn p" data-act="edit" data-id="'+plan.id+'">Composer la '+esc(plan.name.toLowerCase())+'</button>')+
+  (plan.items.length?'<section><div class="between" style="padding-bottom:10px;align-items:center"><h2 class="sec-t">'+esc(plan.name)+' · exercices</h2><button class="pill p" data-act="edit" data-id="'+plan.id+'">Modifier</button></div><div class="list">'+plan.items.map((it,i)=>exRow(it.k, zone(it.k)+' · '+it.sets+' × '+repTxt(it.k,it.lo,it.hi), i+1)).join('')+'</div></section>':'')+
   todayNutri()+
   '</main>';
 }
@@ -406,6 +534,7 @@ function vToday(){
 function startSession(){
   if (LIVE){ render(); return; }
   const wp = weekPlan(); const plan = wp[Math.min(PICK||nextSlot(), wp.length)-1];
+  if (!plan.items.length){ EDIT=plan.id; go('programmes'); return; }
   LIVE = { plan, idx:0, start:Date.now(), mode:'anim', data: plan.items.map(it=>{ const a=advice(it.k,it); const last=lastOf(it.k); return { k:it.k, orig:it.k, sets: Array.from({length:it.sets},(_,j)=>({kg: a.kg!=null?String(a.kg):'', reps: last&&last.sets[j]?String(last.sets[j].reps):'', rir:2, done:false})) }; }) };
   saveDraft(); requestWake(); unlockAudio();
   clockTimer = setInterval(()=>{ const c=document.getElementById('clock'); if (c&&LIVE) c.textContent = mmss((Date.now()-LIVE.start)/1000); }, 1000);
@@ -423,11 +552,11 @@ function vLive(){
   (CONFIRM==='quit'?'<div class="confirm"><b style="font-weight:500">Quitter la séance ?</b><span class="small">Les séries cochées seront perdues si tu ne l\'enregistres pas.</span><div class="row"><button class="btn sm ghost p" data-act="confirm-no">Continuer</button><button class="btn sm p" data-act="finish">Terminer et enregistrer</button></div><button class="btn sm soft p" data-act="abandon">Abandonner sans enregistrer</button></div>':'')+
   '<div class="bar" aria-hidden="true"><i style="width:'+Math.round(doneSets/allSets*100)+'%"></i></div>'+
   demoBlock(d.k, true)+
-  '<div style="display:flex;flex-direction:column;gap:6px"><h1 class="display h2">'+esc(e.n)+'</h1><span class="muted" style="font-size:14px">'+esc(e.m)+' · '+esc(e.eq)+' · '+it.sets+' × '+it.lo+'-'+it.hi+' · repos '+mmss(it.rest)+'</span>'+(d.k!==d.orig?'<span class="small muted">Remplace : '+esc(EX[d.orig].n)+'</span>':'')+'</div>'+
+  '<div style="display:flex;flex-direction:column;gap:6px"><h1 class="display h2">'+esc(e.n)+'</h1><span class="muted" style="font-size:14px">'+esc(e.m)+' · '+esc(e.eq)+' · '+it.sets+' × '+repTxt(d.k,it.lo,it.hi)+' · repos '+mmss(it.rest)+'</span>'+(d.k!==d.orig?'<span class="small muted">Remplace : '+esc(EX[d.orig].n)+'</span>':'')+'</div>'+
   (painFor(d.k).length?'<div class="note danger" style="display:flex;flex-direction:column;gap:8px"><span><b>Attention '+esc(painFor(d.k).join(', ').toLowerCase())+'</b> · Tu as signalé une gêne. Cet exercice la sollicite : va plus léger, ou remplace-le.</span><button class="pill p" style="align-self:flex-start;background:var(--bg)" data-act="sheet-swap">Remplacer l\'exercice</button></div>':'')+
   '<ol class="steps">'+e.s.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ol>'+
   warm+
-  '<section><div class="sets-h"><span>Série</span><span>Dernière fois</span><span>kg</span><span>Reps</span><span>Réserve</span><span></span></div>'+
+  '<section><div class="sets-h"><span>Série</span><span>Dernière fois</span><span>kg</span><span>'+(exType(d.k)==='gainage'?'Sec.':'Reps')+'</span><span>Réserve</span><span></span></div>'+
   d.sets.map((s,j)=>{ const p=last&&last.sets[j]; return '<div class="set"><span class="k">'+(j+1)+'</span><span class="prev">'+(p?fmt(p.kg)+' × '+p.reps:'—')+'</span><input id="kg-'+L.idx+'-'+j+'" inputmode="decimal" type="text" aria-label="Charge série '+(j+1)+' en kg" value="'+esc(s.kg)+'" data-in="kg" data-j="'+j+'" placeholder="kg"><input id="rp-'+L.idx+'-'+j+'" inputmode="numeric" type="text" aria-label="Répétitions série '+(j+1)+'" value="'+esc(s.reps)+'" data-in="reps" data-j="'+j+'" placeholder="'+it.hi+'"><button class="rir" data-act="rir" data-j="'+j+'" aria-label="Reps en réserve">'+(s.rir>=3?'3+':s.rir)+'</button><button class="check" data-act="check" data-j="'+j+'" aria-pressed="'+s.done+'" aria-label="Valider la série '+(j+1)+'">'+svg('check')+'</button></div>'; }).join('')+
   '<div class="row" style="padding-top:10px;justify-content:space-between"><button class="pill p" data-act="addset">+ Série</button><span class="small muted">Réserve = reps que tu aurais encore pu faire. Vise '+RIR_BY_WEEK[cycleInfo().week-1]+'.</span></div></section>'+
   '<div class="note '+(a.up?'accent':'')+'" style="'+(a.up?'':'background:var(--soft)')+'">'+esc(a.text)+'</div>'+
@@ -514,6 +643,7 @@ function vFiche(){
   demoBlock(k,false)+
   '<div style="display:flex;flex-direction:column;gap:10px"><h1 class="display h2" style="font-size:44px">'+esc(e.n)+'</h1><div class="pills">'+e.m.split(' · ').map((m,i)=>'<span class="pill" style="'+(i===0?'background:var(--ink);color:var(--bg)':'')+'">'+esc(m)+'</span>').join('')+'<span class="pill" style="background:var(--bg);border:1px solid var(--stroke)">'+esc(e.eq)+'</span></div></div>'+
   '<section><h2 class="sec-t" style="padding-bottom:10px;border-bottom:1px solid var(--line)">Comment faire</h2>'+e.s.map((x,i)=>'<div style="display:grid;grid-template-columns:28px 1fr;gap:10px;padding:12px 0;border-bottom:1px solid var(--line);line-height:1.45"><span style="font-family:var(--display);font-size:18px">'+(i+1)+'</span><span>'+esc(x)+'</span></div>').join('')+'</section>'+
+  vObjectifs(k)+
   '<section class="note danger" style="display:flex;flex-direction:column;gap:6px"><b>Erreurs à éviter</b><ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px">'+e.e.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>'+
   '<section style="display:flex;flex-direction:column;gap:10px"><div class="between"><h2 class="sec-t">Mon historique</h2><span class="small muted">charge max par séance</span></div>'+
   (h.length?'<div class="hist" style="--n:'+h.length+'">'+h.map((x,i)=>'<div><span>'+fmt(mx[i])+'</span><i style="height:'+Math.round(20+mx[i]/top*80)+'px"></i></div>').join('')+'</div>':'<div class="empty-st">Pas encore d\'historique. Tes charges apparaîtront ici après ta première séance avec cet exercice.</div>')+'</section>'+
@@ -521,8 +651,107 @@ function vFiche(){
   '</main>';
 }
 
+/* ---- Choix de départ ---- */
+function vChoice(){
+  const opt=(m,t,x)=>'<button class="p" data-act="choose" data-m="'+m+'" style="display:flex;flex-direction:column;gap:4px;text-align:left;padding:14px 16px;border-radius:16px;border:1px solid var(--stroke);background:var(--bg);width:100%;color:var(--ink)"><span style="font-weight:600">'+t+'</span><span class="small muted">'+x+'</span></button>';
+  return '<section class="card"><h2 class="display" style="font-size:24px">Comment veux-tu tes séances ?</h2>'+
+  opt('coach','Programme du coach','Des séances prêtes pour la prise de masse. Tu pourras changer chaque exercice.')+
+  opt('perso','Je compose mes séances','Tu choisis tes exercices parmi '+Object.keys(EX).length+', avec photos.')+
+  opt('claude','Demander à Claude','Claude prépare un programme sur mesure, que tu colles dans l\'appli.')+
+  '<span class="small muted">Une séance = un jour à la salle. Les mêmes séances reviennent chaque semaine.</span></section>';
+}
+
+/* ---- Modifier une séance ---- */
+const REPS = ['3-5','4-6','6-8','6-10','8-10','8-12','10-12','10-15','12-15','15-20','20-30','30-45','30-60','45-60','45-90'];
+const RESTS = [30,45,60,75,90,120,150,180,210,240];
+function vEdit(){
+  const id=EDIT, p=buildPlan(id), raw=planItems(id), n=weekPlan().find(x=>x.id===id); const name=n?n.name:PLANS[id].name;
+  const sel=(i,f,opts,cur,lab)=>'<label class="small muted" style="display:flex;flex-direction:column;gap:4px">'+lab+'<select data-in="ed" data-i="'+i+'" data-f="'+f+'" style="height:40px;border-radius:12px;border:1px solid var(--stroke);background:var(--bg);padding:0 8px;font-size:15px;color:var(--ink)">'+opts.map(o=>'<option value="'+o[0]+'"'+(String(o[0])===String(cur)?' selected':'')+'>'+o[1]+'</option>').join('')+'</select></label>';
+  const rows=raw.map((it,i)=>{ const [k,sets,lo,hi,rest]=it; if (!EX[k]) return ''; const rv=lo+'-'+hi; const ro=REPS.includes(rv)?REPS:REPS.concat(rv);
+    return '<div style="display:flex;flex-direction:column;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)">'+
+    '<button class="li p" style="border:0;padding:0" data-act="fiche" data-k="'+k+'"><span class="thumb"><img src="'+img(k)+'" alt="'+esc(EX[k].n)+'" loading="lazy"><span class="num">'+(i+1)+'</span></span><span class="t"><span class="n">'+esc(EX[k].n)+'</span><span class="m">'+esc(zone(k)+' · '+EX[k].eq)+'</span></span>'+svg('chev','class="chev"')+'</button>'+
+    '<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">'+
+      sel(i,'sets',[1,2,3,4,5,6].map(x=>[x,x+' série'+(x>1?'s':'')]),sets,'Séries')+
+      sel(i,'reps',ro.map(x=>[x,x+(exType(k)==='gainage'?' s':' reps')]),rv,exType(k)==='gainage'?'Secondes':'Reps')+
+      sel(i,'rest',(RESTS.includes(rest)?RESTS:RESTS.concat(rest)).map(x=>[x,mmss(x)]),rest,'Repos')+'</div>'+
+    '<div class="row" style="flex-wrap:wrap;gap:6px"><button class="pill p" data-act="ed-swap" data-i="'+i+'">'+svg('swap','style="width:14px;height:14px;margin-right:6px"')+'Remplacer</button><button class="pill p" data-act="ed-del" data-i="'+i+'">'+svg('x','style="width:14px;height:14px;margin-right:6px"')+'Retirer</button>'+
+    (i>0?'<button class="pill p" data-act="ed-up" data-i="'+i+'" aria-label="Monter">↑</button>':'')+(i<raw.length-1?'<button class="pill p" data-act="ed-down" data-i="'+i+'" aria-label="Descendre">↓</button>':'')+'</div></div>'; }).join('');
+  return '<main class="wrap">'+
+  '<div class="between" style="align-items:center"><button class="icon-btn p" data-act="edit-close" aria-label="Retour">'+svg('back')+'</button><span class="small muted">'+esc(MODE_NAME[planMode()])+'</span></div>'+
+  '<div style="display:flex;flex-direction:column;gap:6px"><h1 class="title">'+esc(name)+'</h1><span class="muted" style="font-size:14px">'+raw.length+' exercice'+(raw.length>1?'s':'')+(raw.length?' · ~'+estMinutes(p)+' min':'')+' · s\'applique dès maintenant et les semaines suivantes.</span></div>'+
+  (planMode()==='coach'?'<div class="note" style="background:var(--soft)">Tu pars du programme du coach. Au premier changement, il devient « Mes séances ». Tu pourras revenir au programme du coach dans Programmes.</div>':'')+
+  (raw.length?'<section style="border-top:1px solid var(--line)">'+rows+'</section>':'<div class="empty-st">Aucun exercice. Ajoute-en 5 à 7 : jambes d\'abord, puis pousser, tirer, épaules, bras ou abdos.</div>')+
+  '<button class="btn p" data-act="ed-add">'+svg('plus','style="width:18px;height:18px"')+' Ajouter un exercice</button>'+
+  '<span class="small muted">Repères prise de masse : gros exercices 3 × 8-12, repos 2 à 3 min ; isolation 3 × 10-15, repos 60 à 90 s. Mets les gros exercices en premier.</span>'+
+  '</main>';
+}
+function pickList(){
+  const P=PICKER, inPlan=planItems(P.id).map(x=>x[0]); const ks=filterEx(PQ);
+  if (!ks.length) return '<div class="empty-st">Aucun exercice ne correspond. Essaie un autre mot, comme « poulie » ou « curl ».</div>';
+  return ks.map(k=>{ const e=EX[k], d=defItem(k), has=inPlan.includes(k);
+    return '<div class="li" style="grid-template-columns:72px 1fr auto"><button class="thumb p" style="border:0;padding:0" data-act="fiche" data-k="'+k+'" aria-label="Voir la fiche : '+esc(e.n)+'"><img src="'+img(k)+'" alt="'+esc(e.n)+'" loading="lazy"></button><span class="t"><span class="n">'+esc(e.n)+'</span><span class="m">'+esc(zone(k)+' · '+e.eq)+'</span><span class="m">'+d[1]+' × '+repTxt(k,d[2],d[3])+'</span></span>'+
+    (has?'<span class="small muted">Déjà dedans</span>':'<button class="pill p" style="background:var(--ink);color:var(--bg)" data-act="pk" data-k="'+k+'">'+(P.at==null?'Ajouter':'Choisir')+'</button>')+'</div>'; }).join('');
+}
+function vPicker(){
+  const P=PICKER, n=weekPlan().find(x=>x.id===P.id), name=n?n.name:PLANS[P.id].name, cur=P.at!=null?planItems(P.id)[P.at][0]:null;
+  return '<main class="wrap">'+
+  '<div class="between" style="align-items:center"><button class="icon-btn p" data-act="picker-close" aria-label="Retour">'+svg('back')+'</button><span class="small muted">'+esc(name)+'</span></div>'+
+  '<div style="display:flex;flex-direction:column;gap:6px"><h1 class="title">'+(cur?'Remplacer':'Ajouter')+'</h1>'+(cur?'<span class="muted" style="font-size:14px">'+esc(EX[cur].n)+' → choisis un exercice. Touche la photo pour la fiche.</span>':'<span class="muted" style="font-size:14px">Touche la photo pour voir la fiche, puis « Ajouter ».</span>')+'</div>'+
+  '<label class="search" for="pq">'+svg('search','style="width:18px;height:18px;flex-shrink:0"')+'<span class="sr">Rechercher un exercice</span><input id="pq" type="search" placeholder="Rechercher : curl, poulie, presse…" value="'+esc(PQ.q)+'" data-in="pq"></label>'+
+  filterChips(PQ,'pq')+
+  '<div class="list" id="pklist">'+pickList()+'</div></main>';
+}
+
+/* ---- Demander à Claude un programme ---- */
+function claudeRequest(){
+  const st=settings();
+  const ids={3:['S1','S2','S3'],2:['S1','S2'],1:['E']}[st.days];
+  const lst=Object.keys(EX).map(k=>k+' : '+EX[k].n+' ('+zone(k)+', '+EX[k].eq+')').join('\n');
+  return ['Mets-toi dans la peau d\'un coach de musculation spécialisé en prise de masse.',
+  'Profil : débutant depuis octobre 2026, salle avec machines, poulies, haltères et barres. Séances de 45 min à 1 h, '+st.days+' fois par semaine. Pas de pompes. Je préfère les machines pendant les 6 premières semaines.',
+  'Construis '+ids.length+' séance'+(ids.length>1?'s':'')+' tout le corps (une séance = un jour), avec des exercices différents d\'une séance à l\'autre pour les mêmes muscles. Chaque séance : jambes pousser, jambes charnière de hanche, pousser haut du corps, tirer, épaules, bras ou abdos. Gros exercices en premier.',
+  '','Utilise uniquement les exercices de cette liste (clé : nom) :',lst,'',
+  'Explique ton choix en quelques lignes, puis termine par un seul bloc JSON, exactement dans ce format (clé, séries, reps min, reps max, repos en secondes) :',
+  '```json','{'+ids.map(id=>'"'+id+'": [["legpress", 3, 8, 12, 150], ["legcurl", 2, 10, 12, 90]]').join(', ')+'}','```'].join('\n');
+}
+function parseClaude(txt){
+  const m=txt.match(/\{[\s\S]*\}/g); if (!m) return {err:'Je ne trouve pas le bloc JSON dans le texte collé.'};
+  let j=null; for (const c of m.reverse()){ try { j=JSON.parse(c); break; } catch(e){} }
+  if (!j) return {err:'Le bloc JSON est mal formé. Copie toute la réponse de Claude.'};
+  const out={}, unknown=[]; let n=0;
+  PLAN_IDS.forEach(id=>{ if (!Array.isArray(j[id])) return; out[id]=j[id].filter(x=>{ if (!Array.isArray(x) || !EX[x[0]]){ unknown.push(Array.isArray(x)?x[0]:'?'); return false; } return true; })
+    .map(x=>{ const d=defItem(x[0]); const num=(v,lo,hi,df)=>{ v=Math.round(+v); return v>=lo&&v<=hi?v:df; }; const lo=num(x[2],1,120,d[2]), hi=num(x[3],lo,120,Math.max(lo,d[3])); return [x[0],num(x[1],1,8,d[1]),lo,hi,num(x[4],20,300,d[4])]; }); n+=out[id].length; });
+  if (!n) return {err:'Aucun exercice reconnu dans la réponse.'};
+  return {plan:out, unknown};
+}
+function applyClaude(){
+  const r=parseClaude(CLAUDE_TXT||''); if (r.err){ toast(r.err); return; }
+  const st=settings(); const pl={mode:'claude'}; PLAN_IDS.forEach(id=>pl[id]=r.plan[id]||planItems(id).map(x=>x.slice())); st.plan=pl; saveSettings(); CLAUDE_TXT='';
+  render(); window.scrollTo(0,0); toast('Programme de Claude appliqué'+(r.unknown.length?' ('+r.unknown.length+' exercice(s) ignoré(s))':''));
+}
+function vClaudeCard(){
+  return '<section class="card" id="claude"><h2 class="display" style="font-size:22px">Demander à Claude</h2>'+
+  '<span class="small muted">1. Copie la demande. 2. Colle-la dans Claude. 3. Copie toute sa réponse et colle-la ici.</span>'+
+  '<div class="row" style="flex-wrap:wrap"><button class="pill p" style="background:var(--ink);color:var(--bg);height:40px" data-act="claude-ask">Copier la demande</button><a class="pill p" style="height:40px;background:var(--bg)" href="https://claude.ai/new" target="_blank" rel="noopener">Ouvrir Claude</a></div>'+
+  '<label class="field" for="claudetxt" style="font-size:14px">Réponse de Claude<textarea id="claudetxt" rows="3" data-in="claudetxt" placeholder="Colle ici toute la réponse de Claude">'+esc(CLAUDE_TXT)+'</textarea></label>'+
+  '<button class="btn sm p" data-act="claude-apply">Appliquer le programme</button>'+
+  '<span class="small muted">Tes séances seront remplacées. Tu pourras toujours modifier chaque exercice ensuite.</span></section>';
+}
+
+/* ---- Fiche : séries selon l'objectif + ajout à une séance ---- */
+const TYPE_NAME = {poly:'Gros exercice (plusieurs articulations)', iso:'Isolation (un seul muscle)', abdo:'Abdos', gainage:'Gainage (en secondes)'};
+function vObjectifs(k){
+  const t=exType(k);
+  const rows=OBJ.map((o,i)=>{ const [se,lo,hi,re]=o[t]; return '<div class="between" style="padding:10px 0;border-bottom:1px solid var(--line);align-items:center"><span style="font-weight:'+(i?400:600)+'">'+o.n+(i?'':' · ton objectif')+'</span><span style="font-variant-numeric:tabular-nums;text-align:right">'+se+' × '+repTxt(k,lo,hi)+' <span class="muted">· repos '+mmss(re)+'</span></span></div>'; }).join('');
+  const wp=weekPlan();
+  return '<section><div class="between" style="padding-bottom:6px"><h2 class="sec-t">Séries et reps</h2><span class="small muted">'+TYPE_NAME[t]+'</span></div><div style="border-top:1px solid var(--line)">'+rows+'</div>'+
+  '<div class="row" style="flex-wrap:wrap;gap:6px;padding-top:12px">'+wp.map(p=>{ const has=planItems(p.id).some(x=>x[0]===k); return has?'<span class="pill accent">Dans la '+esc(p.name.toLowerCase())+'</span>':'<button class="pill p" data-act="addto" data-k="'+k+'" data-id="'+p.id+'" data-n="'+esc(p.name)+'">+ '+esc(p.name)+'</button>'; }).join('')+'</div></section>';
+}
+
 /* ---- Programmes ---- */
 function vProg(){
+  if (PICKER) return vPicker();
+  if (EDIT) return vEdit();
   const st=settings(), ci=cycleInfo();
   const why={3:'Chaque muscle travaille 3 fois dans la semaine, avec des exercices différents à chaque séance.',2:'Chaque muscle travaille 2 fois dans la semaine, avec des exercices différents à chaque séance.',1:'Une séance plus longue, centrée sur les gros muscles.'}[st.days];
   return '<main class="wrap">'+
@@ -533,16 +762,32 @@ function vProg(){
   (CONFIRM==='cycle'?'<div class="confirm"><b style="font-weight:500">Recommencer un cycle à partir de cette semaine ?</b><div class="row"><button class="btn sm ghost p" data-act="confirm-no">Annuler</button><button class="btn sm p" data-act="cycle-reset">Recommencer</button></div></div>':'<button class="pill p" style="align-self:flex-start" data-act="cycle-ask">Recommencer un cycle cette semaine</button>')+
   '</section>'+
   '<section style="display:flex;flex-direction:column;gap:12px"><h2 class="sec-t">Cette semaine, j\'y vais</h2><div class="seggroup">'+[1,2,3].map(n=>'<button class="seg" data-act="days" data-n="'+n+'" aria-pressed="'+(weekChosen()&&st.days===n)+'">'+n+' fois</button>').join('')+'</div>'+
-  weekPlan().map(p=>seanceCard(p,false,p.slot<=doneCount(),false)+'<details class="prog" style="margin-top:-6px"><summary><span class="small" style="font-weight:500">Voir les '+p.items.length+' exercices</span>'+svg('chev','class="chev"')+'</summary><div class="list" style="margin-bottom:12px">'+p.items.map((it,i)=>exRow(it.k, zone(it.k)+' · '+it.sets+' × '+it.lo+'-'+it.hi+' · repos '+mmss(it.rest), i+1)).join('')+'</div></details>').join('')+
-  '<div class="note accent">'+why+'</div></section>'+
+  '<div class="between" style="align-items:center"><span style="display:flex;flex-direction:column;gap:2px"><span class="small muted">Mes séances</span><span style="font-weight:600">'+esc(MODE_NAME[planMode()])+'</span></span>'+(planMode()!=='coach'?(CONFIRM==='reset'?'':'<button class="pill p" data-act="reset-ask">Revenir au coach</button>'):'')+'</div>'+
+  (CONFIRM==='reset'?'<div class="confirm"><b style="font-weight:500">Revenir au programme du coach ?</b><span class="small">Tes séances modifiées seront remplacées.</span><div class="row"><button class="btn sm ghost p" data-act="confirm-no">Annuler</button><button class="btn sm p" data-act="coach-reset">Revenir</button></div></div>':'')+
+  weekPlan().map(p=>seanceCard(p,false,p.slot<=doneCount(),false)+'<div class="row" style="margin-top:-4px"><button class="btn sm ghost p" data-act="edit" data-id="'+p.id+'">'+(p.items.length?'Modifier la '+esc(p.name.toLowerCase()):'Composer la '+esc(p.name.toLowerCase()))+'</button></div>'+(p.items.length?'<details class="prog" style="margin-top:-6px"><summary><span class="small" style="font-weight:500">Voir les '+p.items.length+' exercices</span>'+svg('chev','class="chev"')+'</summary><div class="list" style="margin-bottom:12px">'+p.items.map((it,i)=>exRow(it.k, zone(it.k)+' · '+it.sets+' × '+repTxt(it.k,it.lo,it.hi)+' · repos '+mmss(it.rest), i+1)).join('')+'</div></details>':'')).join('')+
+  (planMode()==='coach'?'<div class="note accent">'+why+'</div>':'')+'</section>'+
+  vClaudeCard()+
   '<section class="card"><h2 class="display" style="font-size:22px">Les règles du coach</h2><ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;font-size:14px;line-height:1.45"><li>Chaque muscle travaillé au moins 2 fois par semaine.</li><li>Gros exercices en premier, isolation à la fin.</li><li>10 à 12 séries par muscle et par semaine pour démarrer.</li><li>Arrêter chaque série à 1-2 reps de l\'échec.</li><li>Repos de 2 à 3 min sur les gros exercices, 60 à 90 s sur l\'isolation.</li><li>Pas de pompes.</li></ul></section>'+
   '</main>';
 }
 
 /* ---- Bibliothèque ---- */
+const EQS = ['Tout','Machine','Poulie','Haltères','Barre','Poids du corps'];
+const eqOf = e => /Poulie/.test(e.eq)?'Poulie':/Barre fixe|Barres parallèles|Poids du corps|Chaise|Banc/.test(e.eq)?'Poids du corps':/Barre/.test(e.eq)?'Barre':e.eq;
+const norm = t => t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+function filterEx(f){
+  const q=norm(f.q.trim()); const favs=settings().favs||[];
+  return Object.keys(EX).filter(k=>{ const e=EX[k];
+    if (f.g==='Favoris' && !favs.includes(k)) return false;
+    if (f.g!=='Tous' && f.g!=='Favoris' && e.g!==f.g) return false;
+    if (f.eq && f.eq!=='Tout' && eqOf(e)!==f.eq) return false;
+    return !q || norm(e.n+' '+e.m+' '+e.eq+' '+e.g+' '+zone(k)).includes(q); });
+}
+const filterChips = (f,act) => '<div class="scrollx" role="group" aria-label="Filtrer par muscle">'+['Tous','Favoris'].concat(GROUPS).map(g=>'<button class="chip" data-act="'+act+'g" data-g="'+g+'" aria-pressed="'+(f.g===g)+'">'+g+'</button>').join('')+'</div>'+
+  '<div class="scrollx" role="group" aria-label="Filtrer par matériel">'+EQS.map(q=>'<button class="chip" style="height:34px;font-size:13px" data-act="'+act+'eq" data-v="'+q+'" aria-pressed="'+(f.eq===q)+'">'+(q==='Tout'?'Tout matériel':q)+'</button>').join('')+'</div>';
 function libList(){
-  const q=LIB.q.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,''); const favs=settings().favs||[];
-  const ks=Object.keys(EX).filter(k=>{ const e=EX[k]; if (LIB.g==='Favoris') return favs.includes(k); if (LIB.g!=='Tous' && e.g!==LIB.g) return false; if (!q) return true; return (e.n+' '+e.m+' '+e.eq+' '+e.g).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').includes(q); });
+  const favs=settings().favs||[];
+  const ks=filterEx(LIB);
   if (!ks.length) return '<div class="empty-st" style="grid-column:1/-1">Aucun exercice ne correspond. Essaie un autre mot, comme « poulie » ou « curl ».</div>';
   return ks.map(k=>{ const e=EX[k]; return '<button class="tile p" data-act="fiche" data-k="'+k+'"><span class="im"><img src="'+img(k)+'" alt="'+esc(e.n)+'" loading="lazy">'+(favs.includes(k)?'<span class="fav">'+svg('heart','style="width:14px;height:14px;fill:currentColor"')+'</span>':'')+'</span><span style="display:flex;flex-direction:column;gap:2px"><span style="font-weight:500">'+esc(e.n)+'</span><span class="small muted">'+esc(e.g+' · '+e.eq)+'</span></span></button>'; }).join('');
 }
@@ -550,7 +795,7 @@ function vLib(){
   return '<main class="wrap">'+
   '<div class="between"><h1 class="title">Exercices</h1><span class="small muted">'+Object.keys(EX).length+' avec photos</span></div>'+
   '<label class="search" for="libq">'+svg('search','style="width:18px;height:18px;flex-shrink:0"')+'<span class="sr">Rechercher un exercice</span><input id="libq" type="search" placeholder="Rechercher : curl, poulie, presse…" value="'+esc(LIB.q)+'" data-in="libq"></label>'+
-  '<div class="scrollx" role="group" aria-label="Filtrer par muscle">'+['Tous','Favoris'].concat(GROUPS).map(g=>'<button class="chip" data-act="libg" data-g="'+g+'" aria-pressed="'+(LIB.g===g)+'">'+g+'</button>').join('')+'</div>'+
+  filterChips(LIB,'lib')+
   '<div class="grid2" id="liblist">'+libList()+'</div>'+
   '<p class="small muted" style="margin:0">Photos : base libre de droits free-exercise-db.</p>'+
   '</main>';
@@ -598,10 +843,10 @@ function vProgress(){
 /* ---- Coach : analyse des séances (règles simples, tout reste dans le téléphone) ---- */
 const PAIN_ZONES = ['Dos','Épaules','Genoux','Coudes'];
 const STRESS = {
-  'Dos':['rdl','hacksquat','legpress','seatedrow'],
-  'Épaules':['chestpress','inclinepress','inclinedb','shoulderpress','milpress','dbpress','butterfly','crossover'],
-  'Genoux':['legext','hacksquat','legpress'],
-  'Coudes':['tricepsrope','pushdown','overheadrope','preacher','cablepreacher','machinecurl']
+  'Dos':['rdl','hacksquat','legpress','seatedrow','squat','frontsquat','smithsquat','deadlift','sumo','dbrdl','goodmorning','bbrow','tbar','smithrow','rackpull','backext','ohp'],
+  'Épaules':['chestpress','inclinepress','inclinedb','shoulderpress','milpress','dbpress','butterfly','crossover','bench','inclinebench','declinebench','dbbench','smithbench','smithincline','machinebench','dbfly','inclinefly','pullover','dipschest','dips','benchdips','ohp','arnold','smithohp','uprightrow'],
+  'Genoux':['legext','hacksquat','legpress','squat','frontsquat','smithsquat','gobletsquat','dbsquat','splitsquat','lunge','reverselunge','walklunge','stepup','narrowpress','singlelegext'],
+  'Coudes':['tricepsrope','pushdown','overheadrope','preacher','cablepreacher','machinecurl','skull','closebench','dbext','kickback','reversepush','vbarpush','onearmtri','machinetri','bbcurl','ezcurl','preacherbar','dips']
 };
 const dayDiff = (a,b) => Math.round((parseISO(b)-parseISO(a))/864e5);
 // Dernière douleur signalée il y a moins de 14 jours (une séance « Aucune » efface l'alerte).
@@ -630,7 +875,7 @@ function coachTips(){
     const recent=h.filter(x=>dayDiff(x.date,today())<=28);
     if (recent.length>=2){ const d=topKg(recent[recent.length-1].sets)-topKg(recent[0].sets); if (d>0) ups.push({k,d}); }
   });
-  jumps.forEach(j=>{ const back=['rdl','hacksquat'].includes(j.k);
+  jumps.forEach(j=>{ const back=['rdl','hacksquat','squat','frontsquat','deadlift','sumo','dbrdl','goodmorning','bbrow','tbar','rackpull'].includes(j.k);
     out.push({t:'warn',h:'Charge qui monte vite',x:EX[j.k].n+' : '+fmt(j.a)+' → '+fmt(j.b)+' kg d\'un coup (+'+Math.round((j.b-j.a)/j.a*100)+' %). Monte par 2,5 kg : les muscles suivent vite, les tendons'+(back?' et le bas du dos':'')+' moins.'}); });
   stalls().forEach(x=>out.push({t:'warn',h:'Stagnation',x:EX[x.k].n+' bloqué à '+kgs(x.kg)+' depuis 3 séances. Ajoute une série, ou remplace-le par un exercice du même muscle.'}));
   if (fail.length) out.push({t:'info',h:'Trop près de l\'échec',x:'Réserve à 0 sur la plupart des séries : '+fail.map(k=>EX[k].n).join(', ')+'. Garde 1 à 2 reps en réserve, surtout sur les gros exercices : tu progresses autant et tu récupères mieux.'});
@@ -668,11 +913,11 @@ function report(){
   if (tips.length){ L.push('','Alertes de l\'appli :'); tips.forEach(c=>L.push('- '+c.h+' : '+c.x)); }
   return L.join('\n');
 }
-async function copyReport(){
-  const t=report();
+async function copyReport(){ copyText(report(), 'Bilan copié : colle-le dans Claude'); }
+async function copyText(t, msg){
   try { await navigator.clipboard.writeText(t); }
   catch(e){ const a=document.createElement('textarea'); a.value=t; a.setAttribute('readonly',''); a.style.position='fixed'; a.style.opacity='0'; document.body.appendChild(a); a.select(); try{ document.execCommand('copy'); }catch(_){} a.remove(); }
-  toast('Bilan copié : colle-le dans Claude');
+  toast(msg);
 }
 
 /* ---- Nutrition : 2 objectifs du jour + ajustement chaque semaine ---- */
@@ -836,6 +1081,28 @@ app.addEventListener('click', ev=>{
     case 'claude': copyReport(); break;
     case 'save': { const r=END.rec; if (r.items.length) saveSessionRec(r); END=null; LIVE=null; PICK=null; clearInterval(clockTimer); saveDraft(); try{wake&&wake.release();}catch(e){} VIEW='aujourdhui'; render(); window.scrollTo(0,0); if (r.items.length) toast('Séance enregistrée'); break; }
     case 'libg': LIB.g=el.dataset.g; render(); break;
+    case 'libeq': LIB.eq=el.dataset.v; render(); break;
+    case 'pqg': PQ.g=el.dataset.g; render(); break;
+    case 'pqeq': PQ.eq=el.dataset.v; render(); break;
+    case 'choose': { const m=el.dataset.m, st=settings();
+      if (m==='coach'){ st.plan={mode:'coach'}; saveSettings(); render(); toast('Programme du coach choisi'); }
+      else if (m==='perso'){ st.plan={mode:'perso',S1:[],S2:[],S3:[],E:[]}; saveSettings(); EDIT=weekPlan()[0].id; go('programmes'); }
+      else { go('programmes'); setTimeout(()=>document.getElementById('claude')?.scrollIntoView({block:'start'}),50); }
+      break; }
+    case 'edit': EDIT=el.dataset.id; PICKER=null; go('programmes'); break;
+    case 'edit-close': EDIT=null; PICKER=null; render(); window.scrollTo(0,0); break;
+    case 'ed-add': PICKER={id:EDIT, at:null}; PQ={q:'',g:'Tous',eq:'Tout'}; render(); window.scrollTo(0,0); break;
+    case 'ed-swap': { const i=+el.dataset.i; const k=planItems(EDIT)[i][0]; PICKER={id:EDIT, at:i}; PQ={q:'',g:EX[k].g,eq:'Tout'}; render(); window.scrollTo(0,0); break; }
+    case 'ed-del': { const i=+el.dataset.i; editPlan(EDIT, l=>l.splice(i,1)); render(); toast('Exercice retiré'); break; }
+    case 'ed-up': case 'ed-down': { const i=+el.dataset.i, j=i+(a==='ed-up'?-1:1); editPlan(EDIT, l=>{ if (j<0||j>=l.length) return; [l[i],l[j]]=[l[j],l[i]]; }); render(); break; }
+    case 'picker-close': PICKER=null; render(); window.scrollTo(0,0); break;
+    case 'pk': { const k=el.dataset.k, P=PICKER; editPlan(P.id, l=>{ if (P.at==null) l.push(defItem(k)); else { const old=l[P.at]; l[P.at] = exType(old[0])===exType(k) ? [k].concat(old.slice(1)) : defItem(k); } });
+      toast((P.at==null?'Ajouté : ':'Remplacé par : ')+EX[k].n); PICKER=null; render(); window.scrollTo(0,0); break; }
+    case 'addto': { const k=el.dataset.k, id=el.dataset.id; if (planItems(id).some(x=>x[0]===k)) break; editPlan(id, l=>l.push(defItem(k))); render(); toast('Ajouté à la '+el.dataset.n.toLowerCase()); break; }
+    case 'coach-reset': { settings().plan={mode:'coach'}; CONFIRM=null; saveSettings(); render(); toast('Programme du coach rétabli'); break; }
+    case 'reset-ask': CONFIRM='reset'; render(); break;
+    case 'claude-ask': copyText(claudeRequest(), 'Demande copiée : colle-la dans Claude'); break;
+    case 'claude-apply': applyClaude(); break;
     case 'cycle-ask': CONFIRM='cycle'; render(); break;
     case 'cycle-reset': settings().cycleStart=iso(monday(new Date())); CONFIRM=null; saveSettings(); render(); toast('Nouveau cycle lancé'); break;
     case 'del-ask': CONFIRM='del-'+el.dataset.id; render(); break;
@@ -852,9 +1119,14 @@ app.addEventListener('input', ev=>{
     if (k==='kg' && +t.dataset.j===0 && LIVE.idx===0){ const w=parseFloat(t.value.replace(',','.')); const box=document.querySelector('.warm'); if (box) box.innerHTML = w>0 ? '<b style="font-weight:500">Échauffement calculé</b><span>50 % · '+kgs(round25(w*.5))+' × 10</span><span>75 % · '+kgs(round25(w*.75))+' × 5</span>' : '<b style="font-weight:500">Échauffement</b><span>Entre ta charge de travail : les 2 séries légères se calculent toutes seules.</span>'; } }
   else if (k==='note' && END){ END.rec.note=t.value; }
   else if (k==='libq'){ LIB.q=t.value; const l=document.getElementById('liblist'); if (l) l.innerHTML=libList(); }
+  else if (k==='pq'){ PQ.q=t.value; const l=document.getElementById('pklist'); if (l) l.innerHTML=pickList(); }
+  else if (k==='claudetxt'){ CLAUDE_TXT=t.value; }
 });
 app.addEventListener('change', ev=>{
   if (ev.target.dataset.in==='progex'){ PROG_EX=ev.target.value; render(); }
+  if (ev.target.dataset.in==='ed'){ const t=ev.target, i=+t.dataset.i, f=t.dataset.f, v=t.value;
+    editPlan(EDIT, l=>{ const it=l[i]; if (f==='sets') it[1]=+v; else if (f==='reps'){ const [lo,hi]=v.split('-').map(Number); it[2]=lo; it[3]=hi; } else if (f==='rest') it[4]=+v; });
+    render(); }
   if (ev.target.dataset.in==='import'){ const f=ev.target.files && ev.target.files[0]; if (!f) return;
     f.text().then(t=>{ const d=readImport(t); if (!d){ toast('Ce fichier n\'est pas une sauvegarde Fonte.'); return; } IMPORT=d; CONFIRM='import'; render(); document.getElementById('donnees')?.scrollIntoView({block:'center'}); }); }
 });

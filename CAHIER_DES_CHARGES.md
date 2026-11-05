@@ -76,6 +76,15 @@ Défaut corrigé par rapport à la V1 : la Séance 1 n'avait que l'avant des cui
 
 **Machines d'abord :** pendant les 6 premières semaines, privilégier les machines pour apprendre. Ensuite, proposer de remplacer progressivement par des poids libres. Israetel et Nuckols construisent sur les poids libres.
 
+### 3.4 bis Séances personnalisables
+
+- **Au premier lancement**, 3 choix : *Programme du coach* (section 3.4), *Je compose mes séances* (séances vides) ou *Demander à Claude*.
+- **Une séance = un jour à la salle.** Les mêmes séances reviennent chaque semaine : toute modification s'applique dès maintenant et aux semaines suivantes.
+- Dans chaque séance : ajouter, **remplacer**, retirer, monter / descendre un exercice, régler séries, reps et repos.
+- Modifier le programme du coach le copie dans « Mes séances » (`settings.plan`, champ ajouté sans migration : absent = programme du coach). Bouton « Revenir au coach ».
+- **Demander à Claude** : l'appli copie une demande (rôle de coach prise de masse, profil, liste des clés d'exercices, format JSON imposé). L'utilisateur colle la réponse : les exercices inconnus (ex. pompes) sont ignorés.
+- Ajout rapide depuis la fiche d'un exercice : « + Séance N ».
+
 ### 3.5 Règles d'entraînement
 
 | Règle | Valeur |
@@ -83,6 +92,7 @@ Défaut corrigé par rapport à la V1 : la Séance 1 n'avait que l'avant des cui
 | Volume | 10 à 12 séries par muscle et par semaine au départ, puis on monte |
 | Intensité | Arrêter chaque série à 1-2 reps de l'échec (« reps en réserve ») |
 | Repos | 2 à 3 min sur les gros exercices, 60 à 90 s sur l'isolation (repos défini par exercice) |
+| Selon l'objectif | Prise de masse : gros exercices 3 × 8-12 (2 min 30), isolation 3 × 10-15 (1 min 15). Force : 4 × 3-6 (3 min 30). Endurance : 3 × 12-15 / 2 × 15-20 (45 s à 1 min). Gainage en secondes. Affiché dans chaque fiche. |
 | Progression | Double progression : fourchette de reps (ex. 8-12) ; quand le haut est atteint sur toutes les séries, +2,5 kg |
 | Cycle | 6 semaines : semaines 1-5 en progression (réserve de 3 → 1), semaine 6 allégée (moitié des séries) |
 | Échauffement | Sur le 1er exercice : 50 % × 10 puis 75 % × 5, calculés à partir de la charge de travail |
@@ -134,7 +144,7 @@ Direction claire, inspirée des codes sportswear (Nike, Adidas) sans copier de m
 
 - Source : **free-exercise-db** (domaine public) — https://github.com/yuhonas/free-exercise-db
 - 2 photos par exercice (`img/<clé>-0.jpg` = départ, `img/<clé>-1.jpg` = arrivée), redimensionnées à 600 px de large.
-- 36 exercices dans la V1. La correspondance clé → dossier d'origine est dans `docs/SOURCES.md`.
+- 36 exercices dans la V1, **139** depuis l'ajout de la bibliothèque (filtres par muscle et par matériel). La correspondance clé → dossier d'origine est dans `docs/SOURCES.md`.
 - Piste pour aller plus loin : **exercises-dataset** (1 324 exercices avec GIF animés, licence à vérifier).
 
 ## 7. Prochaines étapes pour Claude Code
