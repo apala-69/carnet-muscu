@@ -341,10 +341,12 @@ const img = (k,i) => 'img/'+k+'-'+(i||0)+'.jpg';
    Chaque séance suit les 6 mouvements : jambes pousser, jambes hanche, pousser, tirer, épaules, bras/abdos.
    On change les exercices d'une séance à l'autre, pas les muscles. */
 const PLANS = {
-  S1:{name:'Séance 1',items:[['legpress',3,8,12,150],['legcurl',2,10,12,90],['chestpress',3,8,10,150],['latpull',3,8,12,120],['latraise',2,12,15,75],['preacher',2,10,12,75],['tricepsrope',2,10,12,75]]},
-  S2:{name:'Séance 2',items:[['hacksquat',3,8,12,150],['rdl',3,8,10,150],['inclinedb',3,8,12,150],['seatedrow',3,8,12,120],['shoulderpress',2,10,12,120],['hammerrope',2,10,12,75],['abcrunch',2,12,15,60]]},
-  S3:{name:'Séance 3',items:[['legext',3,10,12,90],['lyinglegcurl',3,10,12,90],['inclinepress',3,8,12,150],['isorow',3,8,12,120],['cablelat',2,12,15,75],['dbcurl',2,10,12,75],['overheadrope',2,10,12,75]]},
-  E:{name:'Séance unique',items:[['legpress',4,8,12,150],['chestpress',4,8,10,150],['latpull',4,8,12,120],['shoulderpress',3,10,12,120],['legcurl',3,10,12,90],['tricepsrope',2,10,12,75]]}
+  /* Programme fondé sur les études listées dans SCIENCE (onglet Programmes → « Sur quoi je me base »).
+     Mélange machines / poids libres : même prise de muscle (Haugen 2023). Leg curl assis (Maeo 2021). Triceps bras au-dessus de la tête (Maeo 2022). */
+  S1:{name:'Séance 1',items:[['legpress',3,8,12,150],['legcurl',3,10,12,90],['chestpress',3,8,12,150],['latpull',3,8,12,120],['latraise',3,12,15,90],['overheadrope',2,10,12,90],['preacher',2,10,12,90]]},
+  S2:{name:'Séance 2',items:[['hacksquat',3,8,12,150],['dbrdl',3,8,12,150],['inclinedb',3,8,12,150],['dbrow',3,8,12,120],['shoulderpress',3,8,12,120],['hammerrope',2,10,12,90],['abcrunch',2,12,15,60]]},
+  S3:{name:'Séance 3',items:[['splitsquat',3,8,12,120],['legcurl',3,10,12,90],['dbbench',3,8,12,150],['seatedrow',3,8,12,120],['cablelat',3,12,15,90],['legext',2,12,15,90],['dbcurl',2,10,12,90],['tricepsrope',2,10,12,90]]},
+  E:{name:'Séance unique',items:[['legpress',4,8,12,150],['chestpress',4,8,12,150],['latpull',4,8,12,120],['legcurl',3,10,12,90],['dbpress',3,8,12,120],['overheadrope',2,10,12,90]]}
 };
 const RIR_BY_WEEK = ['3','2-3','2','1-2','1','3'];
 
@@ -716,9 +718,10 @@ function claudeRequest(){
   const lst=Object.keys(EX).map(k=>k+' : '+EX[k].n+' ('+zone(k)+', '+EX[k].eq+')').join('\n');
   return ['Mets-toi dans la peau d\'un coach de musculation spécialisé en prise de masse.',
   'Profil : débutant depuis octobre 2026, salle avec machines, poulies, haltères et barres. Séances de 45 min à 1 h, '+st.days+' fois par semaine. Pas de pompes. Je préfère les machines pendant les 6 premières semaines.',
-  'Construis '+ids.length+' séance'+(ids.length>1?'s':'')+' tout le corps (une séance = un jour), avec des exercices différents d\'une séance à l\'autre pour les mêmes muscles. Chaque séance : jambes pousser, jambes charnière de hanche, pousser haut du corps, tirer, épaules, bras ou abdos. Gros exercices en premier.',
+  'Construis '+ids.length+' séance'+(ids.length>1?'s':'')+' tout le corps (une séance = un jour), avec des exercices différents d\'une séance à l\'autre pour les mêmes muscles. Chaque séance : jambes pousser, jambes charnière de hanche, pousser haut du corps, tirer, épaules, bras ou abdos. Gros exercices en premier. Tu peux mélanger machines et poids libres.',
+  'Base chaque choix (séries par semaine, répétitions, repos, proximité de l\'échec, choix des exercices) sur des études publiées : cite-les (auteurs, année, revue). N\'invente aucune étude. Si un choix vient d\'une pratique de coach et non d\'une étude, dis-le clairement.',
   '','Utilise uniquement les exercices de cette liste (clé : nom) :',lst,'',
-  'Explique ton choix en quelques lignes, puis termine par un seul bloc JSON, exactement dans ce format (clé, séries, reps min, reps max, repos en secondes) :',
+  'Explique tes choix et tes sources, puis termine par un seul bloc JSON, exactement dans ce format (clé, séries, reps min, reps max, repos en secondes) :',
   '```json','{'+ids.map(id=>'"'+id+'": [["legpress", 3, 8, 12, 150], ["legcurl", 2, 10, 12, 90]]').join(', ')+'}','```'].join('\n');
 }
 function parseClaude(txt){
@@ -755,12 +758,35 @@ function vObjectifs(k){
   '<div class="row" style="flex-wrap:wrap;gap:6px;padding-top:12px">'+wp.map(p=>{ const has=planItems(p.id).some(x=>x[0]===k); return has?'<span class="pill accent">Dans la '+esc(p.name.toLowerCase())+'</span>':'<button class="pill p" data-act="addto" data-k="'+k+'" data-id="'+p.id+'" data-n="'+esc(p.name)+'">+ '+esc(p.name)+'</button>'; }).join('')+'</div></section>';
 }
 
+/* ---- Sur quoi je me base : chaque règle du programme et sa source ---- */
+const SCIENCE = [
+ {t:'Volume', r:'À 3 séances : 9 à 11 séries par semaine pour chaque gros muscle (bras : 4 à 6, plus le travail des développés et tirages). À 2 séances : environ 6.', x:'Plus de séries par semaine = plus de muscle. Gains moyens : 5,4 % sous 5 séries, 6,6 % entre 5 et 9, 9,8 % à 10 et plus. Surtout mesuré chez des débutants.', k:'Méta-analyse', src:'Schoenfeld, Ogborn & Krieger, Journal of Sports Sciences, 2017 (15 études)', u:'https://www.researchgate.net/publication/305455324'},
+ {t:'Fréquence', r:'Tout le corps à chaque séance, avec des exercices différents.', x:'2 fois par semaine fait mieux que 1 (2016). Mais à nombre de séries égal, la fréquence change peu le résultat (2019) : elle sert surtout à répartir les séries pour garder des séances de moins d\'une heure.', k:'Méta-analyses', src:'Schoenfeld, Ogborn & Krieger, Sports Medicine, 2016 · Schoenfeld, Grgic & Krieger, Journal of Sports Sciences, 2019', u:'https://pubmed.ncbi.nlm.nih.gov/27102172/'},
+ {t:'Répétitions', r:'8 à 12 sur les gros exercices, 10 à 15 sur l\'isolation.', x:'Charges lourdes ou légères font autant de muscle si on s\'approche de l\'échec ; les charges lourdes font plus de force. La fourchette 8-15 est un choix pratique : assez lourd, sans risque inutile.', k:'Méta-analyse + revue', src:'Schoenfeld et al., J Strength Cond Res, 2017 (21 études) · Schoenfeld et al., Sports, 2021', u:'https://pubmed.ncbi.nlm.nih.gov/28834797/'},
+ {t:'Effort', r:'S\'arrêter à 1 à 3 reps de l\'échec (« réserve »), de 3 en semaine 1 à 1 en semaine 5.', x:'Plus on s\'approche de l\'échec, plus le muscle grossit ; la force, elle, dépend peu de cette proximité. Analyse exploratoire selon ses auteurs.', k:'Méta-régressions', src:'Robinson et al., Sports Medicine, 2024', u:'https://www.news-medical.net/news/20240801/New-study-reveals-sweet-spot-for-muscle-growth.aspx'},
+ {t:'Repos', r:'2 à 3 min sur les gros exercices, 90 s sur l\'isolation.', x:'3 min de repos ont donné plus de force et de cuisses que 1 min (8 semaines). Au-delà de 60 s, petit bénéfice ; au-delà de 90 s, pas de différence mesurée.', k:'Étude + méta-analyse', src:'Schoenfeld et al., J Strength Cond Res, 2016 · Singer et al., Frontiers, 2024 (9 études)', u:'https://pubmed.ncbi.nlm.nih.gov/26605807/'},
+ {t:'Machines et poids libres', r:'Un mélange des deux dès le début.', x:'Même prise de muscle avec les deux. La force progresse surtout sur le type d\'appareil utilisé à l\'entraînement. Le choix dépend donc du confort et des objectifs.', k:'Méta-analyse', src:'Haugen et al., BMC Sports Sci Med Rehabil, 2023 (13 études)', u:'https://doaj.org/article/a7282dba5e674176bde2a8239832d2f7'},
+ {t:'Leg curl assis', r:'Leg curl assis plutôt qu\'allongé (séances 1 et 3).', x:'Assis, les ischios sont plus étirés : +14 % de volume contre +9 % allongé, en 12 semaines, chez 20 débutants.', k:'Étude', src:'Maeo et al., Med Sci Sports Exerc, 2021', u:'https://pubmed.ncbi.nlm.nih.gov/33009197/'},
+ {t:'Triceps au-dessus de la tête', r:'Extension triceps bras au-dessus de la tête (séance 1).', x:'+19,9 % de triceps contre +13,9 % avec les bras le long du corps, en 12 semaines, chez 21 débutants.', k:'Étude', src:'Maeo et al., European Journal of Sport Science, 2022', u:'https://pubmed.ncbi.nlm.nih.gov/35819335/'},
+ {t:'Une seule séance par semaine', r:'Séance unique de 4 séries sur les gros exercices.', x:'Même une petite dose d\'entraînement fait progresser, mais moins que 2 séances.', k:'Revue', src:'Nuzzo et al., Sports Medicine, 2024', u:'https://researchers.mq.edu.au/en/publications/resistance-exercise-minimal-dose-strategies-for-increasing-muscle/'},
+ {t:'Protéines', r:'Environ 1,6 g par kg et par jour (onglet Nutrition).', x:'Au-delà d\'environ 1,6 g/kg/jour, le gain de muscle supplémentaire devient faible.', k:'Méta-analyse', src:'Morton et al., British Journal of Sports Medicine, 2018', u:'https://experts.mcmaster.ca/display/publication763612'},
+ {t:'Semaine 6 allégée', r:'Moitié moins de séries toutes les 6 semaines.', x:'Pratique de coach (Renaissance Periodization), peu étudiée. Une semaine complète sans entraînement n\'a pas fait perdre de muscle, mais un peu de force.', k:'Pratique de coach', src:'Coleman et al., PeerJ, 2024', u:'https://peerj.com/articles/16777'},
+ {t:'Progression et ordre', r:'+2,5 kg quand le haut de la fourchette est atteint partout ; gros exercices en premier.', x:'Méthodes d\'entraîneurs (Nuckols, Israetel), pas testées directement : elles servent à garder un effort régulier et à faire les exercices les plus durs quand on est frais.', k:'Pratique de coach', src:'Greg Nuckols (Stronger by Science), Mike Israetel (RP)', u:'https://www.strongerbyscience.com/frequency/'}
+];
+function vScience(){
+  return '<section class="card" id="science"><h2 class="display" style="font-size:22px">Sur quoi je me base</h2>'+
+  '<span class="small muted">Chaque règle du programme du coach, avec ce que disent les études et leur limite. Les « pratiques de coach » ne sont pas prouvées par une étude : elles sont signalées.</span>'+
+  SCIENCE.map(x=>'<details class="prog" style="border-color:var(--stroke)"><summary><span style="display:flex;flex-direction:column;gap:2px"><span style="font-weight:600">'+esc(x.t)+'</span><span class="small muted">'+esc(x.r)+'</span></span>'+svg('chev','class="chev" style="flex-shrink:0"')+'</summary>'+
+    '<div style="display:flex;flex-direction:column;gap:8px;padding-bottom:14px"><span class="pill" style="align-self:flex-start;height:26px;font-size:12px;'+(x.k==='Pratique de coach'?'background:var(--bg);border:1px solid var(--stroke)':'background:var(--ink);color:var(--bg)')+'">'+esc(x.k)+'</span><span style="font-size:14px;line-height:1.45">'+esc(x.x)+'</span><a class="small" style="color:var(--ink)" href="'+x.u+'" target="_blank" rel="noopener">'+esc(x.src)+' ↗</a></div></details>').join('')+
+  '</section>';
+}
+
 /* ---- Programmes ---- */
 function vProg(){
   if (PICKER) return vPicker();
   if (EDIT) return vEdit();
   const st=settings(), ci=cycleInfo();
-  const why={3:'Chaque muscle travaille 3 fois dans la semaine, avec des exercices différents à chaque séance.',2:'Chaque muscle travaille 2 fois dans la semaine, avec des exercices différents à chaque séance.',1:'Une séance plus longue, centrée sur les gros muscles.'}[st.days];
+  const why={3:'Chaque gros muscle : 3 fois par semaine, 9 à 11 séries, avec des exercices différents à chaque séance.',2:'Chaque gros muscle : 2 fois par semaine, environ 6 séries. C\'est efficace ; 3 séances permettent d\'en faire plus.',1:'Une séance plus longue, centrée sur les gros muscles.'}[st.days];
   return '<main class="wrap">'+
   '<h1 class="title">Programmes</h1>'+
   '<section style="display:flex;flex-direction:column;gap:12px"><div class="between"><h2 class="sec-t">Cycle '+ci.num+' · Prise de masse</h2><span class="small muted">'+(ci.week===6?'Semaine allégée':'Semaine '+ci.week+' sur 6')+'</span></div>'+
@@ -774,7 +800,7 @@ function vProg(){
   weekPlan().map(p=>seanceCard(p,false,p.slot<=doneCount(),false)+'<div class="row" style="margin-top:-4px"><button class="btn sm ghost p" data-act="edit" data-id="'+p.id+'">'+(p.items.length?'Modifier la '+esc(p.name.toLowerCase()):'Composer la '+esc(p.name.toLowerCase()))+'</button></div>'+(p.items.length?'<details class="prog" style="margin-top:-6px"><summary><span class="small" style="font-weight:500">Voir les '+p.items.length+' exercices</span>'+svg('chev','class="chev"')+'</summary><div class="list" style="margin-bottom:12px">'+p.items.map((it,i)=>exRow(it.k, zone(it.k)+' · '+it.sets+' × '+repTxt(it.k,it.lo,it.hi)+' · repos '+mmss(it.rest), i+1)).join('')+'</div></details>':'')).join('')+
   (planMode()==='coach'?'<div class="note accent">'+why+'</div>':'')+'</section>'+
   vClaudeCard()+
-  '<section class="card"><h2 class="display" style="font-size:22px">Les règles du coach</h2><ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;font-size:14px;line-height:1.45"><li>Chaque muscle travaillé au moins 2 fois par semaine.</li><li>Gros exercices en premier, isolation à la fin.</li><li>10 à 12 séries par muscle et par semaine pour démarrer.</li><li>Arrêter chaque série à 1-2 reps de l\'échec.</li><li>Repos de 2 à 3 min sur les gros exercices, 60 à 90 s sur l\'isolation.</li><li>Pas de pompes.</li></ul></section>'+
+  vScience()+
   '</main>';
 }
 

@@ -14,6 +14,20 @@
 
 ## Études
 
+Études vérifiées pour le programme du coach (novembre 2026) :
+
+- Schoenfeld, Ogborn & Krieger 2017 – volume : plus de séries par semaine = plus de muscle (5,4 % / 6,6 % / 9,8 % pour <5 / 5-9 / 10+ séries), J Sports Sci : https://www.researchgate.net/publication/305455324
+- Schoenfeld, Grgic & Krieger 2019 – fréquence à volume égal : peu d'effet sur la prise de muscle, J Sports Sci 37(11)
+- Schoenfeld et al. 2017 – charges lourdes vs légères : même hypertrophie près de l'échec, plus de force avec lourd, JSCR : https://pubmed.ncbi.nlm.nih.gov/28834797/
+- Schoenfeld et al. 2021 – continuum des répétitions réexaminé, Sports 9(2):32 : https://doi.org/10.3390/sports9020032
+- Robinson et al. 2024 – proximité de l'échec : effet sur l'hypertrophie, pas sur la force, Sports Medicine : https://www.news-medical.net/news/20240801/New-study-reveals-sweet-spot-for-muscle-growth.aspx
+- Schoenfeld et al. 2016 – repos 3 min > 1 min, JSCR : https://pubmed.ncbi.nlm.nih.gov/26605807/
+- Singer et al. 2024 – repos : petit bénéfice au-delà de 60 s, pas de différence au-delà de 90 s, Frontiers : https://www.frontiersin.org/journals/sports-and-active-living/articles/10.3389/fspor.2024.1429789/abstract
+- Haugen et al. 2023 – machines vs poids libres : même hypertrophie, force spécifique, BMC Sports Sci Med Rehabil : https://doaj.org/article/a7282dba5e674176bde2a8239832d2f7
+- Maeo et al. 2021 – leg curl assis > allongé (+14 % vs +9 %), MSSE : https://pubmed.ncbi.nlm.nih.gov/33009197/
+- Maeo et al. 2022 – triceps bras au-dessus de la tête > bras le long du corps (+19,9 % vs +13,9 %), EJSS : https://pubmed.ncbi.nlm.nih.gov/35819335/
+- Coleman et al. 2024 – une semaine sans entraînement : pas de perte de muscle, un peu de force, PeerJ : https://peerj.com/articles/16777
+
 - Schoenfeld et al. 2016 – fréquence : 2 fois par semaine > 1 fois (Sports Medicine) : https://pubmed.ncbi.nlm.nih.gov/27102172/
 - Schoenfeld et al. – relation dose-réponse du volume (Journal of Sports Sciences) : https://synapsesocial.com/papers/W2506937591
 - Schoenfeld et al. 2016 – repos de 3 min > 1 min (JSCR) : https://weighttraining.guide/blog/should-experienced-lifters-rest-longer-between-sets

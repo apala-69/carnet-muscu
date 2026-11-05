@@ -37,7 +37,7 @@ Dans sa version publiée sur claude.ai, l'appli utilisait le stockage partagé d
 
 C'est le consensus des références pour 1 à 3 séances par semaine. Voir `docs/SOURCES.md`.
 
-- Chaque muscle doit être travaillé au moins 2 fois par semaine (méta-analyse de Schoenfeld, 2016).
+- 2 fois par semaine fait mieux que 1 (Schoenfeld 2016) ; à volume égal, la fréquence change peu (Schoenfeld 2019) : elle sert à répartir les séries.
 - Mike Israetel (RP) conseille au débutant tout le corps, 4 à 6 exercices de base par séance et environ 8 reps.
 - Greg Nuckols (Stronger by Science) fait 3 séances tout le corps, avec **des exercices différents d'une séance à l'autre pour les mêmes muscles**.
 - On change les exercices d'une séance à l'autre, pas les muscles.
@@ -55,26 +55,24 @@ Chaque séance contient :
 
 Les gros exercices viennent en premier, l'isolation à la fin.
 
-### 3.4 Programme cible (à appliquer — la V1 utilise encore l'ancien)
+### 3.4 Programme du coach (version fondée sur les études, novembre 2026)
 
-Défaut corrigé par rapport à la V1 : la Séance 1 n'avait que l'avant des cuisses et la Séance 2 que l'arrière. Maintenant, chaque séance travaille les deux.
+Chaque règle et sa source sont affichées dans l'appli (Programmes → « Sur quoi je me base ») et listées dans `docs/SOURCES.md`. Les pratiques de coach non prouvées sont signalées comme telles.
 
-**2 fois par semaine (environ 55 min)**
+| Mouvement | Séance 1 | Séance 2 | Séance 3 |
+|---|---|---|---|
+| Jambes – pousser | Presse à cuisses 3 × 8-12 | Hack squat 3 × 8-12 | Fente statique haltères 3 × 8-12 (+ leg extension 2 × 12-15) |
+| Jambes – hanche | Leg curl assis 3 × 10-12 | SDT jambes tendues haltères 3 × 8-12 | Leg curl assis 3 × 10-12 |
+| Pousser | Chest press 3 × 8-12 | Développé incliné haltères 3 × 8-12 | Développé couché haltères 3 × 8-12 |
+| Tirer | Tirage vertical 3 × 8-12 | Rowing haltère un bras 3 × 8-12 | Rowing assis 3 × 8-12 |
+| Épaules | Élévations latérales haltères 3 × 12-15 | Développé épaules machine 3 × 8-12 | Élévations latérales poulie 3 × 12-15 |
+| Bras / abdos | Extension triceps au-dessus de la tête 2 × 10-12 + curl pupitre 2 × 10-12 | Curl marteau corde 2 × 10-12 + crunch machine 2 × 12-15 | Curl haltères 2 × 10-12 + triceps corde 2 × 10-12 |
 
-| Mouvement | Séance 1 | Séance 2 |
-|---|---|---|
-| Jambes – pousser | Presse à cuisses 3 × 8-12 | Hack squat 3 × 8-12 |
-| Jambes – hanche | Leg curl assis 2 × 10-12 | Soulevé de terre jambes tendues 3 × 8-10 |
-| Pousser | Chest press 3 × 8-10 | Développé incliné haltères 3 × 8-12 |
-| Tirer | Tirage vertical 3 × 8-12 | Rowing assis 3 × 8-12 |
-| Épaules | Élévations latérales 2 × 12-15 | Développé épaules machine 2 × 10-12 |
-| Bras / abdos | Curl pupitre 2 × 10-12 + Triceps corde 2 × 10-12 | Curl marteau corde 2 × 10-12 + Crunch machine 2 × 12-15 |
-
-**3 fois par semaine :** Séance 1, Séance 2 et une **Séance 3** avec d'autres variantes. Exemple : Leg extension + Leg curl allongé, Pec deck ou Développé incliné machine, Rowing machine ou Tirage prise serrée, Élévations latérales poulie, Curl haltères + Extension triceps au-dessus de la tête. Garder la même structure en 6 mouvements.
-
-**1 fois par semaine :** une séance d'environ 60 min. Presse 4 × 8-12, Chest press 4 × 8-10, Tirage vertical 4 × 8-12, Développé épaules 3 × 10-12, Leg curl 3 × 10-12, Triceps corde 2 × 10-12.
-
-**Machines d'abord :** pendant les 6 premières semaines, privilégier les machines pour apprendre. Ensuite, proposer de remplacer progressivement par des poids libres. Israetel et Nuckols construisent sur les poids libres.
+- Repos : 2 min 30 sur les gros exercices (2 min pour les tirages), 90 s sur l'isolation (Schoenfeld 2016, Singer 2024).
+- Mélange machines / poids libres dès le départ (Haugen 2023 : même hypertrophie). Leg curl **assis** (Maeo 2021), triceps **au-dessus de la tête** (Maeo 2022).
+- Volume obtenu : 3 séances → 9 à 11 séries par semaine par gros muscle, 4 à 6 pour les bras ; 2 séances (S1 + S2) → 6. Séances de 56 à 60 min.
+- **1 fois par semaine** : presse 4 × 8-12, chest press 4 × 8-12, tirage vertical 4 × 8-12, leg curl assis 3 × 10-12, développé épaules haltères 3 × 8-12, triceps au-dessus de la tête 2 × 10-12 (Nuzzo 2024 : une petite dose fait progresser, moins que 2 séances).
+- Après 6 semaines, passage progressif aux poids libres pour les exercices restés sur machine (voir 4.2).
 
 ### 3.4 bis Séances personnalisables
 
