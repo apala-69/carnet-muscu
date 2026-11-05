@@ -418,11 +418,19 @@ function buildPlan(id){
   const base = PLANS[id]; const deload = cycleInfo().week===6;
   let name = base.name;
   const items = planItems(id).filter(it=>EX[it[0]]).map((it,i)=>{
-    let [k,sets,lo,hi,rest] = it;
+    let [k,sets,lo,hi,rest,link] = it;
     if (deload) sets = Math.max(1,Math.ceil(sets/2));
-    return {k,sets,lo,hi,rest};
+    return {k,sets,lo,hi,rest,link:link?1:0};
   });
+  items.forEach((x,i)=>{ if (i===items.length-1) x.link=0; });
   return {id,name,items,deload};
+}
+/* Groupes d'exercices enchaînés (superset) : [[0,1],[2],[3,4]…] */
+function groupsOf(items){ const g=[]; let cur=[]; items.forEach((it,i)=>{ cur.push(i); if (!it.link || i===items.length-1){ g.push(cur); cur=[]; } }); return g; }
+/* Étiquettes : 1, 2, 3… ou A1, A2, B… dès qu'un exercice est enchaîné */
+function planLabels(items){
+  if (!items.some(x=>x.link)) return items.map((_,i)=>String(i+1));
+  const out=[]; groupsOf(items).forEach((g,gi)=>{ const L=String.fromCharCode(65+gi); g.forEach((i,n)=>out[i]=g.length>1?L+(n+1):L); }); return out;
 }
 const ZONE = {legpress:'Cuisses',hacksquat:'Cuisses',legext:'Cuisses',legcurl:'Ischios',lyinglegcurl:'Ischios',rdl:'Ischios',calfstand:'Mollets',calfseated:'Mollets'};
 const zone = k => ZONE[k] || EX[k].z || EX[k].v;
@@ -533,7 +541,7 @@ function vToday(){
   (rv?'':todayCoach())+
   '<section style="display:flex;flex-direction:column;gap:10px"><div class="between"><h2 class="sec-t">Mes séances de la semaine</h2><span class="small muted">'+Math.min(done,wp.length)+' / '+wp.length+' faites</span></div>'+wp.map(p=>seanceCard(p, p.slot===slot, p.slot<=done, true)).join('')+'</section>'+
   (plan.items.length||LIVE ? '<button class="btn p" data-act="start">'+(LIVE?'Reprendre la séance':'Commencer la '+esc(plan.name.toLowerCase()))+'</button>' : '<button class="btn p" data-act="edit" data-id="'+plan.id+'">Composer la '+esc(plan.name.toLowerCase())+'</button>')+
-  (plan.items.length?'<section><div class="between" style="padding-bottom:10px;align-items:center"><h2 class="sec-t">'+esc(plan.name)+' · exercices</h2><button class="pill p" data-act="edit" data-id="'+plan.id+'">Modifier</button></div><div class="list">'+plan.items.map((it,i)=>exRow(it.k, zone(it.k)+' · '+it.sets+' × '+repTxt(it.k,it.lo,it.hi), i+1)).join('')+'</div></section>':'')+
+  (plan.items.length?'<section><div class="between" style="padding-bottom:10px;align-items:center"><h2 class="sec-t">'+esc(plan.name)+' · exercices</h2><button class="pill p" data-act="edit" data-id="'+plan.id+'">Modifier</button></div><div class="list">'+plan.items.map((it,i,a)=>exRow(it.k, zone(it.k)+' · '+it.sets+' × '+repTxt(it.k,it.lo,it.hi)+(it.link?' · enchaîné':''), planLabels(a)[i])).join('')+'</div></section>':'')+
   todayNutri()+
   '</main>';
 }
@@ -544,33 +552,77 @@ function startSession(){
   const wp = weekPlan(); const plan = wp[Math.min(PICK||nextSlot(), wp.length)-1];
   if (!plan.items.length){ EDIT=plan.id; go('programmes'); return; }
   LIVE = { plan, idx:0, start:Date.now(), mode:'anim', data: plan.items.map(it=>{ const a=advice(it.k,it); const last=lastOf(it.k); return { k:it.k, orig:it.k, sets: Array.from({length:it.sets},(_,j)=>({kg: a.kg!=null?String(a.kg).replace('.',','):'', reps: last&&last.sets[j]?String(last.sets[j].reps):'', rir:2, done:false})) }; }) };
+  setSteps(LIVE); LIVE.pos=0;
   saveDraft(); requestWake(); unlockAudio();
   clockTimer = setInterval(()=>{ const c=document.getElementById('clock'); if (c&&LIVE) c.textContent = mmss((Date.now()-LIVE.start)/1000); }, 1000);
   window.scrollTo(0,0); render();
 }
 function saveDraft(){ try { if (LIVE) sessionStorage.setItem(LS_KEY+'-live', JSON.stringify(LIVE)); else sessionStorage.removeItem(LS_KEY+'-live'); } catch(e){} }
+/* Séance en tunnel : une étape à la fois (échauffement, série, repos). */
+function buildSteps(L){
+  const st=[{t:'warm'}]; const gs=groupsOf(L.plan.items);
+  gs.forEach((g,gi)=>{ const n=Math.max(...g.map(i=>L.data[i].sets.length));
+    for (let r=0;r<n;r++){ g.forEach(i=>{ if (r<L.data[i].sets.length) st.push({t:'set',i,j:r}); });
+      const lastStep = gi===gs.length-1 && r===n-1;
+      if (!lastStep) st.push({t:'rest', sec:L.plan.items[g[g.length-1]].rest}); } });
+  return st;
+}
+function setSteps(L, keep){ L.steps=buildSteps(L); if (keep){ const p=L.steps.findIndex(x=>x.t==='set'&&x.i===keep.i&&x.j===keep.j); L.pos=p>=0?p:0; } const s=L.steps[L.pos]; if (s&&s.t==='set') L.idx=s.i; }
+function curStep(){ const L=LIVE; if (!L.steps) setSteps(L); if (L.pos==null) L.pos=0; return L.steps[L.pos]; }
+function nextSetStep(from){ const L=LIVE; for (let p=from;p<L.steps.length;p++) if (L.steps[p].t==='set') return p; return -1; }
+function goStep(p){ const L=LIVE; L.pos=Math.max(0,Math.min(L.steps.length-1,p)); const s=L.steps[L.pos]; if (s.t==='set') L.idx=s.i; L.mode='anim'; saveDraft(); render(); window.scrollTo(0,0); }
+function advance(validated){
+  const L=LIVE; let p=L.pos+1;
+  if (p>=L.steps.length){ finishTunnel(); return; }
+  if (L.steps[p].t==='rest'){ const sec=L.steps[p].sec; p++; if (p>=L.steps.length){ finishTunnel(); return; } goStep(p); if (validated && sec>0) startRest(sec); return; }
+  goStep(p);
+}
+function finishTunnel(){ clearTimeout(REST&&REST.t); REST=null; CONFIRM=null; buildEnd(); render(); window.scrollTo(0,0); }
+function liveTop(label){
+  const L=LIVE, sets=L.steps.filter(x=>x.t==='set'), done=sets.filter(x=>L.data[x.i].sets[x.j].done).length;
+  return '<div class="topbar"><button class="icon-btn p" data-act="quit" aria-label="Quitter la séance">'+svg('x')+'</button><div style="display:flex;flex-direction:column;align-items:center;gap:2px"><span class="clock" id="clock">'+mmss((Date.now()-L.start)/1000)+'</span><span class="small muted">'+label+'</span></div><button class="icon-btn p" data-act="sheet-list" aria-label="Tous les exercices">'+svg('list')+'</button></div>'+
+  (CONFIRM==='quit'?'<div class="confirm"><b style="font-weight:500">Quitter la séance ?</b><span class="small">Les séries validées seront perdues si tu ne l\'enregistres pas.</span><div class="row"><button class="btn sm ghost p" data-act="confirm-no">Continuer</button><button class="btn sm p" data-act="finish">Terminer et enregistrer</button></div><button class="btn sm soft p" data-act="abandon">Abandonner sans enregistrer</button></div>':'')+
+  '<div class="bar" aria-hidden="true"><i style="width:'+Math.round(done/Math.max(1,sets.length)*100)+'%"></i></div>';
+}
+function vWarm(){
+  const L=LIVE, f=L.data[0], it=L.plan.items[0], w=parseFloat(String(f.sets[0].kg).replace(',','.'));
+  return '<main class="wrap full">'+liveTop('Échauffement')+
+  '<div style="display:flex;flex-direction:column;gap:6px"><span class="muted" style="font-weight:500">'+esc(L.plan.name)+' · '+L.steps.filter(x=>x.t==='set').length+' séries</span><h1 class="display h2" style="font-size:48px">Échauffement</h1></div>'+
+  '<ol class="steps"><li><b style="font-weight:600">5 min de cardio léger</b> : vélo, rameur ou marche rapide en pente. Tu dois pouvoir parler.</li><li><b style="font-weight:600">Mobilité, 1 min</b> : 10 cercles de bras, 10 rotations de hanches, 10 squats sans charge.</li><li><b style="font-weight:600">Séries d\'approche</b> sur le 1er exercice, sans aller à la fatigue :</li></ol>'+
+  '<div class="list">'+exRow(f.k, w>0 ? '50 % · '+kgs(round25(w*.5))+' × 10, puis 75 % · '+kgs(round25(w*.75))+' × 5' : '1 série légère × 10, puis 1 série moyenne × 5', null, 'fiche')+'</div>'+
+  '<span class="small muted">Pratique courante des coachs : monter progressivement en charge prépare les articulations au 1er exercice lourd.</span>'+
+  '</main><div class="dock"><div class="dock-in"><button class="btn p" data-act="t-next">C\'est fait · 1er exercice</button></div></div>';
+}
 function vLive(){
-  const L=LIVE, it=L.plan.items[L.idx], d=L.data[L.idx], e=EX[d.k], n=L.plan.items.length;
-  const a=advice(d.k,it); const last=lastOf(d.k);
-  const doneSets=L.data.reduce((s,x)=>s+x.sets.filter(y=>y.done).length,0), allSets=L.data.reduce((s,x)=>s+x.sets.length,0);
-  const w = parseFloat(String(d.sets[0].kg).replace(',','.'));
-  const warm = L.idx===0 && w>0 ? '<div class="warm"><b style="font-weight:500">Échauffement calculé</b><span>50 % · '+kgs(round25(w*.5))+' × 10</span><span>75 % · '+kgs(round25(w*.75))+' × 5</span></div>' : (L.idx===0?'<div class="warm"><b style="font-weight:500">Échauffement</b><span>Entre ta charge de travail : les 2 séries légères se calculent toutes seules.</span></div>':'');
-  return '<main class="wrap full">'+
-  '<div class="topbar"><button class="icon-btn p" data-act="quit" aria-label="Quitter la séance">'+svg('x')+'</button><div style="display:flex;flex-direction:column;align-items:center;gap:2px"><span class="clock" id="clock">'+mmss((Date.now()-L.start)/1000)+'</span><span class="small muted">Exercice '+(L.idx+1)+' sur '+n+'</span></div><button class="icon-btn p" data-act="sheet-list" aria-label="Tous les exercices">'+svg('list')+'</button></div>'+
-  (CONFIRM==='quit'?'<div class="confirm"><b style="font-weight:500">Quitter la séance ?</b><span class="small">Les séries cochées seront perdues si tu ne l\'enregistres pas.</span><div class="row"><button class="btn sm ghost p" data-act="confirm-no">Continuer</button><button class="btn sm p" data-act="finish">Terminer et enregistrer</button></div><button class="btn sm soft p" data-act="abandon">Abandonner sans enregistrer</button></div>':'')+
-  '<div class="bar" aria-hidden="true"><i style="width:'+Math.round(doneSets/allSets*100)+'%"></i></div>'+
+  const L=LIVE, st=curStep();
+  if (st.t==='warm') return vWarm();
+  if (st.t!=='set'){ const p=nextSetStep(L.pos); if (p<0) return vWarm(); L.pos=p; return vLive(); }
+  const i=st.i, j=st.j, it=L.plan.items[i], d=L.data[i], s=d.sets[j], e=EX[d.k];
+  L.idx=i;
+  const a=advice(d.k,it), last=lastOf(d.k), prev=last&&last.sets[j];
+  const g=groupsOf(L.plan.items).find(x=>x.includes(i)), lab=planLabels(L.plan.items)[i];
+  const nextP=nextSetStep(L.pos+1), nx=nextP>=0?L.steps[nextP]:null, restAfter=L.steps[L.pos+1]&&L.steps[L.pos+1].t==='rest'?L.steps[L.pos+1].sec:0;
+  const sec=exType(d.k)==='gainage';
+  const big='height:60px;border-radius:14px;border:0;background:var(--soft);text-align:center;font-size:26px;font-weight:600;font-variant-numeric:tabular-nums;width:100%;min-width:0';
+  const stepBtn=(act,dv,l)=>'<button class="round p" style="width:52px;height:60px;border-radius:14px;font-size:26px;font-weight:500" data-act="'+act+'" data-d="'+dv+'" aria-label="'+l+'">'+(dv>0?'+':'−')+'</button>';
+  return '<main class="wrap full">'+liveTop('Exercice '+(i+1)+' sur '+L.plan.items.length)+
   demoBlock(d.k, true)+
-  '<div style="display:flex;flex-direction:column;gap:6px"><h1 class="display h2">'+esc(e.n)+'</h1><span class="muted" style="font-size:14px">'+esc(e.m)+' · '+esc(e.eq)+' · '+it.sets+' × '+repTxt(d.k,it.lo,it.hi)+' · repos '+mmss(it.rest)+'</span>'+(d.k!==d.orig?'<span class="small muted">Remplace : '+esc(EX[d.orig].n)+'</span>':'')+'</div>'+
-  (painFor(d.k).length?'<div class="note danger" style="display:flex;flex-direction:column;gap:8px"><span><b>Attention '+esc(painFor(d.k).join(', ').toLowerCase())+'</b> · Tu as signalé une gêne. Cet exercice la sollicite : va plus léger, ou remplace-le.</span><button class="pill p" style="align-self:flex-start;background:var(--bg)" data-act="sheet-swap">Remplacer l\'exercice</button></div>':'')+
-  '<ol class="steps">'+e.s.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ol>'+
-  warm+
-  '<section><div class="sets-h"><span>Série</span><span>Dernière fois</span><span>kg</span><span>'+(exType(d.k)==='gainage'?'Sec.':'Reps')+'</span><span>Réserve</span><span></span></div>'+
-  d.sets.map((s,j)=>{ const p=last&&last.sets[j]; return '<div class="set"><span class="k">'+(j+1)+'</span><span class="prev">'+(p?fmt(p.kg)+' × '+p.reps:'—')+'</span><input id="kg-'+L.idx+'-'+j+'" inputmode="decimal" type="text" aria-label="Charge série '+(j+1)+' en kg" value="'+esc(s.kg)+'" data-in="kg" data-j="'+j+'" placeholder="kg"><input id="rp-'+L.idx+'-'+j+'" inputmode="numeric" type="text" aria-label="Répétitions série '+(j+1)+'" value="'+esc(s.reps)+'" data-in="reps" data-j="'+j+'" placeholder="'+it.hi+'"><button class="rir" data-act="rir" data-j="'+j+'" aria-label="Reps en réserve">'+(s.rir>=3?'3+':s.rir)+'</button><button class="check" data-act="check" data-j="'+j+'" aria-pressed="'+s.done+'" aria-label="Valider la série '+(j+1)+'">'+svg('check')+'</button></div>'; }).join('')+
-  '<div class="row" style="padding-top:10px;justify-content:space-between"><button class="pill p" data-act="addset">+ Série</button><span class="small muted">Réserve = reps que tu aurais encore pu faire. Vise '+RIR_BY_WEEK[cycleInfo().week-1]+'.</span></div></section>'+
+  '<div style="display:flex;flex-direction:column;gap:6px">'+(g.length>1?'<span class="pill accent" style="align-self:flex-start;height:28px">Enchaîné '+esc(lab)+' · '+(g.indexOf(i)+1)+' sur '+g.length+'</span>':'')+
+  '<h1 class="display h2">'+esc(e.n)+'</h1><span class="muted" style="font-size:14px">Série '+(j+1)+' sur '+d.sets.length+' · '+repTxt(d.k,it.lo,it.hi)+(sec?'':' reps')+' · '+esc(e.eq)+'</span>'+(d.k!==d.orig?'<span class="small muted">Remplace : '+esc(EX[d.orig].n)+'</span>':'')+'</div>'+
+  (painFor(d.k).length?'<div class="note danger"><b>Attention '+esc(painFor(d.k).join(', ').toLowerCase())+'</b> · gêne signalée : va plus léger, ou remplace l\'exercice (bouton ⇄).</div>':'')+
+  '<section style="display:flex;flex-direction:column;gap:12px">'+
+  '<div class="between"><span class="small muted">Dernière fois</span><span style="font-weight:500">'+(prev?fmt(prev.kg)+' kg × '+prev.reps:'—')+'</span></div>'+
+  '<label class="small muted" style="display:flex;flex-direction:column;gap:6px">Charge (kg)<span style="display:grid;grid-template-columns:52px 1fr 52px;gap:8px">'+stepBtn('t-kg',-2.5,'Moins 2,5 kg')+'<input id="kg-'+i+'-'+j+'" inputmode="decimal" type="text" value="'+esc(s.kg)+'" data-in="kg" data-j="'+j+'" placeholder="kg" style="'+big+'">'+stepBtn('t-kg',2.5,'Plus 2,5 kg')+'</span></label>'+
+  '<label class="small muted" style="display:flex;flex-direction:column;gap:6px">'+(sec?'Secondes':'Répétitions')+'<span style="display:grid;grid-template-columns:52px 1fr 52px;gap:8px">'+stepBtn('t-rp',-1,'Moins 1')+'<input id="rp-'+i+'-'+j+'" inputmode="numeric" type="text" value="'+esc(s.reps)+'" data-in="reps" data-j="'+j+'" placeholder="'+it.hi+'" style="'+big+'">'+stepBtn('t-rp',1,'Plus 1')+'</span></label>'+
+  '<div style="display:flex;flex-direction:column;gap:6px"><span class="small muted">Réserve : reps que tu aurais encore pu faire (vise '+RIR_BY_WEEK[cycleInfo().week-1]+')</span><div class="seggroup">'+[0,1,2,3].map(r=>'<button class="seg" data-act="t-rir" data-r="'+r+'" aria-pressed="'+(s.rir===r)+'">'+(r===3?'3+':r)+'</button>').join('')+'</div></div>'+
+  '</section>'+
   platesLine(d)+
   '<div class="note '+(a.up?'accent':'')+'" style="'+(a.up?'':'background:var(--soft)')+'">'+esc(a.text)+'</div>'+
+  '<details class="prog"><summary><span class="small" style="font-weight:500">Comment faire</span>'+svg('chev','class="chev"')+'</summary><ol class="steps" style="margin-bottom:12px">'+e.s.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ol></details>'+
+  '<div class="between small"><span class="muted">Ensuite</span><span style="font-weight:500;text-align:right">'+(restAfter?'Repos '+mmss(restAfter)+' · ':'')+(nx?esc(EX[L.data[nx.i].k].n)+' · série '+(nx.j+1):'fin de la séance')+'</span></div>'+
+  '<div class="row" style="justify-content:center"><button class="pill p" data-act="addset">+ Série</button><button class="pill p" style="background:none;color:var(--muted)" data-act="t-skip">Passer cette série</button></div>'+
   '</main>'+
-  '<div class="dock"><div class="dock-in"><button class="round p" data-act="sheet-swap" aria-label="Machine prise : remplacer l\'exercice">'+svg('swap')+'</button>'+(L.idx>0?'<button class="round p" data-act="prev" aria-label="Exercice précédent">'+svg('back')+'</button>':'')+(L.idx<n-1?'<button class="btn p" data-act="next">Exercice suivant</button>':'<button class="btn p" data-act="finish">Terminer la séance</button>')+'</div></div>';
+  '<div class="dock"><div class="dock-in"><button class="round p" data-act="sheet-swap" aria-label="Machine prise : remplacer l\'exercice">'+svg('swap')+'</button><button class="round p" data-act="t-prev" aria-label="Étape précédente">'+svg('back')+'</button><button class="btn p" data-act="t-done">'+(nextP<0?'Valider et terminer':'Valider · suivant')+'</button></div></div>';
 }
 function demoBlock(k, withOpen){
   const m = (LIVE && !FICHE) ? LIVE.mode : (FICHE&&FICHE.mode)||'anim';
@@ -585,9 +637,8 @@ function startDemo(){
 }
 function vRest(){
   const L=LIVE, left=(REST.end-Date.now())/1000;
-  let nx=null; const cur=L.data[L.idx]; const ni=cur.sets.findIndex(s=>!s.done);
-  if (ni>=0) nx={k:cur.k, t:'Série '+(ni+1)+' · '+(cur.sets[ni].kg?fmt(parseFloat(String(cur.sets[ni].kg).replace(',','.')))+' kg':'')+' × '+L.plan.items[L.idx].hi};
-  else if (L.idx<L.data.length-1){ const nd=L.data[L.idx+1], nit=L.plan.items[L.idx+1]; nx={k:nd.k, t:'Puis : '+nit.sets+' × '+nit.lo+'-'+nit.hi}; }
+  let nx=null; const cur=L.data[L.idx]; const ns=L.steps&&L.steps[L.pos];
+  if (ns && ns.t==='set'){ const nd=L.data[ns.i], x=nd.sets[ns.j]; nx={k:nd.k, t:'Série '+(ns.j+1)+' sur '+nd.sets.length+(x.kg?' · '+x.kg+' kg':'')+' × '+L.plan.items[ns.i].hi}; }
   const e=EX[(nx||cur).k];
   return '<div class="rest" role="dialog" aria-label="Repos"><div class="rest-in">'+
   '<div class="between" style="align-items:center"><span class="muted" style="font-weight:500">'+esc(EX[cur.k].n)+'</span><button class="pill p" data-act="finish">Terminer</button></div>'+
@@ -676,21 +727,24 @@ const RESTS = [30,45,60,75,90,120,150,180,210,240];
 function vEdit(){
   const id=EDIT, p=buildPlan(id), raw=planItems(id), n=weekPlan().find(x=>x.id===id); const name=n?n.name:PLANS[id].name;
   const sel=(i,f,opts,cur,lab)=>'<label class="small muted" style="display:flex;flex-direction:column;gap:4px">'+lab+'<select data-in="ed" data-i="'+i+'" data-f="'+f+'" style="height:40px;border-radius:12px;border:1px solid var(--stroke);background:var(--bg);padding:0 8px;font-size:15px;color:var(--ink)">'+opts.map(o=>'<option value="'+o[0]+'"'+(String(o[0])===String(cur)?' selected':'')+'>'+o[1]+'</option>').join('')+'</select></label>';
-  const rows=raw.map((it,i)=>{ const [k,sets,lo,hi,rest]=it; if (!EX[k]) return ''; const rv=lo+'-'+hi; const ro=REPS.includes(rv)?REPS:REPS.concat(rv);
+  const labs=planLabels(p.items);
+  const rows=raw.map((it,i)=>{ const [k,sets,lo,hi,rest,link]=it; if (!EX[k]) return ''; const rv=lo+'-'+hi; const ro=REPS.includes(rv)?REPS:REPS.concat(rv); const linked=link && i<raw.length-1;
     return '<div style="display:flex;flex-direction:column;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)">'+
-    '<button class="li p" style="border:0;padding:0" data-act="fiche" data-k="'+k+'"><span class="thumb"><img src="'+img(k)+'" alt="'+esc(EX[k].n)+'" loading="lazy"><span class="num">'+(i+1)+'</span></span><span class="t"><span class="n">'+esc(EX[k].n)+'</span><span class="m">'+esc(zone(k)+' · '+EX[k].eq)+'</span></span>'+svg('chev','class="chev"')+'</button>'+
+    '<button class="li p" style="border:0;padding:0" data-act="fiche" data-k="'+k+'"><span class="thumb"><img src="'+img(k)+'" alt="'+esc(EX[k].n)+'" loading="lazy"><span class="num">'+(labs[i]||i+1)+'</span></span><span class="t"><span class="n">'+esc(EX[k].n)+'</span><span class="m">'+esc(zone(k)+' · '+EX[k].eq)+'</span></span>'+svg('chev','class="chev"')+'</button>'+
     '<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">'+
       sel(i,'sets',[1,2,3,4,5,6].map(x=>[x,x+' série'+(x>1?'s':'')]),sets,'Séries')+
       sel(i,'reps',ro.map(x=>[x,x+(exType(k)==='gainage'?' s':' reps')]),rv,exType(k)==='gainage'?'Secondes':'Reps')+
-      sel(i,'rest',(RESTS.includes(rest)?RESTS:RESTS.concat(rest)).map(x=>[x,mmss(x)]),rest,'Repos')+'</div>'+
+      (linked?'<span class="small muted" style="display:flex;flex-direction:column;gap:4px">Repos<span style="height:40px;display:flex;align-items:center;color:var(--ink)">Aucun, enchaîné</span></span>':sel(i,'rest',(RESTS.includes(rest)?RESTS:RESTS.concat(rest)).map(x=>[x,mmss(x)]),rest,'Repos'))+'</div>'+
     '<div class="row" style="flex-wrap:wrap;gap:6px"><button class="pill p" data-act="ed-swap" data-i="'+i+'">'+svg('swap','style="width:14px;height:14px;margin-right:6px"')+'Remplacer</button><button class="pill p" data-act="ed-del" data-i="'+i+'">'+svg('x','style="width:14px;height:14px;margin-right:6px"')+'Retirer</button>'+
-    (i>0?'<button class="pill p" data-act="ed-up" data-i="'+i+'" aria-label="Monter">↑</button>':'')+(i<raw.length-1?'<button class="pill p" data-act="ed-down" data-i="'+i+'" aria-label="Descendre">↓</button>':'')+'</div></div>'; }).join('');
+    (i>0?'<button class="pill p" data-act="ed-up" data-i="'+i+'" aria-label="Monter">↑</button>':'')+(i<raw.length-1?'<button class="pill p" data-act="ed-down" data-i="'+i+'" aria-label="Descendre">↓</button>':'')+'</div>'+
+    (i<raw.length-1?'<button class="chip" style="align-self:flex-start;height:36px;font-size:13px" data-act="ed-link" data-i="'+i+'" aria-pressed="'+!!linked+'">'+(linked?'Enchaîné avec le suivant ✓':'Enchaîner avec le suivant')+'</button>':'')+'</div>'; }).join('');
   return '<main class="wrap">'+
   '<div class="between" style="align-items:center"><button class="icon-btn p" data-act="edit-close" aria-label="Retour">'+svg('back')+'</button><span class="small muted">'+esc(MODE_NAME[planMode()])+'</span></div>'+
   '<div style="display:flex;flex-direction:column;gap:6px"><h1 class="title">'+esc(name)+'</h1><span class="muted" style="font-size:14px">'+raw.length+' exercice'+(raw.length>1?'s':'')+(raw.length?' · ~'+estMinutes(p)+' min':'')+' · s\'applique dès maintenant et les semaines suivantes.</span></div>'+
   (planMode()==='coach'?'<div class="note" style="background:var(--soft)">Tu pars du programme du coach. Au premier changement, il devient « Mes séances ». Tu pourras revenir au programme du coach dans Programmes.</div>':'')+
   (raw.length?'<section style="border-top:1px solid var(--line)">'+rows+'</section>':'<div class="empty-st">Aucun exercice. Ajoute-en 5 à 7 : jambes d\'abord, puis pousser, tirer, épaules, bras ou abdos.</div>')+
   '<button class="btn p" data-act="ed-add">'+svg('plus','style="width:18px;height:18px"')+' Ajouter un exercice</button>'+
+  (raw.length>1?'<div class="row"><button class="btn sm ghost p" data-act="ed-pairs">Tout enchaîner par 2</button><button class="btn sm ghost p" data-act="ed-unlink">Rien d\'enchaîné</button></div><span class="small muted">Enchaîné (superset) : tu fais les 2 exercices à la suite, puis le repos, puis la série suivante des deux. Le repos réglé sur le 2e exercice s\'applique au duo.</span>':'')+
   '<span class="small muted">Repères prise de masse : gros exercices 3 × 8-12, repos 2 à 3 min ; isolation 3 × 10-15, repos 60 à 90 s. Mets les gros exercices en premier.</span>'+
   '</main>';
 }
@@ -721,8 +775,8 @@ function claudeRequest(){
   'Construis '+ids.length+' séance'+(ids.length>1?'s':'')+' tout le corps (une séance = un jour), avec des exercices différents d\'une séance à l\'autre pour les mêmes muscles. Chaque séance : jambes pousser, jambes charnière de hanche, pousser haut du corps, tirer, épaules, bras ou abdos. Gros exercices en premier. Tu peux mélanger machines et poids libres.',
   'Base chaque choix (séries par semaine, répétitions, repos, proximité de l\'échec, choix des exercices) sur des études publiées : cite-les (auteurs, année, revue). N\'invente aucune étude. Si un choix vient d\'une pratique de coach et non d\'une étude, dis-le clairement.',
   '','Utilise uniquement les exercices de cette liste (clé : nom) :',lst,'',
-  'Explique tes choix et tes sources, puis termine par un seul bloc JSON, exactement dans ce format (clé, séries, reps min, reps max, repos en secondes) :',
-  '```json','{'+ids.map(id=>'"'+id+'": [["legpress", 3, 8, 12, 150], ["legcurl", 2, 10, 12, 90]]').join(', ')+'}','```'].join('\n');
+  'Explique tes choix et tes sources, puis termine par un seul bloc JSON, exactement dans ce format (clé, séries, reps min, reps max, repos en secondes, enchaîné). Enchaîné = 1 si l\'exercice se fait en superset avec le suivant (le repos du 2e s\'applique au duo), sinon 0 :',
+  '```json','{'+ids.map(id=>'"'+id+'": [["legpress", 3, 8, 12, 0, 1], ["legcurl", 3, 10, 12, 90, 0]]').join(', ')+'}','```'].join('\n');
 }
 function parseClaude(txt){
   const m=txt.match(/\{[\s\S]*\}/g); if (!m) return {err:'Je ne trouve pas le bloc JSON dans le texte collé.'};
@@ -730,7 +784,7 @@ function parseClaude(txt){
   if (!j) return {err:'Le bloc JSON est mal formé. Copie toute la réponse de Claude.'};
   const out={}, unknown=[]; let n=0;
   PLAN_IDS.forEach(id=>{ if (!Array.isArray(j[id])) return; out[id]=j[id].filter(x=>{ if (!Array.isArray(x) || !EX[x[0]]){ unknown.push(Array.isArray(x)?x[0]:'?'); return false; } return true; })
-    .map(x=>{ const d=defItem(x[0]); const num=(v,lo,hi,df)=>{ v=Math.round(+v); return v>=lo&&v<=hi?v:df; }; const lo=num(x[2],1,120,d[2]), hi=num(x[3],lo,120,Math.max(lo,d[3])); return [x[0],num(x[1],1,8,d[1]),lo,hi,num(x[4],20,300,d[4])]; }); n+=out[id].length; });
+    .map(x=>{ const d=defItem(x[0]); const num=(v,lo,hi,df)=>{ v=Math.round(+v); return v>=lo&&v<=hi?v:df; }; const lo=num(x[2],1,120,d[2]), hi=num(x[3],lo,120,Math.max(lo,d[3])); return [x[0],num(x[1],1,8,d[1]),lo,hi,num(x[4],0,300,d[4]),x[5]?1:0]; }); n+=out[id].length; });
   if (!n) return {err:'Aucun exercice reconnu dans la réponse.'};
   return {plan:out, unknown};
 }
@@ -797,7 +851,7 @@ function vProg(){
   '<section style="display:flex;flex-direction:column;gap:12px"><h2 class="sec-t">Cette semaine, j\'y vais</h2><div class="seggroup">'+[1,2,3].map(n=>'<button class="seg" data-act="days" data-n="'+n+'" aria-pressed="'+(weekChosen()&&st.days===n)+'">'+n+' fois</button>').join('')+'</div>'+
   '<div class="between" style="align-items:center"><span style="display:flex;flex-direction:column;gap:2px"><span class="small muted">Mes séances</span><span style="font-weight:600">'+esc(MODE_NAME[planMode()])+'</span></span>'+(planMode()!=='coach'?(CONFIRM==='reset'?'':'<button class="pill p" data-act="reset-ask">Revenir au coach</button>'):'')+'</div>'+
   (CONFIRM==='reset'?'<div class="confirm"><b style="font-weight:500">Revenir au programme du coach ?</b><span class="small">Tes séances modifiées seront remplacées.</span><div class="row"><button class="btn sm ghost p" data-act="confirm-no">Annuler</button><button class="btn sm p" data-act="coach-reset">Revenir</button></div></div>':'')+
-  weekPlan().map(p=>seanceCard(p,false,p.slot<=doneCount(),false)+'<div class="row" style="margin-top:-4px"><button class="btn sm ghost p" data-act="edit" data-id="'+p.id+'">'+(p.items.length?'Modifier la '+esc(p.name.toLowerCase()):'Composer la '+esc(p.name.toLowerCase()))+'</button></div>'+(p.items.length?'<details class="prog" style="margin-top:-6px"><summary><span class="small" style="font-weight:500">Voir les '+p.items.length+' exercices</span>'+svg('chev','class="chev"')+'</summary><div class="list" style="margin-bottom:12px">'+p.items.map((it,i)=>exRow(it.k, zone(it.k)+' · '+it.sets+' × '+repTxt(it.k,it.lo,it.hi)+' · repos '+mmss(it.rest), i+1)).join('')+'</div></details>':'')).join('')+
+  weekPlan().map(p=>seanceCard(p,false,p.slot<=doneCount(),false)+'<div class="row" style="margin-top:-4px"><button class="btn sm ghost p" data-act="edit" data-id="'+p.id+'">'+(p.items.length?'Modifier la '+esc(p.name.toLowerCase()):'Composer la '+esc(p.name.toLowerCase()))+'</button></div>'+(p.items.length?'<details class="prog" style="margin-top:-6px"><summary><span class="small" style="font-weight:500">Voir les '+p.items.length+' exercices</span>'+svg('chev','class="chev"')+'</summary><div class="list" style="margin-bottom:12px">'+p.items.map((it,i,a)=>exRow(it.k, zone(it.k)+' · '+it.sets+' × '+repTxt(it.k,it.lo,it.hi)+(it.link?' · enchaîné':' · repos '+mmss(it.rest)), planLabels(a)[i])).join('')+'</div></details>':'')).join('')+
   (planMode()==='coach'?'<div class="note accent">'+why+'</div>':'')+'</section>'+
   vClaudeCard()+
   vScience()+
@@ -1244,13 +1298,26 @@ app.addEventListener('click', ev=>{
       if (s.done && !allDone){ const rest=L.plan.items[L.idx].rest; if (d.sets.every(y=>y.done) && L.idx<L.data.length-1){ L.idx++; window.scrollTo(0,0); } startRest(rest); }
       render(); if (allDone && s.done){ toast('Toutes les séries sont faites. Termine la séance en bas.'); }
       break; }
-    case 'addset': { const d=L.data[L.idx]; const lastS=d.sets[d.sets.length-1]; d.sets.push({kg:lastS?lastS.kg:'',reps:'',rir:2,done:false}); saveDraft(); render(); break; }
+    case 't-next': advance(false); break;
+    case 't-prev': { let p=L.pos-1; while (p>0 && L.steps[p].t==='rest') p--; goStep(p); break; }
+    case 't-skip': advance(false); break;
+    case 't-rir': { const st=curStep(); L.data[st.i].sets[st.j].rir=+el.dataset.r; saveDraft(); render(); break; }
+    case 't-kg': case 't-rp': { const st=curStep(), x=L.data[st.i].sets[st.j], f=a==='t-kg'?'kg':'reps';
+      let v=num(x[f]); if (!(v>=0)) v = f==='kg' ? 0 : L.plan.items[st.i].hi; v=Math.max(0, v+ +el.dataset.d); x[f]=String(Math.round(v*100)/100).replace('.',',');
+      if (f==='kg') L.data[st.i].sets.forEach((y,jj)=>{ if (jj>st.j && !y.done) y.kg=x.kg; });
+      saveDraft(); render(); break; }
+    case 't-done': { const st=curStep(), d=L.data[st.i], x=d.sets[st.j]; unlockAudio();
+      if (String(x.kg).trim()==='' || !(num(x.kg)>=0)){ toast('Entre la charge (kg) avant de valider.'); document.getElementById('kg-'+st.i+'-'+st.j)?.focus(); return; }
+      if (String(x.reps).trim()==='') x.reps=String(L.plan.items[st.i].hi);
+      x.done=true; d.sets.forEach((y,jj)=>{ if (jj>st.j && !y.done && String(y.kg).trim()==='') y.kg=x.kg; });
+      saveDraft(); advance(true); break; }
+    case 'addset': { const d=L.data[L.idx]; const lastS=d.sets[d.sets.length-1]; d.sets.push({kg:lastS?lastS.kg:'',reps:'',rir:2,done:false}); const st=curStep(); setSteps(L, st&&st.t==='set'?st:null); saveDraft(); render(); break; }
     case 'next': L.idx=Math.min(L.data.length-1,L.idx+1); L.mode='anim'; saveDraft(); render(); window.scrollTo(0,0); break;
     case 'prev': L.idx=Math.max(0,L.idx-1); L.mode='anim'; saveDraft(); render(); window.scrollTo(0,0); break;
     case 'sheet-swap': SHEET='swap'; render(); break;
     case 'sheet-list': SHEET='list'; render(); break;
     case 'close-sheet': SHEET=null; render(); break;
-    case 'jump': L.idx=+el.dataset.i; SHEET=null; saveDraft(); render(); window.scrollTo(0,0); break;
+    case 'jump': { const i=+el.dataset.i; SHEET=null; let p=L.steps.findIndex(x=>x.t==='set'&&x.i===i&&!L.data[i].sets[x.j].done); if (p<0) p=L.steps.findIndex(x=>x.t==='set'&&x.i===i); goStep(p); break; }
     case 'swap': { const d=L.data[L.idx]; d.k=el.dataset.k; const it=L.plan.items[L.idx]; const ad=advice(d.k,it); d.sets=d.sets.map(()=>({kg:ad.kg!=null?String(ad.kg).replace('.',','):'',reps:'',rir:2,done:false})); SHEET=null; saveDraft(); render(); window.scrollTo(0,0); break; }
     case 'rest-minus': REST.end-=15000; REST.total=Math.max(15,REST.total-15); tickRest(); break;
     case 'rest-plus': REST.end+=15000; REST.total+=15; tickRest(); break;
@@ -1275,6 +1342,9 @@ app.addEventListener('click', ev=>{
     case 'edit-close': EDIT=null; PICKER=null; render(); window.scrollTo(0,0); break;
     case 'ed-add': PICKER={id:EDIT, at:null}; PQ={q:'',g:'Tous',eq:'Tout'}; render(); window.scrollTo(0,0); break;
     case 'ed-swap': { const i=+el.dataset.i; const k=planItems(EDIT)[i][0]; PICKER={id:EDIT, at:i}; PQ={q:'',g:EX[k].g,eq:'Tout'}; render(); window.scrollTo(0,0); break; }
+    case 'ed-link': { const i=+el.dataset.i; editPlan(EDIT, l=>{ l[i][5]=l[i][5]?0:1; }); render(); break; }
+    case 'ed-pairs': editPlan(EDIT, l=>l.forEach((x,i)=>{ x[5] = i%2===0 && i<l.length-1 ? 1 : 0; if (i%2===1 || i===l.length-1) x[4]=Math.min(x[4],90); })); render(); toast('Exercices enchaînés par 2, repos 1 min 30 après chaque duo'); break;
+    case 'ed-unlink': editPlan(EDIT, l=>l.forEach(x=>{ x[5]=0; })); render(); break;
     case 'ed-del': { const i=+el.dataset.i; editPlan(EDIT, l=>l.splice(i,1)); render(); toast('Exercice retiré'); break; }
     case 'ed-up': case 'ed-down': { const i=+el.dataset.i, j=i+(a==='ed-up'?-1:1); editPlan(EDIT, l=>{ if (j<0||j>=l.length) return; [l[i],l[j]]=[l[j],l[i]]; }); render(); break; }
     case 'picker-close': PICKER=null; render(); window.scrollTo(0,0); break;
@@ -1305,8 +1375,9 @@ app.addEventListener('click', ev=>{
 app.addEventListener('input', ev=>{
   const t=ev.target, k=t.dataset.in; if (!k) return;
   if ((k==='kg'||k==='reps') && LIVE){ const s=LIVE.data[LIVE.idx].sets[+t.dataset.j]; s[k]=t.value; saveDraft();
+    if (k==='kg' && LIVE.steps){ const d=LIVE.data[LIVE.idx], j=+t.dataset.j; d.sets.forEach((y,jj)=>{ if (jj>j && !y.done) y.kg=t.value; }); }
     if (k==='kg'){ const pl=document.getElementById('plates'); if (pl){ const tmp=document.createElement('div'); tmp.innerHTML=platesLine(LIVE.data[LIVE.idx]); pl.replaceWith(tmp.firstChild); } }
-    if (k==='kg' && +t.dataset.j===0 && LIVE.idx===0){ const w=parseFloat(t.value.replace(',','.')); const box=document.querySelector('.warm'); if (box) box.innerHTML = w>0 ? '<b style="font-weight:500">Échauffement calculé</b><span>50 % · '+kgs(round25(w*.5))+' × 10</span><span>75 % · '+kgs(round25(w*.75))+' × 5</span>' : '<b style="font-weight:500">Échauffement</b><span>Entre ta charge de travail : les 2 séries légères se calculent toutes seules.</span>'; } }
+  }
   else if (k==='note' && END){ END.rec.note=t.value; }
   else if (k==='libq'){ LIB.q=t.value; const l=document.getElementById('liblist'); if (l) l.innerHTML=libList(); }
   else if (k==='pq'){ PQ.q=t.value; const l=document.getElementById('pklist'); if (l) l.innerHTML=pickList(); }
@@ -1335,7 +1406,7 @@ window.addEventListener('hashchange', ()=>{ const h=location.hash.slice(1); if (
 
 /* ============ Démarrage ============ */
 lsLoad(); settings();
-try { const dr=sessionStorage.getItem(LS_KEY+'-live'); if (dr){ LIVE=JSON.parse(dr); clockTimer=setInterval(()=>{ const c=document.getElementById('clock'); if (c&&LIVE) c.textContent=mmss((Date.now()-LIVE.start)/1000); },1000); } } catch(e){}
+try { const dr=sessionStorage.getItem(LS_KEY+'-live'); if (dr){ LIVE=JSON.parse(dr); if (!LIVE.steps){ setSteps(LIVE); LIVE.pos=0; } clockTimer=setInterval(()=>{ const c=document.getElementById('clock'); if (c&&LIVE) c.textContent=mmss((Date.now()-LIVE.start)/1000); },1000); } } catch(e){}
 { let h=location.hash.slice(1); if (h==='shakers') h='nutrition'; if (TABS.some(t=>t[0]===h)) VIEW=h; }
 render();
 connect();
