@@ -26,6 +26,8 @@
 - Haugen et al. 2023 – machines vs poids libres : même hypertrophie, force spécifique, BMC Sports Sci Med Rehabil : https://doaj.org/article/a7282dba5e674176bde2a8239832d2f7
 - Maeo et al. 2021 – leg curl assis > allongé (+14 % vs +9 %), MSSE : https://pubmed.ncbi.nlm.nih.gov/33009197/
 - Maeo et al. 2022 – triceps bras au-dessus de la tête > bras le long du corps (+19,9 % vs +13,9 %), EJSS : https://pubmed.ncbi.nlm.nih.gov/35819335/
+- Zhang et al. 2025 – supersets vs séries classiques : même hypertrophie et force, séance plus courte, effort ressenti plus élevé ; supersets du même muscle = moins de volume, Sports Medicine (méta-analyse, 19 études) : https://eprints.leedsbeckett.ac.uk/id/eprint/11908
+- J Strength Cond Res 36(3), 2022 – repos entre paired sets : 1 min fait baisser le volume total, 2 min équivaut au repos choisi librement
 - Coleman et al. 2024 – une semaine sans entraînement : pas de perte de muscle, un peu de force, PeerJ : https://peerj.com/articles/16777
 
 - Schoenfeld et al. 2016 – fréquence : 2 fois par semaine > 1 fois (Sports Medicine) : https://pubmed.ncbi.nlm.nih.gov/27102172/
