@@ -377,6 +377,7 @@ const ICON = {
 const svg = (n,extra) => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" '+(extra||'')+'>'+ICON[n]+'</svg>';
 
 /* ============ Stockage (db partagé de l'artifact, sinon navigateur) ============ */
+const APP_VERSION = '2026-11-08';   // à changer avec VERSION dans sw.js
 const LS_KEY = 'carnet-muscu-v1';
 let DB = null;
 const S = { sessions:[], shakers:{}, weights:{}, settings:null };
@@ -535,6 +536,7 @@ function render(){
   if (REST) h += vRest();
   if (SHEET) h += vSheet();
   if (PHOTO_VIEW && !LIVE) h += vPhoto();
+  if (SES_VIEW && !LIVE) h += vSessionSheet();
   app.innerHTML = h;
   startDemo();
 }
@@ -562,6 +564,7 @@ function vToday(){
   (plan.deload?'<div class="note accent">Semaine allégée : moitié moins de séries.</div>':'')+
   (rv?'':todayCoach())+
   '<section style="display:flex;flex-direction:column;gap:10px"><div class="between"><h2 class="sec-t">Mes séances de la semaine</h2><span class="small muted">'+Math.min(done,wp.length)+' / '+wp.length+' faites</span></div>'+wp.map(p=>seanceCard(p, p.slot===slot, p.slot<=done, true)).join('')+'</section>'+
+  vLastSession()+
   (plan.items.length||LIVE ? '<button class="btn p" data-act="start">'+(LIVE?'Reprendre la séance':'Commencer la '+esc(plan.name.toLowerCase()))+'</button>' : '<button class="btn p" data-act="edit" data-id="'+plan.id+'">Composer la '+esc(plan.name.toLowerCase())+'</button>')+
   (plan.items.length?'<section><div class="between" style="padding-bottom:10px;align-items:center"><h2 class="sec-t">'+esc(plan.name)+' · exercices</h2><button class="pill p" data-act="edit" data-id="'+plan.id+'">Modifier</button></div><div class="list">'+plan.items.map((it,i,a)=>exRow(it.k, zone(it.k)+' · '+it.sets+' × '+repTxt(it.k,it.lo,it.hi)+(it.link?' · enchaîné':''), planLabels(a)[i])).join('')+'</div></section>':'')+
   todayNutri()+
@@ -950,7 +953,7 @@ function vProgress(){
   (wk.length?'<div style="display:flex;flex-direction:column;gap:4px">'+wk.slice(-4).reverse().map(d=>'<div class="between small"><span class="muted">'+esc(frDate(parseISO(d),{weekday:'short',day:'numeric',month:'short'}))+'</span><span style="font-weight:500">'+fmt(S.weights[d])+' kg</span></div>').join('')+'</div>':'')+
   '</section>'+
   vMeasures()+
-  '<section><h2 class="sec-t" style="padding-bottom:10px">Historique</h2>'+(ss.length?'<div class="list">'+[...ss].reverse().slice(0,12).map(s=>'<div class="li" style="grid-template-columns:1fr auto"><span class="t"><span class="n">'+esc(s.name)+'</span><span class="m">'+esc(cap(frDate(parseISO(s.date),{weekday:'long',day:'numeric',month:'long'})))+' · '+Math.max(1,Math.round(s.dur/60))+' min · '+s.items.reduce((a,i)=>a+i.sets.length,0)+' séries'+(s.feel?' · '+esc(s.feel):'')+'</span>'+(s.note?'<span class="m">« '+esc(s.note)+' »</span>':'')+'</span>'+(CONFIRM==='del-'+s.id?'<span class="row"><button class="pill p" data-act="confirm-no">Garder</button><button class="pill p" style="background:var(--danger);color:#fff" data-act="del-session" data-id="'+s.id+'">Supprimer</button></span>':'<button class="icon-btn p" style="width:36px;height:36px" data-act="del-ask" data-id="'+s.id+'" aria-label="Supprimer cette séance">'+svg('x')+'</button>')+'</div>').join('')+'</div>':'<div class="empty-st">Aucune séance enregistrée pour l\'instant. Lance la séance du jour depuis l\'onglet Aujourd\'hui.</div>')+'</section>'+
+  '<section><h2 class="sec-t" style="padding-bottom:10px">Historique</h2>'+(ss.length?'<div class="list">'+[...ss].reverse().slice(0,12).map(s=>'<div class="li" style="grid-template-columns:1fr auto"><button class="t p" data-act="ses-open" data-id="'+s.id+'" style="border:0;background:none;padding:0;text-align:left;color:var(--ink)"><span class="n">'+esc(s.name)+' <span class="small muted">· voir le détail</span></span><span class="m">'+esc(cap(frDate(parseISO(s.date),{weekday:'long',day:'numeric',month:'long'})))+' · '+Math.max(1,Math.round(s.dur/60))+' min · '+s.items.reduce((a,i)=>a+i.sets.length,0)+' séries'+(s.feel?' · '+esc(s.feel):'')+'</span>'+(s.note?'<span class="m">« '+esc(s.note)+' »</span>':'')+'</button>'+(CONFIRM==='del-'+s.id?'<span class="row"><button class="pill p" data-act="confirm-no">Garder</button><button class="pill p" style="background:var(--danger);color:#fff" data-act="del-session" data-id="'+s.id+'">Supprimer</button></span>':'<button class="icon-btn p" style="width:36px;height:36px" data-act="del-ask" data-id="'+s.id+'" aria-label="Supprimer cette séance">'+svg('x')+'</button>')+'</div>').join('')+'</div>':'<div class="empty-st">Aucune séance enregistrée pour l\'instant. Lance la séance du jour depuis l\'onglet Aujourd\'hui.</div>')+'</section>'+
   vDataCard()+vAppCard()+
   '</main>';
 }
@@ -1162,6 +1165,7 @@ function platesLine(d){
 const MEAS = [['bras','Bras'],['poitrine','Poitrine'],['taille','Taille'],['cuisse','Cuisse']];
 let PHOTOS = [];        // [{date, url}] chargées depuis IndexedDB
 let PHOTO_VIEW = null;
+let SES_VIEW = null;     // id de la séance passée affichée en détail
 function idb(){ return new Promise((res,rej)=>{ try { const r=indexedDB.open('fonte-photos',1); r.onupgradeneeded=()=>r.result.createObjectStore('photos'); r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error); } catch(e){ rej(e); } }); }
 async function idbAll(){ const db=await idb(); return new Promise(res=>{ const out=[]; const c=db.transaction('photos').objectStore('photos').openCursor(); c.onsuccess=()=>{ const x=c.result; if (x){ out.push({date:x.key, url:x.value}); x.continue(); } else res(out.sort((a,b)=>a.date<b.date?-1:1)); }; c.onerror=()=>res(out); }); }
 async function idbPut(key, val){ const db=await idb(); return new Promise((res,rej)=>{ const t=db.transaction('photos','readwrite'); val==null ? t.objectStore('photos').delete(key) : t.objectStore('photos').put(val,key); t.oncomplete=res; t.onerror=()=>rej(t.error); }); }
@@ -1200,6 +1204,24 @@ function vPhoto(){
   return '<div class="scrim" data-act="photo-close"><div class="sheet" data-stop="1" role="dialog" aria-label="Photo de progression"><div class="between"><h2 class="sec-t">'+(first!==cur?'Avant / maintenant':'Photo')+'</h2><button class="icon-btn p" data-act="photo-close" aria-label="Fermer">'+svg('x')+'</button></div>'+
   (first!==cur?'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'+fig(first,'Avant')+fig(cur,'Maintenant')+'</div>':fig(cur,'Photo'))+
   (CONFIRM==='photo-del'?'<div class="confirm"><b style="font-weight:500">Supprimer cette photo ?</b><div class="row"><button class="btn sm ghost p" data-act="confirm-no">Annuler</button><button class="btn sm p" data-act="photo-del">Supprimer</button></div></div>':'<button class="btn sm ghost p" data-act="photo-del-ask">Supprimer cette photo</button>')+'</div></div>';
+}
+
+/* ---- Détail d'une séance passée ---- */
+function sessionLine(i){ return i.sets.map(x=>fmt(x.kg)+' kg × '+x.reps).join(' · '); }
+function vSessionSheet(){
+  const s=S.sessions.find(x=>x.id===SES_VIEW); if (!s) return '';
+  const sets=s.items.reduce((a,i)=>a+i.sets.length,0), vol=s.items.reduce((a,i)=>a+i.sets.reduce((b,x)=>b+x.kg*x.reps,0),0);
+  return '<div class="scrim" data-act="ses-close"><div class="sheet" data-stop="1" role="dialog" aria-label="Détail de la séance">'+
+  '<div class="between" style="align-items:center"><span style="display:flex;flex-direction:column;gap:2px"><span class="display" style="font-size:26px">'+esc(s.name)+'</span><span class="small muted">'+esc(cap(frDate(parseISO(s.date),{weekday:'long',day:'numeric',month:'long'})))+'</span></span><button class="icon-btn p" data-act="ses-close" aria-label="Fermer">'+svg('x')+'</button></div>'+
+  '<div class="stats three"><div class="stat"><span class="small muted">Durée</span><b style="font-size:24px">'+Math.max(1,Math.round(s.dur/60))+' min</b></div><div class="stat"><span class="small muted">Séries</span><b style="font-size:24px">'+sets+'</b></div><div class="stat"><span class="small muted">Volume</span><b style="font-size:24px">'+Math.round(vol).toLocaleString('fr-FR')+' kg</b></div></div>'+
+  '<div class="list">'+s.items.map(i=>EX[i.k]?exRow(i.k, sessionLine(i), null, 'fiche'):'').join('')+'</div>'+
+  ((s.feel||(s.pain&&s.pain.length)||s.note)?'<div class="note" style="background:var(--soft);display:flex;flex-direction:column;gap:4px">'+(s.feel?'<span>Ressenti : <b style="font-weight:600">'+esc(s.feel)+'</b></span>':'')+(s.pain&&s.pain.length?'<span>Douleur : '+esc(s.pain.join(', ').toLowerCase())+'</span>':'')+(s.note?'<span>« '+esc(s.note)+' »</span>':'')+'</div>':'')+
+  '</div></div>';
+}
+function vLastSession(){
+  const s=S.sessions[S.sessions.length-1]; if (!s) return '';
+  const top=s.items.filter(i=>EX[i.k]).slice(0,3).map(i=>EX[i.k].n+' '+fmt(Math.max(...i.sets.map(x=>x.kg)))+' kg').join(' · ');
+  return '<button class="card p" data-act="ses-open" data-id="'+s.id+'" style="border:0;text-align:left;color:var(--ink);width:100%;flex-direction:row;align-items:center;justify-content:space-between"><span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-weight:500">Dernière séance : '+esc(s.name)+'</span><span class="small muted">'+esc(cap(frDate(parseISO(s.date),{weekday:'long',day:'numeric',month:'long'})))+' · '+esc(top)+'</span></span>'+svg('chev','class="chev" style="flex-shrink:0"')+'</button>';
 }
 
 /* ---- Bilan de la semaine passée (lundi à mercredi) ---- */
@@ -1286,12 +1308,23 @@ function vAppCard(){
   else if (INSTALL) inst='<span class="small muted">Ajoute-la à ton écran d\'accueil : elle s\'ouvre en plein écran et marche sans réseau.</span><button class="btn sm p" data-act="install">Installer l\'appli</button>';
   else if (isIOS()) inst='<span class="small muted">Pour l\'avoir sur ton écran d\'accueil : dans Safari, touche Partager puis « Sur l\'écran d\'accueil ». Elle marchera aussi sans réseau.</span>';
   else inst='<span class="small muted">Pour l\'avoir sur ton écran d\'accueil : ouvre le menu du navigateur puis « Installer l\'appli » ou « Ajouter à l\'écran d\'accueil ».</span>';
-  return '<section class="card" id="appli"><h2 class="display" style="font-size:22px">L\'appli</h2>'+inst+'</section>';
+  return '<section class="card" id="appli"><h2 class="display" style="font-size:22px">L\'appli</h2>'+inst+'<span class="small muted">Version du '+esc(frDate(parseISO(APP_VERSION),{day:'numeric',month:'long',year:'numeric'}))+'. Elle se met à jour toute seule à l\'ouverture.</span></section>';
 }
 window.addEventListener('beforeinstallprompt', e=>{ e.preventDefault(); INSTALL=e; if (VIEW==='progres' && !LIVE) render(); });
 window.addEventListener('appinstalled', ()=>{ INSTALL=null; toast('Appli installée'); if (VIEW==='progres' && !LIVE) render(); });
 if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
-  window.addEventListener('load', ()=>{ navigator.serviceWorker.register('sw.js').catch(()=>{}); });
+  // Cherche une nouvelle version à chaque ouverture ; recharge dès qu'elle est installée (sauf pendant une séance).
+  window.addEventListener('load', ()=>{ navigator.serviceWorker.register('sw.js', {updateViaCache:'none'}).then(reg=>{
+    const check=()=>{ try { reg.update(); } catch(e){} };
+    document.addEventListener('visibilitychange', ()=>{ if (!document.hidden) check(); });
+    setInterval(check, 30*60*1000);
+  }).catch(()=>{}); });
+  let reloading=false; const hadController=!!navigator.serviceWorker.controller;   // 1re installation : pas de rechargement
+  navigator.serviceWorker.addEventListener('controllerchange', ()=>{
+    if (reloading || !hadController) return;
+    if (LIVE || END){ toast('Nouvelle version prête : elle s\'affichera après ta séance.'); return; }
+    reloading=true; location.reload();
+  });
 }
 
 /* ============ Interactions ============ */
@@ -1368,6 +1401,8 @@ app.addEventListener('click', ev=>{
     case 'edit-close': EDIT=null; PICKER=null; render(); window.scrollTo(0,0); break;
     case 'ed-add': PICKER={id:EDIT, at:null}; PQ={q:'',g:'Tous',eq:'Tout'}; render(); window.scrollTo(0,0); break;
     case 'ed-swap': { const i=+el.dataset.i; const k=planItems(EDIT)[i][0]; PICKER={id:EDIT, at:i}; PQ={q:'',g:EX[k].g,eq:'Tout'}; render(); window.scrollTo(0,0); break; }
+    case 'ses-open': SES_VIEW=el.dataset.id; render(); break;
+    case 'ses-close': if (ev.target.closest('[data-stop]') && !ev.target.closest('.icon-btn')) break; SES_VIEW=null; render(); break;
     case 'duo': settings().duo = el.dataset.v==='1'; saveSettings(); render(); toast(settings().duo?'Séances en duo activées':'Séances classiques'); break;
     case 'ed-link': { const i=+el.dataset.i; editPlan(EDIT, l=>{ l[i][5]=l[i][5]?0:1; }); render(); break; }
     case 'ed-pairs': editPlan(EDIT, l=>{ const n=autoPair(l.map(toObj)).map(toArr); l.splice(0,l.length,...n); }); render(); toast('Duos formés : 2 muscles différents, repos après chaque duo'); break;
