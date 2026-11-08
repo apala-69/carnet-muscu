@@ -1,6 +1,6 @@
 /* Service worker de Fonte : l'appli fonctionne hors ligne à la salle.
    Quand tu modifies index.html ou ajoutes des photos, change VERSION et complète la liste. */
-const VERSION = 'fonte-v10';
+const VERSION = 'fonte-v11';
 const FONTS = 'carnet-muscu-polices';
 const APP = [
   './',
@@ -306,7 +306,7 @@ async function cacheFonts() {
 }
 
 self.addEventListener('install', e => {
-  e.waitUntil(Promise.all([caches.open(VERSION).then(c => c.addAll(APP)), cacheFonts()]).then(() => self.skipWaiting()));
+  e.waitUntil(Promise.all([caches.open(VERSION).then(c => c.addAll(APP.map(u => new Request(u, { cache: 'reload' })))), cacheFonts()]).then(() => self.skipWaiting()));
 });
 
 self.addEventListener('activate', e => {
@@ -336,7 +336,7 @@ self.addEventListener('fetch', e => {
   // Page : réseau d'abord (pour recevoir les mises à jour), cache si hors ligne.
   // Si le réseau de la salle est trop lent (plus de 3 s), on ouvre la version en cache.
   if (req.mode === 'navigate') {
-    const net = fetch(req).then(r => { if (r.ok) { const copy = r.clone(); caches.open(VERSION).then(c => c.put('index.html', copy)); } return r; });
+    const net = fetch(req, { cache: 'no-store' }).then(r => { if (r.ok) { const copy = r.clone(); caches.open(VERSION).then(c => c.put('index.html', copy)); } return r; });
     const slow = new Promise(res => setTimeout(() => caches.match('index.html').then(hit => hit && res(hit)), 3000));
     e.respondWith(Promise.race([net.catch(() => caches.match('index.html')), slow]));
     return;
