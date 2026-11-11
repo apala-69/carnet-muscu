@@ -98,6 +98,19 @@ Chaque règle et sa source sont affichées dans l'appli (Programmes → « Sur q
 | Poids du corps | Pesée le lundi au réveil ; cible prise de masse : +0,25 à +0,5 % du poids par semaine |
 | Protéines | Repère : environ 1,6 g par kg de poids et par jour (Morton et al., 2018) |
 
+## 4.0 Version épurée (11 novembre 2026) — fait foi sur le reste de la section 4
+
+Après un audit (trop de texte, bouton Commencer enterré, doublons), l'appli a été simplifiée. En cas de contradiction avec la suite, c'est cette section qui compte.
+
+- **3 onglets** : **Séance**, **Progrès**, **Réglages**.
+- **Séance** : nom de la séance, zones, durée, bouton **Commencer** visible sans défiler, choix Séance 1/2/3, une alerte du coach au plus, liste des exercices, dernière séance, poids libres, bilan du lundi.
+- **Écran de série** : tout tient sur un écran (photo de 150 px qui ouvre la fiche, charge, reps, réserve, bouton Valider). La réserve choisie vaut pour les séries suivantes de l'exercice.
+- **Progrès** : 2 messages du coach au plus, poids du corps, courbe des charges, carte des muscles, mensurations et photos (repliées), historique (6 séances, puis « Voir toutes »).
+- **Réglages** : séances par semaine, Classique / En duo, mes séances (modifier), tous les exercices, puis sections repliées : mes données, Claude, sur quoi je me base, l'appli.
+- **Supprimé** : onglet Nutrition (et shakers), question « combien de fois cette semaine » à chaque lundi (devenue un réglage), cycle de 6 semaines et semaine allégée, volume de la semaine par muscle (doublon de la carte des muscles), tableau Force / Endurance des fiches, paragraphes d'explication.
+- **Règles d'interface** : zones tactiles de 44 px au minimum, pas de texte sous 12 px, une ligne d'explication au plus par carte.
+- Les anciennes données (shakers, réglages nutrition) restent stockées et exportées, mais ne sont plus affichées.
+
 ## 4. Écrans et fonctionnalités
 
 Navigation : **barre d'onglets en bas, 5 onglets** : Aujourd'hui, Programmes, Exercices, Nutrition, Progrès.
