@@ -1,6 +1,6 @@
 /* Service worker de Fonte : l'appli fonctionne hors ligne à la salle.
    Quand tu modifies index.html ou ajoutes des photos, change VERSION et complète la liste. */
-const VERSION = 'fonte-v13';
+const VERSION = 'fonte-v14';
 const FONTS = 'carnet-muscu-polices';
 const APP = [
   './',

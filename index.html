@@ -385,10 +385,11 @@ const APP_VERSION = '2026-11-12';   // à changer avec VERSION dans sw.js
 const LS_KEY = 'carnet-muscu-v1';
 let DB = null;
 const S = { sessions:[], shakers:{}, weights:{}, settings:null };
-function defaultSettings(){ return { days:3, cycleStart: iso(monday(new Date())), favs:[], lastShaker:{type:'Whey',dose:30} }; }
+function defaultSettings(){ return { days:3, duo:true, cycleStart: iso(monday(new Date())), favs:[], lastShaker:{type:'Whey',dose:30} }; }
 function lsLoad(){ try { const raw = localStorage.getItem(LS_KEY); if (raw) { const d = JSON.parse(raw); Object.assign(S, d); } } catch(e){} }
 function lsSave(){ if (DB) return; try { localStorage.setItem(LS_KEY, JSON.stringify(S)); } catch(e){} }
-function settings(){ if (!S.settings) S.settings = defaultSettings(); return S.settings; }
+function settings(){ if (!S.settings) S.settings = defaultSettings(); if (S.settings.duo===undefined) S.settings.duo=true;   // duo par défaut ; un choix « Classique » déjà fait est respecté
+  return S.settings; }
 async function dbWrite(fn){ if (!DB) { lsSave(); return; } try { await fn(); } catch(e){ toast(e && e.code==='quota_exceeded' ? 'Stockage plein : supprime d\'anciennes données.' : 'Enregistrement impossible pour le moment, réessaie.'); } }
 function saveSettings(){ dbWrite(()=>DB.doc('settings/main').set(settings())); }
 function saveWeight(d){ dbWrite(()=> S.weights[d]!=null ? DB.doc('weights/'+d).set({date:d,kg:S.weights[d]}) : DB.doc('weights/'+d).delete()); }

@@ -107,7 +107,7 @@ Après un audit (trop de texte, bouton Commencer enterré, doublons), l'appli a 
 - **Séance** : nom de la séance, zones, durée, bouton **Commencer** visible sans défiler, choix Séance 1/2/3, une alerte du coach au plus, liste des exercices, dernière séance, poids libres, bilan du lundi.
 - **Écran de série** : tout tient sur un écran (photo de 150 px qui ouvre la fiche, charge, reps, réserve, bouton Valider). La réserve choisie vaut pour les séries suivantes de l'exercice.
 - **Progrès** : 2 messages du coach au plus, poids du corps, courbe des charges, carte des muscles, mensurations et photos (repliées), historique (6 séances, puis « Voir toutes »).
-- **Réglages** : séances par semaine, Classique / En duo, mes séances (modifier), tous les exercices, puis sections repliées : mes données, Claude, sur quoi je me base, l'appli.
+- **Réglages** : séances par semaine, Classique / En duo (**En duo par défaut**), mes séances (modifier), tous les exercices, puis sections repliées : mes données, Claude, sur quoi je me base, l'appli.
 - **Supprimé** : onglet Nutrition (et shakers), question « combien de fois cette semaine » à chaque lundi (devenue un réglage), cycle de 6 semaines et semaine allégée, volume de la semaine par muscle (doublon de la carte des muscles), tableau Force / Endurance des fiches, paragraphes d'explication.
 - **Règles d'interface** : zones tactiles de 44 px au minimum, pas de texte sous 12 px, une ligne d'explication au plus par carte.
 - Les anciennes données (shakers, réglages nutrition) restent stockées et exportées, mais ne sont plus affichées.
