@@ -105,6 +105,7 @@ Après un audit (trop de texte, bouton Commencer enterré, doublons), l'appli a 
 
 - **3 onglets** : **Séance**, **Progrès**, **Réglages**.
 - **Séance** : nom de la séance, zones, durée, bouton **Commencer** visible sans défiler, choix Séance 1/2/3, une alerte du coach au plus, liste des exercices, dernière séance, poids libres, bilan du lundi.
+- **Mémoire des séries** : chaque série est préremplie avec le poids et les reps de la dernière fois (même exercice, même série) ; après validation, les séries suivantes reprennent ce qui vient d'être fait. Une séance connue se fait donc avec le seul bouton Valider. Les conseils (hausse de 2,5 kg, 10 % plus léger en cas de gêne ou de reprise) ne changent plus la charge d'office : ils proposent un bouton « Mettre X kg ».
 - **Écran de série** : tout tient sur un écran (photo de 150 px qui ouvre la fiche, charge, reps, réserve, bouton Valider). La réserve choisie vaut pour les séries suivantes de l'exercice.
 - **Progrès** : 2 messages du coach au plus, poids du corps, courbe des charges, carte des muscles, mensurations et photos (repliées), historique (6 séances, puis « Voir toutes »).
 - **Réglages** : séances par semaine, Classique / En duo (**En duo par défaut**), mes séances (modifier), tous les exercices, puis sections repliées : mes données, Claude, sur quoi je me base, l'appli.
