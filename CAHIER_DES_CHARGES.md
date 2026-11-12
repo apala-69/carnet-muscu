@@ -71,7 +71,8 @@ Chaque règle et sa source sont affichées dans l'appli (Programmes → « Sur q
 - Repos : 2 min 30 sur les gros exercices (2 min pour les tirages), 90 s sur l'isolation (Schoenfeld 2016, Singer 2024).
 - Mélange machines / poids libres dès le départ (Haugen 2023 : même hypertrophie). Leg curl **assis** (Maeo 2021), triceps **au-dessus de la tête** (Maeo 2022).
 - Volume obtenu : 3 séances → 9 à 11 séries par semaine par gros muscle, 4 à 6 pour les bras ; 2 séances (S1 + S2) → 6. Séances de 56 à 60 min.
-- **1 fois par semaine** : presse 4 × 8-12, chest press 4 × 8-12, tirage vertical 4 × 8-12, leg curl assis 3 × 10-12, développé épaules haltères 3 × 8-12, triceps au-dessus de la tête 2 × 10-12 (Nuzzo 2024 : une petite dose fait progresser, moins que 2 séances).
+- **1 fois par semaine** (environ 1 h en duo, 1 h 30 en classique) : accent sur le haut du corps. Presse 4, chest press 4, leg curl assis 3, tirage vertical 4, développé incliné haltères 3, rowing assis 3, développé épaules haltères 3, curl haltères 2, triceps au-dessus de la tête 2, crunch machine 2. Soit 30 séries : pecs 7, dos 7, cuisses 4, ischios 3, épaules 3. (Nuzzo 2024 : une petite dose fait progresser, moins que 2 séances ; Schoenfeld 2017 : plus de séries = plus de muscle.)
+- **Abdos à la fin de chaque séance** (demande de l'utilisateur) : crunch poulie (S1), crunch machine (S2 et séance unique), relevé de genoux (S3), 2 séries. En duo, les abdos restent seuls en dernier.
 - Après 6 semaines, passage progressif aux poids libres pour les exercices restés sur machine (voir 4.2).
 
 ### 3.4 bis Séances personnalisables
@@ -106,7 +107,7 @@ Après un audit (trop de texte, bouton Commencer enterré, doublons), l'appli a 
 - **Séance** : nom de la séance, zones, durée, bouton **Commencer** visible sans défiler, choix Séance 1/2/3, une alerte du coach au plus, liste des exercices, dernière séance, poids libres, bilan du lundi.
 - **Écran de série** : tout tient sur un écran (photo de 150 px qui ouvre la fiche, charge, reps, réserve, bouton Valider). La réserve choisie vaut pour les séries suivantes de l'exercice.
 - **Progrès** : 2 messages du coach au plus, poids du corps, courbe des charges, carte des muscles, mensurations et photos (repliées), historique (6 séances, puis « Voir toutes »).
-- **Réglages** : séances par semaine, Classique / En duo, mes séances (modifier), tous les exercices, puis sections repliées : mes données, Claude, sur quoi je me base, l'appli.
+- **Réglages** : séances par semaine, Classique / En duo (**En duo par défaut**), mes séances (modifier), tous les exercices, puis sections repliées : mes données, Claude, sur quoi je me base, l'appli.
 - **Supprimé** : onglet Nutrition (et shakers), question « combien de fois cette semaine » à chaque lundi (devenue un réglage), cycle de 6 semaines et semaine allégée, volume de la semaine par muscle (doublon de la carte des muscles), tableau Force / Endurance des fiches, paragraphes d'explication.
 - **Règles d'interface** : zones tactiles de 44 px au minimum, pas de texte sous 12 px, une ligne d'explication au plus par carte.
 - Les anciennes données (shakers, réglages nutrition) restent stockées et exportées, mais ne sont plus affichées.
