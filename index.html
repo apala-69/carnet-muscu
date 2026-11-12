@@ -345,10 +345,11 @@ const img = (k,i) => 'img/'+k+'-'+(i||0)+'.jpg';
 const PLANS = {
   /* Programme fondé sur les études listées dans SCIENCE (onglet Programmes → « Sur quoi je me base »).
      Mélange machines / poids libres : même prise de muscle (Haugen 2023). Leg curl assis (Maeo 2021). Triceps bras au-dessus de la tête (Maeo 2022). */
-  S1:{name:'Séance 1',items:[['legpress',3,8,12,150],['legcurl',3,10,12,90],['chestpress',3,8,12,150],['latpull',3,8,12,120],['latraise',3,12,15,90],['overheadrope',2,10,12,90],['preacher',2,10,12,90]]},
+  S1:{name:'Séance 1',items:[['legpress',3,8,12,150],['legcurl',3,10,12,90],['chestpress',3,8,12,150],['latpull',3,8,12,120],['latraise',3,12,15,90],['overheadrope',2,10,12,90],['preacher',2,10,12,90],['cablecrunch',2,12,15,60]]},
   S2:{name:'Séance 2',items:[['hacksquat',3,8,12,150],['dbrdl',3,8,12,150],['inclinedb',3,8,12,150],['dbrow',3,8,12,120],['shoulderpress',3,8,12,120],['hammerrope',2,10,12,90],['abcrunch',2,12,15,60]]},
-  S3:{name:'Séance 3',items:[['splitsquat',3,8,12,120],['legcurl',3,10,12,90],['dbbench',3,8,12,150],['seatedrow',3,8,12,120],['cablelat',3,12,15,90],['legext',2,12,15,90],['dbcurl',2,10,12,90],['tricepsrope',2,10,12,90]]},
-  E:{name:'Séance unique',items:[['legpress',4,8,12,150],['chestpress',4,8,12,150],['latpull',4,8,12,120],['legcurl',3,10,12,90],['dbpress',3,8,12,120],['overheadrope',2,10,12,90]]}
+  S3:{name:'Séance 3',items:[['splitsquat',3,8,12,120],['legcurl',3,10,12,90],['dbbench',3,8,12,150],['seatedrow',3,8,12,120],['cablelat',3,12,15,90],['legext',2,12,15,90],['dbcurl',2,10,12,90],['tricepsrope',2,10,12,90],['kneeraise',2,12,15,60]]},
+  /* Séance unique : une heure, accent sur le haut du corps, abdos à la fin. */
+  E:{name:'Séance unique',items:[['legpress',4,8,12,150],['chestpress',4,8,12,150],['legcurl',3,10,12,90],['latpull',4,8,12,120],['inclinedb',3,8,12,150],['seatedrow',3,8,12,120],['dbpress',3,8,12,120],['dbcurl',2,10,12,90],['overheadrope',2,10,12,90],['abcrunch',2,12,15,60]]}
 };
 const RIR_BY_WEEK = ['3','2-3','2','1-2','1','3'];
 
@@ -380,7 +381,7 @@ const ICON = {
 const svg = (n,extra) => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" '+(extra||'')+'>'+ICON[n]+'</svg>';
 
 /* ============ Stockage (db partagé de l'artifact, sinon navigateur) ============ */
-const APP_VERSION = '2026-11-11';   // à changer avec VERSION dans sw.js
+const APP_VERSION = '2026-11-12';   // à changer avec VERSION dans sw.js
 const LS_KEY = 'carnet-muscu-v1';
 let DB = null;
 const S = { sessions:[], shakers:{}, weights:{}, settings:null };
@@ -442,12 +443,12 @@ function duoScore(a,b){ if (zone(a)===zone(b)) return 0; const ra=region(a), rb=
   if ((ra==='pousser'&&rb==='tirer')||(ra==='tirer'&&rb==='pousser')) return 3; return 1; }
 const duoRest = (a,b) => exType(a)==='poly'||exType(b)==='poly' ? 120 : 90;
 function autoPair(items){   // items : [{k,sets,lo,hi,rest,link}]
-  const left=items.map(x=>Object.assign({},x,{link:0})), out=[];
+  const all=items.map(x=>Object.assign({},x,{link:0})), abs=all.filter(x=>zone(x.k)==='Abdos'), left=all.filter(x=>zone(x.k)!=='Abdos'), out=[];
   while (left.length){ const a=left.shift(); let bi=-1, best=0;
     left.forEach((b,i)=>{ const sc=duoScore(a.k,b.k); if (sc>best){ best=sc; bi=i; } });
     if (bi<0){ out.push(a); continue; }
     const b=left.splice(bi,1)[0]; a.link=1; b.rest=duoRest(a.k,b.k); out.push(a,b); }
-  return out;
+  return out.concat(abs);   // abdos seuls, en fin de séance
 }
 const toObj = it => ({k:it[0],sets:it[1],lo:it[2],hi:it[3],rest:it[4],link:it[5]?1:0});
 const toArr = o => [o.k,o.sets,o.lo,o.hi,o.rest,o.link?1:0];
